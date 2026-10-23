@@ -1,0 +1,509 @@
+{
+  "schemaVersion": 1,
+  "topicId": "scalable-decoupled",
+  "domainId": "resilient",
+  "name": "Design scalable and loosely coupled architectures",
+  "lesson": {
+    "summary": "Loose coupling lets each tier scale and fail independently. Queues, topics and event buses sit between components so spikes are buffered instead of passed straight to a database or service. Stateless compute behind a load balancer and Auto Scaling completes the picture.",
+    "keyPoints": [
+      "SQS buffers messages for pull-based consumers; standard queues are at-least-once with best-effort ordering, FIFO queues add ordering and deduplication",
+      "SNS fan-out to one SQS queue per consumer gives each service its own durable copy",
+      "Visibility timeout must exceed processing time (for Lambda, at least six times the function timeout); long polling reduces empty receives; dead-letter queues isolate poison messages",
+      "Scale worker fleets on queue backlog per instance, and keep compute stateless by moving sessions and files to ElastiCache, DynamoDB or S3",
+      "RDS Proxy pools connections so bursty Lambda or microservice traffic does not exhaust the database",
+      "EventBridge routes events by rule; Step Functions orchestrates workflows; Kinesis Data Streams handles per-shard ordered, replayable streams"
+    ],
+    "docLinks": [
+      "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html",
+      "https://docs.aws.amazon.com/sns/latest/dg/welcome.html",
+      "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html",
+      "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-using-sqs-queue.html",
+      "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html",
+      "https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_stateless.html"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "sd-sc-1",
+      "text": "A retailer runs its order service on an Auto Scaling group behind an Application Load Balancer. Each web server writes orders synchronously to a single RDS database. During flash sales the database saturates and orders are lost. Orders may be processed within a few minutes, but none can be lost."
+    }
+  ],
+  "questions": [
+    {
+      "id": "scalable-decoupled-001",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "SQS"
+      ],
+      "prompt": "An order system must process each customer's orders strictly in the order they were placed, and an order must never be processed twice. Which design meets this with the least effort?",
+      "options": [
+        {
+          "id": "a",
+          "text": "An SQS standard queue, with consumers sorting messages by timestamp",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "An SNS standard topic with one HTTPS subscriber",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "An SQS FIFO queue using the customer ID as the message group ID",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "An SQS standard queue with a short delay set on every message",
+          "correct": false
+        }
+      ],
+      "explanation": "A FIFO queue preserves order within a message group and deduplicates messages, so the customer ID as the group ID gives per-customer ordering without extra code. A standard queue offers only best-effort ordering and at-least-once delivery, so consumer-side sorting cannot prevent duplicates. A standard SNS topic gives no ordering or deduplication guarantee. A delay only postpones visibility and does not enforce order.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-fifo-queues.html"
+      ]
+    },
+    {
+      "id": "scalable-decoupled-002",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "SNS",
+        "SQS"
+      ],
+      "prompt": "When a payment completes, the inventory, billing and shipping services must each receive the event independently, and a slow service must not lose messages. What should the architect build?",
+      "options": [
+        {
+          "id": "a",
+          "text": "One SQS queue that all three services poll",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "An SNS topic with a separate SQS queue subscribed for each service",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "A Lambda function that calls the three services one after another",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "An Application Load Balancer with three target groups",
+          "correct": false
+        }
+      ],
+      "explanation": "SNS fan-out to one SQS queue per service gives each consumer its own durable copy of every event, so a slow consumer just builds a backlog. One shared queue delivers each message to only one consumer. A chained Lambda function couples the services and loses the event if a call fails. An ALB distributes requests and does not broadcast or buffer events.",
+      "sources": [
+        "https://docs.aws.amazon.com/sns/latest/dg/sns-sqs-as-subscriber.html"
+      ]
+    },
+    {
+      "id": "scalable-decoupled-003",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "SQS"
+      ],
+      "prompt": "Consumers poll an SQS queue that is empty most of the time, which creates many empty responses and unnecessary API cost. Which change reduces this?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Reduce the visibility timeout to 1 second",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Convert the queue to a FIFO queue",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Add a dead-letter queue",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Enable long polling by setting ReceiveMessageWaitTimeSeconds greater than zero",
+          "correct": true
+        }
+      ],
+      "explanation": "Long polling makes ReceiveMessage wait until a message arrives or the wait time expires, which cuts empty responses and cost. A shorter visibility timeout only causes more redelivery. A FIFO queue does not change polling behavior. A dead-letter queue handles failed messages, not empty polls.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-short-and-long-polling.html"
+      ]
+    },
+    {
+      "id": "scalable-decoupled-004",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "Lambda",
+        "SQS"
+      ],
+      "prompt": "A Lambda function with a 60-second timeout processes messages from an SQS queue. Messages are being processed more than once while the function is still running. What is the best fix?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Set the queue visibility timeout to at least six times the function timeout, plus the batch window if one is configured",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Lower the Lambda memory setting",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Switch the queue to long polling",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Set the message retention period to 14 days",
+          "correct": false
+        }
+      ],
+      "explanation": "If the visibility timeout is shorter than the processing time, the message becomes visible again and is delivered a second time. For Lambda, AWS recommends at least six times the function timeout so Lambda can also retry after throttling. Memory does not change message visibility. Long polling affects how consumers receive messages, not redelivery. Retention controls how long unprocessed messages are kept, not when they reappear.",
+      "sources": [
+        "https://docs.aws.amazon.com/lambda/latest/dg/services-sqs-configure.html",
+        "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html"
+      ]
+    },
+    {
+      "id": "scalable-decoupled-005",
+      "type": "mcq",
+      "difficulty": 3,
+      "tags": [
+        "S3",
+        "Lambda"
+      ],
+      "prompt": "Users upload images to an S3 bucket. Each image needs a thumbnail created within seconds, the workload is very bursty, and the team wants no servers to manage. Which solution fits?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Configure an S3 event notification that invokes a Lambda function to create the thumbnail",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Run a fleet of EC2 instances that list the bucket every minute",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Run a single large EC2 instance with a cron job",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Use CloudFront to resize the image on the origin bucket",
+          "correct": false
+        }
+      ],
+      "explanation": "S3 event notifications can invoke Lambda for each upload, scaling automatically from zero with no servers. Polling EC2 fleets and a cron instance require capacity management and add delay. CloudFront caches and delivers content but does not run general image-processing code on the origin bucket.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/EventNotifications.html",
+        "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html"
+      ]
+    },
+    {
+      "id": "scalable-decoupled-006",
+      "type": "mcq",
+      "difficulty": 3,
+      "tags": [
+        "Lambda",
+        "RDS"
+      ],
+      "prompt": "A traffic spike causes hundreds of concurrent Lambda executions that each open a database connection, exhausting connections on an RDS MySQL instance. Which solution has the least operational overhead?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Increase the Lambda timeout",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Convert the database to a Multi-AZ deployment",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Add a read replica and send all writes to it",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Place Amazon RDS Proxy between the functions and the database",
+          "correct": true
+        }
+      ],
+      "explanation": "RDS Proxy pools and shares database connections, so many short-lived Lambda executions no longer exhaust the database. A longer timeout does not reduce connections. Multi-AZ improves availability but does not add connection capacity. A read replica is read-only and cannot take writes.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html"
+      ]
+    },
+    {
+      "id": "scalable-decoupled-007",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": [
+        "SQS",
+        "EventBridge"
+      ],
+      "prompt": "Which TWO approaches make the components of an application loosely coupled?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Services call each other using hard-coded private IP addresses",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Producers publish messages to an SQS queue that consumers read",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Services share state through a local file on one instance",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Services publish events to Amazon EventBridge, which routes them to targets by rule",
+          "correct": true
+        },
+        {
+          "id": "e",
+          "text": "A web server calls a backend server synchronously and waits for the result in every case",
+          "correct": false
+        }
+      ],
+      "explanation": "A queue and an event bus both let producers and consumers evolve, scale and fail independently. Hard-coded IPs, a shared local file and mandatory synchronous calls all tie the components to each other's location, availability or timing.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html",
+        "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html"
+      ]
+    },
+    {
+      "id": "scalable-decoupled-008",
+      "type": "multi",
+      "difficulty": 3,
+      "tags": [
+        "ElastiCache",
+        "S3",
+        "Auto Scaling"
+      ],
+      "prompt": "A web tier behind an Application Load Balancer runs in an Auto Scaling group. Instances currently keep user sessions and uploaded files on local disk, so scale-in loses data. Which TWO changes make the tier stateless?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Enable sticky sessions on the load balancer and keep local state",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Store user sessions in Amazon ElastiCache",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Store uploaded files in Amazon S3",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Move uploads to instance store volumes",
+          "correct": false
+        },
+        {
+          "id": "e",
+          "text": "Increase the minimum size of the group to avoid scale-in",
+          "correct": false
+        }
+      ],
+      "explanation": "Externalizing sessions to ElastiCache and files to S3 lets any instance serve any request and be terminated safely. Sticky sessions and instance store still keep data on one instance that can disappear. A larger minimum size only hides the problem and still loses data on failure.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/ecommerce-caching-valkey.html",
+        "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-store-lifetime.html",
+        "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/edit-target-group-attributes.html"
+      ]
+    },
+    {
+      "id": "scalable-decoupled-009",
+      "type": "scenario",
+      "difficulty": 2,
+      "tags": [
+        "SQS",
+        "Auto Scaling"
+      ],
+      "prompt": "Which change best protects the orders during flash sales?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Increase the RDS instance size and keep synchronous writes",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Lower the ALB idle timeout",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Have the web tier send each order to an SQS queue, and have a worker fleet write to the database at its own pace",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Use a Network Load Balancer in front of the web tier",
+          "correct": false
+        }
+      ],
+      "explanation": "A queue absorbs the spike and durably holds orders until workers can write them, decoupling the web tier from database capacity. A bigger instance still fails when the spike exceeds it and keeps tight coupling. The ALB timeout and an NLB do nothing about database saturation.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html"
+      ],
+      "scenarioId": "sd-sc-1"
+    },
+    {
+      "id": "scalable-decoupled-010",
+      "type": "scenario",
+      "difficulty": 2,
+      "tags": [
+        "SQS"
+      ],
+      "prompt": "After the queue is introduced, a few malformed orders fail every time they are processed and are retried endlessly, delaying other work. How should the team isolate them for later inspection?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Configure a dead-letter queue with a maximum receive count on the order queue",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Raise the queue visibility timeout to the maximum",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Enable long polling on the worker fleet",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Turn off message retention",
+          "correct": false
+        }
+      ],
+      "explanation": "A dead-letter queue with a maxReceiveCount moves repeatedly failing messages aside so they can be inspected without blocking the rest. A longer visibility timeout just delays the retries. Long polling does not affect failures. Disabling retention would not isolate the messages and risks losing them.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html"
+      ],
+      "scenarioId": "sd-sc-1"
+    },
+    {
+      "id": "scalable-decoupled-011",
+      "type": "truefalse",
+      "difficulty": 1,
+      "tags": [
+        "SNS"
+      ],
+      "statement": "An Amazon SNS topic keeps each message until every subscriber polls for it, in the same way an SQS queue does.",
+      "answer": false,
+      "explanation": "False. SNS pushes messages to its subscribers and does not hold messages for subscribers to poll; to buffer messages for a slow consumer, subscribe an SQS queue to the topic.",
+      "sources": [
+        "https://docs.aws.amazon.com/sns/latest/dg/welcome.html",
+        "https://docs.aws.amazon.com/sns/latest/dg/sns-sqs-as-subscriber.html"
+      ]
+    },
+    {
+      "id": "scalable-decoupled-012",
+      "type": "ordering",
+      "difficulty": 1,
+      "tags": [
+        "SQS"
+      ],
+      "prompt": "Put the steps of normal SQS message handling in the correct order.",
+      "steps": [
+        "The consumer deletes the message from the queue",
+        "The producer sends a message to the queue",
+        "The consumer processes the message",
+        "The consumer receives the message and its visibility timeout starts"
+      ],
+      "correctOrder": [
+        1,
+        3,
+        2,
+        0
+      ],
+      "explanation": "A producer sends, a consumer receives (the message becomes invisible for the visibility timeout), processes it, and then deletes it; if the delete does not happen before the timeout ends, the message becomes visible again.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html"
+      ]
+    },
+    {
+      "id": "scalable-decoupled-013",
+      "type": "matching",
+      "difficulty": 2,
+      "tags": [
+        "SQS",
+        "SNS",
+        "EventBridge",
+        "Kinesis"
+      ],
+      "prompt": "Match each service to its best-fit role in a decoupled design.",
+      "pairs": [
+        {
+          "left": "Amazon SQS",
+          "right": "Buffers messages for pull-based consumers"
+        },
+        {
+          "left": "Amazon SNS",
+          "right": "Pushes one message to many subscribers (pub/sub)"
+        },
+        {
+          "left": "Amazon EventBridge",
+          "right": "Routes events from AWS services and SaaS to targets by rule"
+        },
+        {
+          "left": "Amazon Kinesis Data Streams",
+          "right": "Stream with records ordered per shard that multiple consumers can read and replay within the retention period"
+        }
+      ],
+      "explanation": "SQS is a pull queue, SNS is push pub/sub, EventBridge is a rule-based event bus, and Kinesis Data Streams is a stream with per-shard ordering, configurable retention, and independent consumers.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html",
+        "https://docs.aws.amazon.com/sns/latest/dg/welcome.html",
+        "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html",
+        "https://docs.aws.amazon.com/streams/latest/dev/introduction.html",
+        "https://docs.aws.amazon.com/streams/latest/dev/key-concepts.html"
+      ]
+    },
+    {
+      "id": "scalable-decoupled-014",
+      "type": "typed",
+      "difficulty": 2,
+      "tags": [
+        "Step Functions",
+        "Lambda"
+      ],
+      "prompt": "Which AWS service orchestrates several Lambda functions as a workflow with built-in retries, error handling and branching? Name the service.",
+      "rubric": [
+        {
+          "any": [
+            "step functions",
+            "aws step functions",
+            "sfn"
+          ]
+        }
+      ],
+      "explanation": "AWS Step Functions models workflows as state machines and provides retries, catch handlers, and branching, so you do not hand-code orchestration between functions.",
+      "sources": [
+        "https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,228 @@
+{
+    "schemaVersion": 1,
+    "topicId": "perf-ingestion",
+    "domainId": "performant",
+    "name": "Determine high-performing data ingestion and transformation solutions",
+    "lesson": {
+        "summary": "Choose the ingestion path by data shape and latency: streams (Kinesis Data Streams, MSK), managed delivery (Amazon Data Firehose), file transfer (DataSync, Transfer Family), and then transform and query with Glue and Athena.",
+        "keyPoints": [
+            "Kinesis Data Streams ingests real-time data, keeps records for a retention period, and supports multiple independent consumers",
+            "Amazon Data Firehose delivers streaming data to S3, Redshift, OpenSearch and other destinations with no consumer code",
+            "DataSync transfers data online between on-premises storage such as NFS or SMB and AWS storage, and tasks can run on a schedule",
+            "AWS Snowball Edge is no longer available to new customers; for new transfers use DataSync for online transfers or AWS Data Transfer Terminal for physical transfers",
+            "Glue is serverless ETL with a Data Catalog; Athena queries S3 with SQL",
+            "MSK is managed Apache Kafka"
+        ],
+        "docLinks": [
+            "https://docs.aws.amazon.com/streams/latest/dev/key-concepts.html",
+            "https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html",
+            "https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html",
+            "https://docs.aws.amazon.com/athena/latest/ug/what-is.html",
+            "https://docs.aws.amazon.com/datasync/latest/userguide/what-is-datasync.html",
+            "https://docs.aws.amazon.com/datasync/latest/userguide/task-scheduling.html",
+            "https://docs.aws.amazon.com/snowball/latest/developer-guide/whatisedge.html"
+        ]
+    },
+    "scenarios": [],
+    "questions": [
+        {
+            "id": "perf-ingestion-001",
+            "type": "mcq",
+            "difficulty": 1,
+            "tags": [
+                "Kinesis"
+            ],
+            "prompt": "An application must ingest real-time clickstream data, let several independent consumers process it, and be able to replay recent records. Which service fits?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Amazon SQS standard queue",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "Amazon Kinesis Data Streams",
+                    "correct": true
+                },
+                {
+                    "id": "c",
+                    "text": "Amazon S3 Transfer Acceleration",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "AWS DataSync",
+                    "correct": false
+                }
+            ],
+            "explanation": "Kinesis Data Streams keeps records for a retention period and allows multiple applications to consume the same stream independently, so records can be re-read. An SQS consumer deletes each message after processing and SQS typically serves a single subscriber, so it does not give replay to several consumers. Transfer Acceleration speeds object uploads, and DataSync copies files between storage systems rather than ingesting streaming records.",
+            "sources": [
+                "https://docs.aws.amazon.com/streams/latest/dev/key-concepts.html",
+                "https://docs.aws.amazon.com/streams/latest/dev/building-consumers.html",
+                "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html"
+            ]
+        },
+        {
+            "id": "perf-ingestion-002",
+            "type": "mcq",
+            "difficulty": 2,
+            "tags": [
+                "Firehose"
+            ],
+            "prompt": "A team wants streaming log data delivered to Amazon S3 in compressed batches with no custom consumer code and minimal operations. Which service should they use?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Amazon MSK with a self-written consumer on EC2",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "AWS Glue crawlers",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Amazon Data Firehose",
+                    "correct": true
+                },
+                {
+                    "id": "d",
+                    "text": "Amazon EMR long-running cluster",
+                    "correct": false
+                }
+            ],
+            "explanation": "Amazon Data Firehose is a fully managed service that buffers streaming data, can transform it before delivery, and delivers it to S3 with optional compression, with no applications to write. MSK plus EC2 and EMR need infrastructure and code, and Glue crawlers catalog data rather than ingest streams.",
+            "sources": [
+                "https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html",
+                "https://docs.aws.amazon.com/firehose/latest/dev/create-destination.html"
+            ]
+        },
+        {
+            "id": "perf-ingestion-003",
+            "type": "multi",
+            "difficulty": 3,
+            "tags": [
+                "DataSync"
+            ],
+            "prompt": "A company must copy a 200 TB archive from an on-premises NFS NAS to Amazon S3 over its fast network link and then keep S3 in sync with the NAS every night. Which TWO actions meet the requirement with the least custom code?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Use AWS DataSync to transfer the NAS data to S3 online",
+                    "correct": true
+                },
+                {
+                    "id": "b",
+                    "text": "Amazon Data Firehose for the 200 TB archive",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Run the DataSync task on a nightly schedule",
+                    "correct": true
+                },
+                {
+                    "id": "d",
+                    "text": "AWS Glue crawlers for the nightly sync",
+                    "correct": false
+                },
+                {
+                    "id": "e",
+                    "text": "Amazon CloudFront for the initial 200 TB",
+                    "correct": false
+                }
+            ],
+            "explanation": "DataSync works with on-premises NFS storage and transfers data to S3 over the network, and a DataSync task can run on a schedule with cron or rate expressions, so a nightly run keeps S3 in sync. Data Firehose delivers streaming records, Glue crawlers catalog data rather than copy it, and CloudFront delivers content to users rather than ingesting it.",
+            "sources": [
+                "https://docs.aws.amazon.com/datasync/latest/userguide/what-is-datasync.html",
+                "https://docs.aws.amazon.com/datasync/latest/userguide/task-scheduling.html"
+            ]
+        },
+        {
+            "id": "perf-ingestion-004",
+            "type": "ordering",
+            "difficulty": 2,
+            "tags": [
+                "S3",
+                "Glue",
+                "Athena"
+            ],
+            "prompt": "Put the steps in order to query raw CSV files in S3 with SQL without managing servers.",
+            "steps": [
+                "Query the table with Amazon Athena",
+                "Run an AWS Glue crawler to populate the Data Catalog",
+                "Land the CSV files in an S3 bucket"
+            ],
+            "correctOrder": [
+                2,
+                1,
+                0
+            ],
+            "explanation": "Data must first exist in S3, then a Glue crawler infers the schema into the Data Catalog, and finally Athena queries the cataloged table.",
+            "sources": [
+                "https://docs.aws.amazon.com/glue/latest/dg/define-crawler.html",
+                "https://docs.aws.amazon.com/athena/latest/ug/data-sources-glue.html",
+                "https://docs.aws.amazon.com/athena/latest/ug/what-is.html"
+            ]
+        },
+        {
+            "id": "perf-ingestion-005",
+            "type": "matching",
+            "difficulty": 2,
+            "tags": [
+                "Glue",
+                "Athena",
+                "MSK",
+                "Transfer Family"
+            ],
+            "prompt": "Match each requirement to the service.",
+            "pairs": [
+                {
+                    "left": "Serverless ETL jobs and a Data Catalog",
+                    "right": "AWS Glue"
+                },
+                {
+                    "left": "Serverless SQL queries directly on S3 data",
+                    "right": "Amazon Athena"
+                },
+                {
+                    "left": "Managed Apache Kafka clusters",
+                    "right": "Amazon MSK"
+                },
+                {
+                    "left": "Partners uploading files over SFTP into S3",
+                    "right": "AWS Transfer Family"
+                }
+            ],
+            "explanation": "Each pairing reflects the service's purpose: Glue for ETL, Athena for interactive SQL on S3, MSK for Kafka, and Transfer Family for managed SFTP/FTPS/FTP into AWS storage.",
+            "sources": [
+                "https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html",
+                "https://docs.aws.amazon.com/athena/latest/ug/what-is.html",
+                "https://docs.aws.amazon.com/msk/latest/developerguide/what-is-msk.html",
+                "https://docs.aws.amazon.com/transfer/latest/userguide/what-is-aws-transfer-family.html"
+            ]
+        },
+        {
+            "id": "perf-ingestion-006",
+            "type": "typed",
+            "difficulty": 2,
+            "tags": [
+                "Glue"
+            ],
+            "prompt": "Which AWS service provides serverless ETL with a central Data Catalog and can run Apache Spark jobs?",
+            "rubric": [
+                {
+                    "any": [
+                        "glue",
+                        "aws glue"
+                    ]
+                }
+            ],
+            "explanation": "AWS Glue is a serverless data integration service that includes the Data Catalog, crawlers and Spark-based ETL jobs.",
+            "sources": [
+                "https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html"
+            ]
+        }
+    ]
+}

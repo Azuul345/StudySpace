@@ -1,0 +1,487 @@
+{
+  "schemaVersion": 1,
+  "cards": [
+    {
+      "id": "fc-secure-001",
+      "term": "IAM role",
+      "definition": "An IAM identity with permissions that any trusted principal can assume to get temporary credentials, instead of long-term keys.",
+      "sources": [
+        "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html"
+      ]
+    },
+    {
+      "id": "fc-secure-002",
+      "term": "Service control policy (SCP)",
+      "definition": "An AWS Organizations policy that sets the maximum permissions available to accounts; it never grants permissions itself.",
+      "sources": [
+        "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html"
+      ]
+    },
+    {
+      "id": "fc-secure-003",
+      "term": "Permissions boundary",
+      "definition": "An IAM managed policy set on a user or role that defines the maximum permissions that identity-based policies can grant it.",
+      "sources": [
+        "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html"
+      ]
+    },
+    {
+      "id": "fc-secure-004",
+      "term": "AWS STS",
+      "definition": "AWS Security Token Service, which issues temporary, limited-privilege credentials for roles and federated users.",
+      "sources": [
+        "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp.html"
+      ]
+    },
+    {
+      "id": "fc-secure-005",
+      "term": "IAM Identity Center",
+      "definition": "Service for workforce single sign-on and centrally managed access to multiple AWS accounts and applications.",
+      "sources": [
+        "https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html"
+      ]
+    },
+    {
+      "id": "fc-secure-006",
+      "term": "Cognito user pool",
+      "definition": "A user directory in Amazon Cognito that handles sign-up and sign-in for app users and issues tokens.",
+      "sources": [
+        "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html"
+      ]
+    },
+    {
+      "id": "fc-secure-007",
+      "term": "Cognito identity pool",
+      "definition": "Exchanges authenticated or guest identities for temporary AWS credentials mapped to IAM roles.",
+      "sources": [
+        "https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-identity.html"
+      ]
+    },
+    {
+      "id": "fc-secure-008",
+      "term": "IAM Access Analyzer",
+      "definition": "Identifies resources shared with external principals and helps validate and generate least-privilege policies.",
+      "sources": [
+        "https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html"
+      ]
+    },
+    {
+      "id": "fc-secure-009",
+      "term": "Security group",
+      "definition": "A stateful virtual firewall at the instance or network interface level that has allow rules only.",
+      "sources": [
+        "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html"
+      ]
+    },
+    {
+      "id": "fc-secure-010",
+      "term": "Network ACL",
+      "definition": "A stateless subnet-level firewall with numbered allow and deny rules for inbound and outbound traffic.",
+      "sources": [
+        "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html"
+      ]
+    },
+    {
+      "id": "fc-secure-011",
+      "term": "Gateway VPC endpoint",
+      "definition": "A route-table target that privately connects a VPC to Amazon S3 or DynamoDB at no additional charge.",
+      "sources": [
+        "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html"
+      ]
+    },
+    {
+      "id": "fc-secure-012",
+      "term": "AWS WAF",
+      "definition": "A web application firewall that filters HTTP and HTTPS requests to CloudFront, ALB, API Gateway, and other resources.",
+      "sources": [
+        "https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html"
+      ]
+    },
+    {
+      "id": "fc-secure-013",
+      "term": "AWS Shield",
+      "definition": "Managed DDoS protection; Standard is automatic at no extra charge, and Advanced is a paid subscription for higher levels of protection.",
+      "sources": [
+        "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html"
+      ]
+    },
+    {
+      "id": "fc-secure-014",
+      "term": "Amazon GuardDuty",
+      "definition": "Threat detection service that analyzes CloudTrail events, VPC flow logs, and DNS logs for malicious activity.",
+      "sources": [
+        "https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html"
+      ]
+    },
+    {
+      "id": "fc-secure-015",
+      "term": "AWS Secrets Manager",
+      "definition": "Stores and retrieves secrets such as database credentials and can rotate them automatically.",
+      "sources": [
+        "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html"
+      ]
+    },
+    {
+      "id": "fc-secure-016",
+      "term": "AWS KMS",
+      "definition": "Managed service for creating and controlling cryptographic keys used to protect data across AWS services.",
+      "sources": [
+        "https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html"
+      ]
+    },
+    {
+      "id": "fc-secure-017",
+      "term": "S3 Object Lock",
+      "definition": "Write-once-read-many protection for S3 object versions, with governance and compliance retention modes.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"
+      ]
+    },
+    {
+      "id": "fc-secure-018",
+      "term": "Amazon Macie",
+      "definition": "Uses machine learning and pattern matching to discover and report sensitive data in Amazon S3.",
+      "sources": [
+        "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html"
+      ]
+    },
+    {
+      "id": "fc-resilient-001",
+      "term": "Message queue (SQS)",
+      "definition": "A managed queue that buffers messages between producers and consumers so they scale and fail independently. Consumers pull messages.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html"
+      ]
+    },
+    {
+      "id": "fc-resilient-002",
+      "term": "Visibility timeout",
+      "definition": "The period after a consumer receives an SQS message during which other consumers cannot see it. Set it longer than the processing time.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html"
+      ]
+    },
+    {
+      "id": "fc-resilient-003",
+      "term": "Dead-letter queue",
+      "definition": "An SQS queue that receives messages that exceeded the maximum receive count on the source queue, so failures can be inspected.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html"
+      ]
+    },
+    {
+      "id": "fc-resilient-004",
+      "term": "Long polling",
+      "definition": "Receiving SQS messages with a wait time greater than zero so the call waits for messages, reducing empty responses and cost.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-short-and-long-polling.html"
+      ]
+    },
+    {
+      "id": "fc-resilient-005",
+      "term": "SNS fan-out",
+      "definition": "Publishing one message to an SNS topic that delivers it to many subscribers, commonly one SQS queue per consumer.",
+      "sources": [
+        "https://docs.aws.amazon.com/sns/latest/dg/sns-sqs-as-subscriber.html"
+      ]
+    },
+    {
+      "id": "fc-resilient-006",
+      "term": "Amazon EventBridge",
+      "definition": "A serverless event bus that routes events from AWS services, applications and SaaS partners to targets using rules.",
+      "sources": [
+        "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html"
+      ]
+    },
+    {
+      "id": "fc-resilient-007",
+      "term": "AWS Step Functions",
+      "definition": "A serverless workflow service that orchestrates services as state machines with retries, error handling and branching.",
+      "sources": [
+        "https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html"
+      ]
+    },
+    {
+      "id": "fc-resilient-008",
+      "term": "RDS Proxy",
+      "definition": "A managed database proxy that pools and shares connections, protecting databases from connection exhaustion by bursty clients such as Lambda.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html"
+      ]
+    },
+    {
+      "id": "fc-resilient-009",
+      "term": "Multi-AZ deployment (RDS)",
+      "definition": "An RDS deployment with a synchronous standby in another AZ for automatic failover. It is for availability, not read scaling.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html"
+      ]
+    },
+    {
+      "id": "fc-resilient-010",
+      "term": "Read replica",
+      "definition": "An asynchronously replicated copy of a database used to scale read traffic and, for cross-Region replicas, to support disaster recovery.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html"
+      ]
+    },
+    {
+      "id": "fc-resilient-011",
+      "term": "Aurora Global Database",
+      "definition": "An Aurora database spanning multiple Regions with storage-level replication, low replication lag and fast cross-Region failover.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.html"
+      ]
+    },
+    {
+      "id": "fc-resilient-012",
+      "term": "DynamoDB global tables",
+      "definition": "A multi-Region, multi-active replication feature where each replica table accepts reads and writes.",
+      "sources": [
+        "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html"
+      ]
+    },
+    {
+      "id": "fc-resilient-013",
+      "term": "RTO and RPO",
+      "definition": "Recovery time objective is how long a workload may be down; recovery point objective is how much data loss, measured in time, is acceptable.",
+      "sources": [
+        "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/disaster-recovery-dr-objectives.html"
+      ]
+    },
+    {
+      "id": "fc-resilient-014",
+      "term": "Pilot light",
+      "definition": "A disaster recovery strategy that keeps core components such as replicated data ready, with compute scaled up only during a disaster.",
+      "sources": [
+        "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html"
+      ]
+    },
+    {
+      "id": "fc-resilient-015",
+      "term": "AWS Global Accelerator",
+      "definition": "A service that provides static anycast IP addresses and routes traffic to healthy Regional endpoints without depending on DNS caching.",
+      "sources": [
+        "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html",
+        "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html"
+      ]
+    },
+    {
+      "id": "fc-performant-001",
+      "term": "Provisioned IOPS SSD (io2)",
+      "definition": "EBS volume type for latency-sensitive workloads that need sustained, high IOPS, such as large databases.",
+      "sources": [
+        "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html"
+      ]
+    },
+    {
+      "id": "fc-performant-002",
+      "term": "gp3 volume",
+      "definition": "General Purpose SSD EBS volume with a baseline of 3,000 IOPS where IOPS and throughput can be provisioned independently of size.",
+      "sources": [
+        "https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html"
+      ]
+    },
+    {
+      "id": "fc-performant-003",
+      "term": "Instance store",
+      "definition": "Temporary block storage physically attached to the host; very fast but data is lost when the instance stops, hibernates or terminates.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-store-lifetime.html"
+      ]
+    },
+    {
+      "id": "fc-performant-004",
+      "term": "Amazon EFS",
+      "definition": "Managed, elastic NFS file system that many Linux instances across Availability Zones can mount at the same time.",
+      "sources": [
+        "https://docs.aws.amazon.com/efs/latest/ug/performance.html"
+      ]
+    },
+    {
+      "id": "fc-performant-005",
+      "term": "FSx for Lustre",
+      "definition": "High-performance file system for HPC and machine learning workloads that can be linked to an S3 bucket.",
+      "sources": [
+        "https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html"
+      ]
+    },
+    {
+      "id": "fc-performant-006",
+      "term": "S3 Transfer Acceleration",
+      "definition": "Feature that speeds long-distance transfers to S3 by routing uploads through CloudFront edge locations.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html"
+      ]
+    },
+    {
+      "id": "fc-performant-007",
+      "term": "Cluster placement group",
+      "definition": "Packs EC2 instances close together in one AZ for low-latency, high-throughput networking.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html"
+      ]
+    },
+    {
+      "id": "fc-performant-008",
+      "term": "Target tracking scaling",
+      "definition": "Auto Scaling policy that adjusts capacity to keep a metric near a target value.",
+      "sources": [
+        "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html"
+      ]
+    },
+    {
+      "id": "fc-performant-009",
+      "term": "Provisioned concurrency",
+      "definition": "Lambda setting that keeps a set number of execution environments initialized to avoid cold starts.",
+      "sources": [
+        "https://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html"
+      ]
+    },
+    {
+      "id": "fc-performant-010",
+      "term": "AWS Fargate",
+      "definition": "Serverless compute engine for containers on ECS and EKS, with no instances to manage.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html"
+      ]
+    },
+    {
+      "id": "fc-performant-011",
+      "term": "Read replica",
+      "definition": "Asynchronously replicated copy of a database used to scale read traffic.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html"
+      ]
+    },
+    {
+      "id": "fc-performant-012",
+      "term": "DynamoDB Accelerator (DAX)",
+      "definition": "Fully managed in-memory cache for DynamoDB that delivers microsecond read latency.",
+      "sources": [
+        "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.html"
+      ]
+    },
+    {
+      "id": "fc-performant-013",
+      "term": "RDS Proxy",
+      "definition": "Managed database proxy that pools and shares connections to reduce connection exhaustion.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html"
+      ]
+    },
+    {
+      "id": "fc-performant-014",
+      "term": "AWS Global Accelerator",
+      "definition": "Service giving static anycast IP addresses that route TCP and UDP traffic over the AWS global network to optimal endpoints.",
+      "sources": [
+        "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html",
+        "https://docs.aws.amazon.com/global-accelerator/latest/dg/about-listeners.html"
+      ]
+    },
+    {
+      "id": "fc-performant-015",
+      "term": "Amazon Data Firehose",
+      "definition": "Managed service that loads streaming data into S3, Redshift, OpenSearch and other destinations with no consumer code.",
+      "sources": [
+        "https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html"
+      ]
+    },
+    {
+      "id": "fc-cost-001",
+      "term": "S3 Intelligent-Tiering",
+      "definition": "An S3 storage class that automatically moves objects between access tiers as access patterns change, with no retrieval fees and a small per-object monitoring fee.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/intelligent-tiering.html"
+      ]
+    },
+    {
+      "id": "fc-cost-002",
+      "term": "S3 Lifecycle rule",
+      "definition": "A configuration that transitions objects between storage classes or expires them after a set time, and can also remove noncurrent versions and incomplete multipart uploads.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/intro-lifecycle-rules.html"
+      ]
+    },
+    {
+      "id": "fc-cost-003",
+      "term": "S3 Glacier Deep Archive",
+      "definition": "The lowest-cost S3 storage class, meant for long-term archives that are rarely read and can wait hours for retrieval.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html"
+      ]
+    },
+    {
+      "id": "fc-cost-004",
+      "term": "EBS gp3",
+      "definition": "A general purpose SSD volume type priced about 20 percent lower per GiB than gp2, where you can provision IOPS and throughput independently of size.",
+      "sources": [
+        "https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html"
+      ]
+    },
+    {
+      "id": "fc-cost-005",
+      "term": "Spot Instance",
+      "definition": "An EC2 instance that uses spare capacity at a large discount and can be interrupted by AWS with a two-minute notice, suited to fault-tolerant work.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html"
+      ]
+    },
+    {
+      "id": "fc-cost-006",
+      "term": "Savings Plan",
+      "definition": "A pricing model that gives a lower rate in exchange for a commitment to a consistent amount of usage per hour for one or three years.",
+      "sources": [
+        "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html"
+      ]
+    },
+    {
+      "id": "fc-cost-007",
+      "term": "AWS Compute Optimizer",
+      "definition": "A service that analyzes utilization metrics and recommends right-sized EC2 instances, Auto Scaling groups, EBS volumes and Lambda functions.",
+      "sources": [
+        "https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is-compute-optimizer.html"
+      ]
+    },
+    {
+      "id": "fc-cost-008",
+      "term": "Aurora Serverless v2",
+      "definition": "An Aurora configuration that scales database capacity up and down in fine increments with load, so you pay for the capacity used.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html"
+      ]
+    },
+    {
+      "id": "fc-cost-009",
+      "term": "Reserved DB Instance",
+      "definition": "An RDS billing commitment for a one or three year term that lowers the hourly rate for databases that run steadily.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithReservedDBInstances.html"
+      ]
+    },
+    {
+      "id": "fc-cost-010",
+      "term": "DynamoDB on-demand capacity",
+      "definition": "A capacity mode where DynamoDB bills per read and write request with no capacity planning, suited to unpredictable traffic.",
+      "sources": [
+        "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/capacity-mode.html"
+      ]
+    },
+    {
+      "id": "fc-cost-011",
+      "term": "Gateway VPC endpoint",
+      "definition": "A route table target that privately connects a VPC to S3 or DynamoDB at no additional charge, avoiding NAT gateway data processing fees.",
+      "sources": [
+        "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html"
+      ]
+    },
+    {
+      "id": "fc-cost-012",
+      "term": "NAT gateway charges",
+      "definition": "A NAT gateway bills for each hour it runs and for each GB of data it processes, so heavy traffic to AWS services is often cheaper through VPC endpoints.",
+      "sources": [
+        "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-pricing.html"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,506 @@
+{
+  "schemaVersion": 1,
+  "topicId": "highly-available",
+  "domainId": "resilient",
+  "name": "Design highly available and/or fault-tolerant architectures",
+  "lesson": {
+    "summary": "High availability removes single points of failure by spreading components across Availability Zones, and disaster recovery extends that across Regions. Choose the strategy by RTO and RPO: backup and restore, pilot light, warm standby or multi-site active/active.",
+    "keyPoints": [
+      "Spread load balancers, Auto Scaling groups and subnets across at least two AZs; a zonal NAT gateway serves one AZ, so create one per AZ (a regional NAT gateway expands across AZs automatically)",
+      "RDS Multi-AZ gives failover, not read scaling; read replicas scale reads; Aurora Global Database and DynamoDB global tables give cross-Region replication",
+      "Use ELB health checks with Auto Scaling so application-level failures replace instances",
+      "Route 53 failover routing and Global Accelerator redirect traffic to a healthy Region; Global Accelerator does not depend on DNS caching",
+      "DR strategies by rising cost and falling RTO: backup and restore, pilot light, warm standby, multi-site active/active",
+      "S3 replication needs versioning; AWS Backup and Elastic Disaster Recovery protect data and servers centrally"
+    ],
+    "docLinks": [
+      "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html",
+      "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html",
+      "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html",
+      "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html",
+      "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html",
+      "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateways-regional.html"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "ha-sc-1",
+      "text": "A company runs an e-commerce site in one Region on an Application Load Balancer, an Auto Scaling group across two AZs, and an Aurora MySQL cluster. The business now requires surviving a full Regional outage with an RTO of 15 minutes and an RPO of about one minute, while keeping operational effort low."
+    }
+  ],
+  "questions": [
+    {
+      "id": "highly-available-001",
+      "type": "mcq",
+      "difficulty": 1,
+      "tags": [
+        "RDS"
+      ],
+      "prompt": "What does an Amazon RDS Multi-AZ DB instance deployment provide?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Read scaling through a readable standby",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Automatic failover to a synchronously replicated standby in another Availability Zone",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Cross-Region disaster recovery",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Automatic scaling of storage and compute capacity",
+          "correct": false
+        }
+      ],
+      "explanation": "In a Multi-AZ DB instance deployment, RDS keeps a synchronous standby in a different AZ and fails over automatically, which is an availability feature. The standby in that deployment does not serve reads. It stays inside one Region, so it is not cross-Region DR. It does not scale compute capacity.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html"
+      ]
+    },
+    {
+      "id": "highly-available-002",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "EFS",
+        "EC2"
+      ],
+      "prompt": "EC2 instances in three Availability Zones must read and write the same files, and the file system must survive the loss of one AZ. Which storage choice fits?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Amazon EBS io2 volume with Multi-Attach",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Amazon EFS file system with mount targets in each AZ",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Instance store volumes replicated with rsync",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "A single EBS volume with hourly snapshots",
+          "correct": false
+        }
+      ],
+      "explanation": "EFS stores data redundantly across multiple AZs and can be mounted concurrently from instances in different AZs. EBS volumes live in a single AZ, and Multi-Attach only works for instances in that AZ. Instance store data is lost when the instance stops and rsync adds operational burden. A single volume with snapshots is neither shared nor highly available.",
+      "sources": [
+        "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html"
+      ]
+    },
+    {
+      "id": "highly-available-003",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "VPC",
+        "NAT Gateway"
+      ],
+      "prompt": "Private subnets in three AZs all route internet-bound traffic through one zonal NAT gateway in AZ-a. What should be changed so that an AZ-a outage does not break outbound access for the other AZs?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Create a zonal NAT gateway in each AZ and route each private subnet to the NAT gateway in its own AZ",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Replace the NAT gateway with a larger NAT instance",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Attach an additional Elastic IP address to the existing NAT gateway",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Add a second route to the same NAT gateway",
+          "correct": false
+        }
+      ],
+      "explanation": "A zonal NAT gateway operates in a single AZ, so each AZ needs its own zonal gateway and route for AZ independence (a regional NAT gateway would instead expand across AZs automatically). A NAT instance is neither managed nor more available. An extra Elastic IP does not add redundancy, and a second route to the same gateway has the same failure domain.",
+      "sources": [
+        "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-scenarios.html",
+        "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html",
+        "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateways-regional.html"
+      ]
+    },
+    {
+      "id": "highly-available-004",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "Route 53"
+      ],
+      "prompt": "A company runs its site in one Region and keeps a standby copy in another Region. Which Route 53 setup sends users to the standby automatically only when the primary becomes unhealthy?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Weighted records with equal weights and no health checks",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Geolocation records for each continent",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Simple routing with both endpoints in one record",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Failover routing with a health check on the primary record",
+          "correct": true
+        }
+      ],
+      "explanation": "Failover routing is active-passive: Route 53 answers with the primary while its health check passes and with the secondary when it fails. Equal weights without health checks send traffic to both and never remove a dead endpoint. Geolocation routes by user location, not health. A single simple record has no primary and secondary concept.",
+      "sources": [
+        "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html",
+        "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html"
+      ]
+    },
+    {
+      "id": "highly-available-005",
+      "type": "mcq",
+      "difficulty": 3,
+      "tags": [
+        "DynamoDB"
+      ],
+      "prompt": "A global application needs a DynamoDB table that accepts writes in two Regions and keeps both copies in sync, so users can fail over with no data restore. Which feature should be used?",
+      "options": [
+        {
+          "id": "a",
+          "text": "On-demand backups copied to the second Region",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Point-in-time recovery",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "DynamoDB global tables",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "DynamoDB Accelerator (DAX)",
+          "correct": false
+        }
+      ],
+      "explanation": "Global tables provide multi-Region, multi-active replication, so each Region can read and write. Backups and PITR require a restore and cause downtime. DAX is an in-memory cache and does not replicate across Regions.",
+      "sources": [
+        "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html"
+      ]
+    },
+    {
+      "id": "highly-available-006",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "S3"
+      ],
+      "prompt": "Objects in an S3 bucket must be copied automatically to a bucket in another Region to protect against a Regional outage. Which prerequisite applies?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Versioning must be enabled on both the source and destination buckets",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "The destination bucket must use the Glacier storage class",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Both buckets must have a lifecycle policy",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Object Lock must be enabled on the destination bucket",
+          "correct": false
+        }
+      ],
+      "explanation": "S3 replication requires versioning on the source and destination buckets. The destination can use any storage class and does not need Glacier. Lifecycle policies and Object Lock are optional and not required for replication.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html",
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-requirements.html"
+      ]
+    },
+    {
+      "id": "highly-available-007",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": [
+        "ELB",
+        "VPC"
+      ],
+      "prompt": "Which TWO actions make an Application Load Balancer tolerate the loss of one Availability Zone?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Enable the load balancer in subnets of at least two Availability Zones",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Register targets in more than one Availability Zone",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Assign an Elastic IP address to each target",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Use a single large target in one AZ",
+          "correct": false
+        },
+        {
+          "id": "e",
+          "text": "Disable health checks to avoid false failures",
+          "correct": false
+        }
+      ],
+      "explanation": "The load balancer needs nodes in several AZs and the target group needs targets in several AZs, so traffic keeps flowing when one AZ fails. Elastic IPs on targets add nothing to AZ resilience. One target in one AZ is a single point of failure. Disabling health checks stops the ALB from avoiding failed targets.",
+      "sources": [
+        "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html"
+      ]
+    },
+    {
+      "id": "highly-available-008",
+      "type": "multi",
+      "difficulty": 3,
+      "tags": [
+        "Auto Scaling",
+        "ELB"
+      ],
+      "prompt": "The application process on some instances in an Auto Scaling group hangs while the EC2 status checks still pass, so users receive errors. Which TWO actions cause such instances to be replaced automatically?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Enable Elastic Load Balancing health checks for the Auto Scaling group",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Configure the target group health check to call an application health endpoint",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Increase the default cooldown period",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Rely only on the default EC2 status checks",
+          "correct": false
+        },
+        {
+          "id": "e",
+          "text": "Create a CloudWatch alarm on network packets",
+          "correct": false
+        }
+      ],
+      "explanation": "By default the group trusts only EC2 status checks; turning on ELB health checks and pointing the target group at an application-level path lets Auto Scaling replace instances the load balancer marks unhealthy. A longer cooldown only delays scaling actions. EC2 status checks cannot see an application hang. A packets alarm is not a health signal.",
+      "sources": [
+        "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-health-checks.html",
+        "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html"
+      ]
+    },
+    {
+      "id": "highly-available-009",
+      "type": "scenario",
+      "difficulty": 3,
+      "tags": [
+        "Aurora"
+      ],
+      "prompt": "Which database design meets the RPO and RTO with the least operational effort?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Aurora Global Database with a secondary Region",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Daily automated snapshots copied to the second Region",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "A Multi-AZ deployment in the primary Region only",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "A self-managed MySQL replica on EC2 in the second Region",
+          "correct": false
+        }
+      ],
+      "explanation": "Aurora Global Database replicates storage across Regions with typically about a second of lag and lets you promote the secondary Region quickly. Daily snapshots give an RPO of up to a day. Multi-AZ stays inside one Region. A self-managed replica adds operational work and offers weaker guarantees.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.html"
+      ],
+      "scenarioId": "ha-sc-1"
+    },
+    {
+      "id": "highly-available-010",
+      "type": "scenario",
+      "difficulty": 3,
+      "tags": [
+        "Global Accelerator",
+        "Route 53"
+      ],
+      "prompt": "Some enterprise clients cache DNS answers for a long time and ignore TTLs. Which option redirects traffic to the second Region fastest without relying on client DNS caching?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Route 53 failover records with a 24-hour TTL",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Re-associate the primary Elastic IP address with an instance in the second Region",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "AWS Global Accelerator with endpoint groups in both Regions",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Increase the Auto Scaling group size in the primary Region",
+          "correct": false
+        }
+      ],
+      "explanation": "Global Accelerator gives static anycast IP addresses and shifts traffic between Regional endpoint groups based on health, independent of DNS caching. A long TTL makes DNS failover slower. An Elastic IP cannot move between Regions. More capacity in the failed Region does not help.",
+      "sources": [
+        "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html",
+        "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html"
+      ],
+      "scenarioId": "ha-sc-1"
+    },
+    {
+      "id": "highly-available-011",
+      "type": "truefalse",
+      "difficulty": 2,
+      "tags": [
+        "RDS"
+      ],
+      "statement": "In an RDS Multi-AZ DB instance deployment with one standby, you can send read queries to the standby to scale read traffic.",
+      "answer": false,
+      "explanation": "False. The standby in a Multi-AZ DB instance deployment exists only for failover and does not accept connections; use read replicas to scale reads.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html",
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html"
+      ]
+    },
+    {
+      "id": "highly-available-012",
+      "type": "ordering",
+      "difficulty": 2,
+      "tags": [
+        "Disaster Recovery"
+      ],
+      "prompt": "Order the disaster recovery strategies from the highest RTO and lowest cost to the lowest RTO and highest cost.",
+      "steps": [
+        "Warm standby",
+        "Backup and restore",
+        "Multi-site active/active",
+        "Pilot light"
+      ],
+      "correctOrder": [
+        1,
+        3,
+        0,
+        2
+      ],
+      "explanation": "Backup and restore is cheapest with the slowest recovery, pilot light keeps only core pieces running, warm standby runs a scaled-down full copy, and multi-site active/active has the fastest recovery at the highest cost.",
+      "sources": [
+        "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html"
+      ]
+    },
+    {
+      "id": "highly-available-013",
+      "type": "matching",
+      "difficulty": 2,
+      "tags": [
+        "Route 53",
+        "AWS Backup",
+        "Elastic Disaster Recovery",
+        "ELB"
+      ],
+      "prompt": "Match each service to what it provides for resilience.",
+      "pairs": [
+        {
+          "left": "Amazon Route 53 health checks",
+          "right": "DNS failover when an endpoint becomes unhealthy"
+        },
+        {
+          "left": "AWS Backup",
+          "right": "Centrally managed backup plans across AWS services"
+        },
+        {
+          "left": "AWS Elastic Disaster Recovery",
+          "right": "Continuous block-level replication of servers for fast recovery"
+        },
+        {
+          "left": "Elastic Load Balancing",
+          "right": "Spreads traffic across healthy targets in multiple AZs"
+        }
+      ],
+      "explanation": "Route 53 handles DNS-level failover, AWS Backup centralizes backups, Elastic Disaster Recovery replicates servers continuously, and ELB spreads traffic over healthy targets.",
+      "sources": [
+        "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html",
+        "https://docs.aws.amazon.com/aws-backup/latest/devguide/whatisbackup.html",
+        "https://docs.aws.amazon.com/drs/latest/userguide/what-is-drs.html",
+        "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html"
+      ]
+    },
+    {
+      "id": "highly-available-014",
+      "type": "typed",
+      "difficulty": 2,
+      "tags": [
+        "S3"
+      ],
+      "prompt": "What is the name of the S3 feature that automatically copies new objects to a bucket in a different Region?",
+      "rubric": [
+        {
+          "any": [
+            "cross-region replication",
+            "cross region replication",
+            "crr",
+            "replication"
+          ]
+        }
+      ],
+      "explanation": "S3 Cross-Region Replication (CRR), part of S3 Replication, asynchronously copies objects between buckets in different Regions.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html"
+      ]
+    }
+  ]
+}

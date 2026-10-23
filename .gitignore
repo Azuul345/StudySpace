@@ -26,3 +26,6 @@ Thumbs.db
 
 # Handoff docs (local only, not pushed)
 /docs/
+
+# Local review scratch (verifier reports in progress)
+/.review/
