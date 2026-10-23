@@ -18,7 +18,7 @@ using (var scope = app.Services.CreateScope())
     scope.ServiceProvider.GetRequiredService<StudySpaceDbContext>().Database.Migrate();
 }
 
-app.UseExceptionHandler();
+app.UseProblemErrors();
 app.Use(async (context, next) =>
 {
     context.Response.Headers["X-Content-Type-Options"] = "nosniff";
@@ -28,6 +28,7 @@ app.Use(async (context, next) =>
 
 var api = app.MapGroup("/api/v1");
 api.MapCatalog();
+api.MapAttempts();
 
 app.Run();
 
