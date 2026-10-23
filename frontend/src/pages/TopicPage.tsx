@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { getTopic } from '../api/client'
 import { Async } from '../components/Async'
 import { Markdown } from '../components/Markdown'
@@ -55,6 +55,9 @@ export function TopicPage() {
               <p>No lesson for this topic yet.</p>
             )}
             <p>{t.questionCount} verified questions available.</p>
+            {t.questionCount > 0 && (
+              <Link to={`/practice?form=drill&examCode=${encodeURIComponent(t.examCode)}&topicId=${t.id}`}>Start drill</Link>
+            )}
           </>
         )}
       </Async>

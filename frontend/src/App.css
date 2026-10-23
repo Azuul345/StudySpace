@@ -6,3 +6,12 @@ small { font-weight: 400; opacity: 0.7; }
 .cards li { border: 1px solid #8884; border-radius: 8px; padding: 1rem; }
 .error { color: #b00020; }
 .crumb { margin: 0; opacity: 0.7; }
+.actions { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1rem 0; }
+.option { display: block; margin: 0.5rem 0; }
+.scenario { border-left: 4px solid #8886; margin: 1rem 0; padding: 0.25rem 1rem; }
+.feedback { border: 1px solid #8886; border-radius: 8px; padding: 0.5rem 1rem; margin: 1rem 0; }
+.timer { position: sticky; top: 0; float: right; font-variant-numeric: tabular-nums; font-size: 1.5rem; }
+.timer.low { color: #b00020; }
+.flashcard { border: 1px solid #8886; border-radius: 8px; padding: 1rem 2rem; }
+.ratings { display: flex; gap: 0.5rem; }
+textarea { display: block; width: 100%; min-height: 6rem; }

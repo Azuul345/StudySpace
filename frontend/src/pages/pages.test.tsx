@@ -25,6 +25,7 @@ const topic: client.TopicDetail = {
   id: 7,
   slug: 's3-security',
   name: 'S3 security and access',
+  examCode: 'SAA-C03',
   domain: { id: 1, name: 'Design Secure Architectures' },
   lesson: {
     summary: 'Use **bucket policies** with Block Public Access.',

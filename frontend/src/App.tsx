@@ -2,6 +2,8 @@ import { Link, NavLink, Route, Routes } from 'react-router-dom'
 import { Dashboard } from './pages/Dashboard'
 import { ExamPage } from './pages/ExamPage'
 import { TopicPage } from './pages/TopicPage'
+import { FlashcardsPage } from './pages/FlashcardsPage'
+import { PracticePage } from './pages/PracticePage'
 import './App.css'
 
 function NotFound() {
@@ -26,6 +28,8 @@ export function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/exams/:code" element={<ExamPage />} />
           <Route path="/topics/:id" element={<TopicPage />} />
+          <Route path="/exams/:code/flashcards" element={<FlashcardsPage />} />
+          <Route path="/practice" element={<PracticePage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

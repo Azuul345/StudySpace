@@ -63,6 +63,7 @@ public static class CatalogEndpoints
         }
 
         var domain = await db.Domains.FirstAsync(d => d.Id == topic.DomainId, ct);
+        var examCode = await db.Exams.Where(e => e.Id == topic.ExamId).Select(e => e.Code).FirstAsync(ct);
         var count = await db.Questions.CountAsync(q => q.TopicId == id && q.VerificationStatus == VerificationStatus.Verified, ct);
 
         return Results.Ok(new
@@ -70,6 +71,7 @@ public static class CatalogEndpoints
             topic.Id,
             topic.Slug,
             topic.Name,
+            ExamCode = examCode,
             Domain = new { domain.Id, domain.Name },
             Lesson = topic.Lesson is null ? null : new
             {
