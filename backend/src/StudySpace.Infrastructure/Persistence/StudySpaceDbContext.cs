@@ -13,6 +13,11 @@ public class StudySpaceDbContext(DbContextOptions<StudySpaceDbContext> options) 
     public DbSet<QuestionOptionEntity> QuestionOptions => Set<QuestionOptionEntity>();
     public DbSet<FlashcardEntity> Flashcards => Set<FlashcardEntity>();
     public DbSet<ContentPackEntity> ContentPacks => Set<ContentPackEntity>();
+    public DbSet<AttemptEntity> Attempts => Set<AttemptEntity>();
+    public DbSet<AttemptQuestionEntity> AttemptQuestions => Set<AttemptQuestionEntity>();
+    public DbSet<AnswerRecordEntity> AnswerRecords => Set<AnswerRecordEntity>();
+    public DbSet<BankItemEntity> BankItems => Set<BankItemEntity>();
+    public DbSet<FlashcardScheduleEntity> FlashcardSchedules => Set<FlashcardScheduleEntity>();
 
     protected override void OnModelCreating(ModelBuilder b)
     {
@@ -44,5 +49,21 @@ public class StudySpaceDbContext(DbContextOptions<StudySpaceDbContext> options) 
         b.Entity<ContentPackEntity>().HasIndex(p => new { p.PackSlug, p.Version }).IsUnique();
         b.Entity<ContentPackEntity>().HasOne<ExamEntity>().WithMany().HasForeignKey(p => p.ExamId).OnDelete(DeleteBehavior.Cascade);
         b.Entity<ContentPackEntity>().Property(p => p.VerificationStatus).HasConversion<string>();
+
+        b.Entity<AttemptEntity>().HasOne<ExamEntity>().WithMany().HasForeignKey(a => a.ExamId).OnDelete(DeleteBehavior.Cascade);
+        b.Entity<AttemptEntity>().HasMany(a => a.Questions).WithOne().HasForeignKey(q => q.AttemptId).OnDelete(DeleteBehavior.Cascade);
+        b.Entity<AttemptQuestionEntity>().HasIndex(q => new { q.AttemptId, q.QuestionId }).IsUnique();
+        b.Entity<AttemptQuestionEntity>().HasOne<QuestionEntity>().WithMany().HasForeignKey(q => q.QuestionId).OnDelete(DeleteBehavior.Cascade);
+
+        b.Entity<AnswerRecordEntity>().HasIndex(a => new { a.AttemptId, a.QuestionId }).IsUnique();
+        b.Entity<AnswerRecordEntity>().HasOne<AttemptEntity>().WithMany().HasForeignKey(a => a.AttemptId).OnDelete(DeleteBehavior.Cascade);
+        b.Entity<AnswerRecordEntity>().HasOne<QuestionEntity>().WithMany().HasForeignKey(a => a.QuestionId).OnDelete(DeleteBehavior.Cascade);
+
+        b.Entity<BankItemEntity>().HasKey(i => i.QuestionId);
+        b.Entity<BankItemEntity>().HasOne<QuestionEntity>().WithOne().HasForeignKey<BankItemEntity>(i => i.QuestionId).OnDelete(DeleteBehavior.Cascade);
+        b.Entity<BankItemEntity>().Property(i => i.Status).HasConversion<string>();
+
+        b.Entity<FlashcardScheduleEntity>().HasKey(s => s.FlashcardId);
+        b.Entity<FlashcardScheduleEntity>().HasOne<FlashcardEntity>().WithOne().HasForeignKey<FlashcardScheduleEntity>(s => s.FlashcardId).OnDelete(DeleteBehavior.Cascade);
     }
 }
