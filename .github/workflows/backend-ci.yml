@@ -1,15 +1,25 @@
-# CI only: build, test, and dependency checks on every push and pull request.
-# There is no deployment job. Deployment is out of scope for v1 (see docs/04-SECURITY.md).
-name: CI
+# Backend CI: build, test, and vulnerability check for the .NET solution.
+# Runs only when backend code or this workflow changes. CI only, no deployment.
+name: Backend CI
 
 on:
   push:
     branches: [main]
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend-ci.yml"
   pull_request:
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend-ci.yml"
   workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: backend-ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   backend:
@@ -24,6 +34,9 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "10.0.x"
+          # Caches NuGet packages. The key changes only when a project file changes.
+          cache: true
+          cache-dependency-path: "backend/**/*.csproj"
 
       - name: Restore
         run: dotnet restore StudySpace.slnx
@@ -44,33 +57,3 @@ jobs:
             echo "Vulnerable NuGet packages found" >&2
             exit 1
           fi
-
-  frontend:
-    name: Frontend (Node)
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "24"
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
-
-      - name: Install
-        run: npm ci
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Test
-        run: npm test
-
-      - name: Build
-        run: npm run build
-
-      - name: Audit dependencies (fail on high or critical)
-        run: npm audit --audit-level=high
