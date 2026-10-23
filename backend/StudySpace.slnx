@@ -9,5 +9,9 @@
     <Project Path="tests/StudySpace.Api.Tests/StudySpace.Api.Tests.csproj" />
     <Project Path="tests/StudySpace.Application.Tests/StudySpace.Application.Tests.csproj" />
     <Project Path="tests/StudySpace.Domain.Tests/StudySpace.Domain.Tests.csproj" />
+    <Project Path="tests/StudySpace.Infrastructure.Tests/StudySpace.Infrastructure.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="../tools/StudySpace.Import/StudySpace.Import.csproj" />
   </Folder>
 </Solution>
