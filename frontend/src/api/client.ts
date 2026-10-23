@@ -181,3 +181,45 @@ export const overrideTyped = (questionId: number, attemptId: number, correct: bo
 export const getDueFlashcards = (examCode: string, limit = 20) =>
   get<Flashcard[]>(`/flashcards/due?examCode=${encodeURIComponent(examCode)}&limit=${limit}`)
 export const reviewFlashcard = (id: number, quality: number) => post<unknown>(`/flashcards/${id}/review`, { quality })
+
+// ---- Progress and bank (P6) ----
+
+export type MasteryLevel = 'unseen' | 'weak' | 'strong'
+
+export interface TopicProgress {
+  id: number
+  name: string
+  answered: number
+  correct: number
+  accuracy: number
+  score: number
+  level: MasteryLevel
+  activeBankCount: number
+}
+
+export interface DomainProgress extends TopicProgress {
+  weightPercent: number
+  topics: TopicProgress[]
+}
+
+export interface Progress {
+  code: string
+  domains: DomainProgress[]
+}
+
+export interface BankItem {
+  questionId: number
+  topicId: number
+  topicName: string
+  prompt: string
+  consecutiveCorrect: number
+  lastWrongAt: string | null
+}
+
+export interface Bank {
+  total: number
+  categories: { domainId: number; domainName: string; items: BankItem[] }[]
+}
+
+export const getProgress = (examCode: string) => get<Progress>(`/progress?examCode=${encodeURIComponent(examCode)}`)
+export const getBank = (examCode: string) => get<Bank>(`/bank?examCode=${encodeURIComponent(examCode)}`)
