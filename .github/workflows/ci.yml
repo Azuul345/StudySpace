@@ -1,0 +1,76 @@
+# CI only: build, test, and dependency checks on every push and pull request.
+# There is no deployment job. Deployment is out of scope for v1 (see docs/04-SECURITY.md).
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend (.NET)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Restore
+        run: dotnet restore StudySpace.slnx
+
+      - name: Build
+        run: dotnet build StudySpace.slnx --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test StudySpace.slnx --no-build --configuration Release
+
+      - name: Check NuGet packages for known vulnerabilities
+        # dotnet list exits 0 even when it finds vulnerabilities, so check the output.
+        # Every project must print "has no vulnerable packages". Any other line that mentions
+        # "vulnerab" or an advisory fails the job.
+        run: |
+          dotnet list StudySpace.slnx package --vulnerable --include-transitive | tee vulnerable.txt
+          if grep -v "has no vulnerable packages" vulnerable.txt | grep -qiE "vulnerab|advisor"; then
+            echo "Vulnerable NuGet packages found" >&2
+            exit 1
+          fi
+
+  frontend:
+    name: Frontend (Node)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Audit dependencies (fail on high or critical)
+        run: npm audit --audit-level=high
