@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/StudySpace.Api/StudySpace.Api.csproj" />
+    <Project Path="src/StudySpace.Application/StudySpace.Application.csproj" />
+    <Project Path="src/StudySpace.Domain/StudySpace.Domain.csproj" />
+    <Project Path="src/StudySpace.Infrastructure/StudySpace.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/StudySpace.Api.Tests/StudySpace.Api.Tests.csproj" />
+    <Project Path="tests/StudySpace.Application.Tests/StudySpace.Application.Tests.csproj" />
+    <Project Path="tests/StudySpace.Domain.Tests/StudySpace.Domain.Tests.csproj" />
+  </Folder>
+</Solution>
