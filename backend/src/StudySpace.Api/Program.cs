@@ -6,6 +6,7 @@ using StudySpace.Infrastructure.Persistence;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.WebHost.UseUrls(ListenAddress.Resolve(builder.Configuration).ToArray());
+builder.WebHost.ConfigureKestrel(o => o.Limits.MaxRequestBodySize = 64 * 1024);
 builder.Services.AddDbContext<StudySpaceDbContext>(o =>
     o.UseSqlite(builder.Configuration.GetConnectionString("Default") ?? "Data Source=studyspace.db"));
 builder.Services.AddSingleton(TimeProvider.System);
@@ -29,6 +30,8 @@ app.Use(async (context, next) =>
 var api = app.MapGroup("/api/v1");
 api.MapCatalog();
 api.MapAttempts();
+api.MapProgress();
+api.MapFlashcards();
 
 app.Run();
 
