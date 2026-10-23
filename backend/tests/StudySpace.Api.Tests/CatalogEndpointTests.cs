@@ -69,6 +69,7 @@ public class CatalogEndpointTests : IAsyncLifetime
         Assert.Equal("https://example.com/ha", topic.GetProperty("lesson").GetProperty("docLinks")[0].GetString());
         Assert.Equal(2, topic.GetProperty("questionCount").GetInt32());
         Assert.Equal("Resilient", topic.GetProperty("domain").GetProperty("name").GetString());
+        Assert.Equal("API-1", topic.GetProperty("examCode").GetString());
     }
 
     [Fact]
