@@ -17,6 +17,118 @@ namespace StudySpace.Infrastructure.Persistence.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.12");
 
+            modelBuilder.Entity("StudySpace.Infrastructure.Persistence.AnswerRecordEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset>("AnsweredAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("AttemptId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Confirmed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("GivenAnswerJson")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool?>("SelfOverride")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("AttemptId", "QuestionId")
+                        .IsUnique();
+
+                    b.ToTable("AnswerRecords");
+                });
+
+            modelBuilder.Entity("StudySpace.Infrastructure.Persistence.AttemptEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ExamId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset?>("FinishedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Form")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("StartedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("TimeLimitSeconds")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExamId");
+
+                    b.ToTable("Attempts");
+                });
+
+            modelBuilder.Entity("StudySpace.Infrastructure.Persistence.AttemptQuestionEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AttemptId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("AttemptId", "QuestionId")
+                        .IsUnique();
+
+                    b.ToTable("AttemptQuestions");
+                });
+
+            modelBuilder.Entity("StudySpace.Infrastructure.Persistence.BankItemEntity", b =>
+                {
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ConsecutiveCorrect")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset?>("LastWrongAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("QuestionId");
+
+                    b.ToTable("BankItems");
+                });
+
             modelBuilder.Entity("StudySpace.Infrastructure.Persistence.ContentPackEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -144,6 +256,28 @@ namespace StudySpace.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("Flashcards");
+                });
+
+            modelBuilder.Entity("StudySpace.Infrastructure.Persistence.FlashcardScheduleEntity", b =>
+                {
+                    b.Property<int>("FlashcardId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset>("DueAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("EaseFactor")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("IntervalDays")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Repetitions")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("FlashcardId");
+
+                    b.ToTable("FlashcardSchedules");
                 });
 
             modelBuilder.Entity("StudySpace.Infrastructure.Persistence.LessonEntity", b =>
@@ -329,6 +463,54 @@ namespace StudySpace.Infrastructure.Persistence.Migrations
                     b.ToTable("Topics");
                 });
 
+            modelBuilder.Entity("StudySpace.Infrastructure.Persistence.AnswerRecordEntity", b =>
+                {
+                    b.HasOne("StudySpace.Infrastructure.Persistence.AttemptEntity", null)
+                        .WithMany()
+                        .HasForeignKey("AttemptId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StudySpace.Infrastructure.Persistence.QuestionEntity", null)
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("StudySpace.Infrastructure.Persistence.AttemptEntity", b =>
+                {
+                    b.HasOne("StudySpace.Infrastructure.Persistence.ExamEntity", null)
+                        .WithMany()
+                        .HasForeignKey("ExamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("StudySpace.Infrastructure.Persistence.AttemptQuestionEntity", b =>
+                {
+                    b.HasOne("StudySpace.Infrastructure.Persistence.AttemptEntity", null)
+                        .WithMany("Questions")
+                        .HasForeignKey("AttemptId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StudySpace.Infrastructure.Persistence.QuestionEntity", null)
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("StudySpace.Infrastructure.Persistence.BankItemEntity", b =>
+                {
+                    b.HasOne("StudySpace.Infrastructure.Persistence.QuestionEntity", null)
+                        .WithOne()
+                        .HasForeignKey("StudySpace.Infrastructure.Persistence.BankItemEntity", "QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("StudySpace.Infrastructure.Persistence.ContentPackEntity", b =>
                 {
                     b.HasOne("StudySpace.Infrastructure.Persistence.ExamEntity", null)
@@ -359,6 +541,15 @@ namespace StudySpace.Infrastructure.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("PackId")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("StudySpace.Infrastructure.Persistence.FlashcardScheduleEntity", b =>
+                {
+                    b.HasOne("StudySpace.Infrastructure.Persistence.FlashcardEntity", null)
+                        .WithOne()
+                        .HasForeignKey("StudySpace.Infrastructure.Persistence.FlashcardScheduleEntity", "FlashcardId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -428,6 +619,11 @@ namespace StudySpace.Infrastructure.Persistence.Migrations
                         .HasForeignKey("ExamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("StudySpace.Infrastructure.Persistence.AttemptEntity", b =>
+                {
+                    b.Navigation("Questions");
                 });
 
             modelBuilder.Entity("StudySpace.Infrastructure.Persistence.QuestionEntity", b =>

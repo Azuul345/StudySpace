@@ -1,4 +1,5 @@
 using StudySpace.Application.ContentPacks;
+using StudySpace.Domain.Bank;
 
 namespace StudySpace.Infrastructure.Persistence;
 
@@ -100,4 +101,54 @@ public class ContentPackEntity
     public string FileHash { get; set; } = "";
     public DateTimeOffset ImportedAt { get; set; }
     public VerificationStatus VerificationStatus { get; set; }
+}
+
+public class AttemptEntity
+{
+    public int Id { get; set; }
+    public int ExamId { get; set; }
+    public string Form { get; set; } = "";
+    public DateTimeOffset StartedAt { get; set; }
+    public DateTimeOffset? FinishedAt { get; set; }
+    public int? TimeLimitSeconds { get; set; }
+    public List<AttemptQuestionEntity> Questions { get; set; } = [];
+}
+
+public class AttemptQuestionEntity
+{
+    public int Id { get; set; }
+    public int AttemptId { get; set; }
+    public int QuestionId { get; set; }
+    public int Position { get; set; }
+}
+
+public class AnswerRecordEntity
+{
+    public int Id { get; set; }
+    public int AttemptId { get; set; }
+    public int QuestionId { get; set; }
+    public DateTimeOffset AnsweredAt { get; set; }
+    public string GivenAnswerJson { get; set; } = "{}";
+    public bool IsCorrect { get; set; }
+
+    /// Typed answers are graded by keyword, then the user confirms or overrides. Until then they do not touch the bank.
+    public bool Confirmed { get; set; }
+    public bool? SelfOverride { get; set; }
+}
+
+public class BankItemEntity
+{
+    public int QuestionId { get; set; }
+    public BankStatus Status { get; set; }
+    public int ConsecutiveCorrect { get; set; }
+    public DateTimeOffset? LastWrongAt { get; set; }
+}
+
+public class FlashcardScheduleEntity
+{
+    public int FlashcardId { get; set; }
+    public int Repetitions { get; set; }
+    public int IntervalDays { get; set; }
+    public double EaseFactor { get; set; }
+    public DateTimeOffset DueAt { get; set; }
 }
