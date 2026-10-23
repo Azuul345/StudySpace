@@ -21,6 +21,8 @@ export function ExamPage() {
               <Link to={`/practice?form=daily&examCode=${encodeURIComponent(e.code)}`}>Daily drill</Link>
               <Link to={`/practice?form=bank&examCode=${encodeURIComponent(e.code)}`}>Wrong-answer review</Link>
               <Link to={`/exams/${encodeURIComponent(e.code)}/flashcards`}>Flashcards</Link>
+              <Link to={`/exams/${encodeURIComponent(e.code)}/progress`}>Progress</Link>
+              <Link to={`/exams/${encodeURIComponent(e.code)}/bank`}>Wrong-answer bank</Link>
             </nav>
             {e.domains.map((d) => (
               <article key={d.id}>
