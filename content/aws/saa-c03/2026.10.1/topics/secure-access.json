@@ -1,0 +1,369 @@
+{
+  "schemaVersion": 1,
+  "topicId": "secure-access",
+  "domainId": "secure",
+  "name": "Design secure access to AWS resources",
+  "lesson": {
+    "summary": "Secure access means giving the right identities only the permissions they need. Use IAM roles and temporary credentials instead of long-lived keys, centralize workforce access with IAM Identity Center, use Cognito for application customers, and apply guardrails with SCPs and permissions boundaries across accounts.",
+    "keyPoints": [
+      "Use roles and temporary credentials via STS, not long-lived access keys",
+      "IAM policy evaluation: explicit deny wins, then SCPs and boundaries cap permissions, and an allow must still exist",
+      "Cross-account access needs trust or resource policy in the owner and an allow in the caller",
+      "SCPs never grant permissions; they limit what accounts can do",
+      "Cognito user pools authenticate customers; identity pools issue AWS credentials",
+      "IAM Identity Center provides workforce SSO across accounts"
+    ],
+    "docLinks": [
+      "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html",
+      "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html",
+      "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html",
+      "https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html",
+      "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "secure-access-sc-1",
+      "text": "A company is building a mobile photo app for millions of consumers. Users sign in with their Google or Facebook accounts and upload photos straight to an Amazon S3 bucket. The security team forbids embedding long-lived AWS credentials in the app."
+    }
+  ],
+  "questions": [
+    {
+      "id": "secure-access-001",
+      "type": "mcq",
+      "difficulty": 1,
+      "tags": [
+        "IAM",
+        "EC2"
+      ],
+      "prompt": "An application on Amazon EC2 must read objects from an S3 bucket. Which approach follows AWS security best practice?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Store an IAM user's access key in the application configuration file",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Embed the access key in the AMI so it is always available",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Attach an IAM role to the instance through an instance profile",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Make the bucket public so no credentials are needed",
+          "correct": false
+        }
+      ],
+      "explanation": "An instance profile role gives the application automatically rotated temporary credentials with no secrets to manage. A stored access key is a long-lived credential that can leak. Baking a key into the AMI spreads it to every copy of the image. A public bucket exposes the data to everyone.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html",
+        "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+      ]
+    },
+    {
+      "id": "secure-access-002",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "Organizations",
+        "IAM"
+      ],
+      "prompt": "A company wants to guarantee that no principal in any member account, including account administrators, can launch resources outside two approved Regions. What should the solution architect use?",
+      "options": [
+        {
+          "id": "a",
+          "text": "An IAM permissions boundary attached to every administrator",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "A network ACL on each VPC",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "An IAM group policy in the management account",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "A service control policy attached to the organizational unit",
+          "correct": true
+        }
+      ],
+      "explanation": "An SCP sets the maximum permissions for all principals in the affected accounts, so a Region-deny SCP cannot be overridden by account admins. Permissions boundaries apply per user or role and must be managed in each account. Network ACLs filter subnet traffic, not API calls. IAM groups in the management account do not affect member accounts.",
+      "sources": [
+        "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html"
+      ]
+    },
+    {
+      "id": "secure-access-003",
+      "type": "mcq",
+      "difficulty": 3,
+      "tags": [
+        "IAM"
+      ],
+      "prompt": "A platform team lets developers create their own IAM roles for Lambda functions. The team must make sure developers cannot create a role with more permissions than a defined maximum. Which solution meets this requirement?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Give developers the iam:CreateRole permission only and review roles monthly",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Require that developers attach a permissions boundary when creating roles, using a condition in their IAM policy",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Enable MFA for all developers",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Use an SCP that denies all IAM actions",
+          "correct": false
+        }
+      ],
+      "explanation": "Delegating role creation with a condition that forces a permissions boundary caps the effective permissions of any role the developers create. Monthly review is detective, not preventive. MFA verifies identity but does not limit permissions. Denying all IAM actions would stop developers from creating roles at all.",
+      "sources": [
+        "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html"
+      ]
+    },
+    {
+      "id": "secure-access-004",
+      "type": "mcq",
+      "difficulty": 3,
+      "tags": [
+        "S3",
+        "IAM"
+      ],
+      "prompt": "A role in account A must read objects in an S3 bucket owned by account B. The bucket policy in account B allows the role's ARN. The role still gets Access Denied. What is the most likely missing piece?",
+      "options": [
+        {
+          "id": "a",
+          "text": "The role in account A has no identity-based policy that allows s3:GetObject on the bucket",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "The bucket in account B needs versioning enabled",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Account B must create an IAM user for the role",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "S3 does not support cross-account access",
+          "correct": false
+        }
+      ],
+      "explanation": "For cross-account access to a resource, both the resource policy in the owning account and an identity policy in the requesting account must allow the action. Versioning is unrelated to authorization. Creating a user is unnecessary because the role already authenticates in account A. S3 does support cross-account access.",
+      "sources": [
+        "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies-cross-account-resource-access.html",
+        "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html"
+      ]
+    },
+    {
+      "id": "secure-access-005",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": [
+        "IAM"
+      ],
+      "prompt": "Which TWO actions align with IAM best practices for securing access? (Choose two.)",
+      "options": [
+        {
+          "id": "a",
+          "text": "Require multi-factor authentication for human users",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Share the root user password with the operations team for emergencies",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Create long-lived access keys for each application",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Use IAM roles with temporary credentials for workloads",
+          "correct": true
+        },
+        {
+          "id": "e",
+          "text": "Attach AdministratorAccess to all developers to avoid blocked work",
+          "correct": false
+        }
+      ],
+      "explanation": "MFA protects human identities and roles supply short-lived credentials to workloads. Sharing the root password removes accountability. Long-lived keys are a leak risk. Giving everyone administrator access violates least privilege.",
+      "sources": [
+        "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+      ]
+    },
+    {
+      "id": "secure-access-006",
+      "type": "truefalse",
+      "difficulty": 1,
+      "tags": [
+        "Organizations",
+        "IAM"
+      ],
+      "statement": "A service control policy that allows an action grants that permission to the IAM users and roles in the member accounts.",
+      "answer": false,
+      "explanation": "False. An SCP only sets a permission guardrail; principals still need an identity-based or resource-based policy that grants the action.",
+      "sources": [
+        "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html"
+      ]
+    },
+    {
+      "id": "secure-access-007",
+      "type": "ordering",
+      "difficulty": 2,
+      "tags": [
+        "IAM",
+        "STS"
+      ],
+      "prompt": "Put these steps in order for a user in account A to access resources in account B using a role.",
+      "steps": [
+        "The user calls sts:AssumeRole and receives temporary credentials",
+        "An administrator in account B creates a role whose trust policy names account A",
+        "An administrator in account A allows the user to call sts:AssumeRole on that role ARN",
+        "An administrator in account B attaches permissions to the role"
+      ],
+      "correctOrder": [
+        1,
+        3,
+        2,
+        0
+      ],
+      "explanation": "The role and its trust policy come first, then its permissions, then the account A user is allowed to assume it, and only then can the user call AssumeRole to get temporary credentials.",
+      "sources": [
+        "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html",
+        "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp.html"
+      ]
+    },
+    {
+      "id": "secure-access-008",
+      "type": "scenario",
+      "difficulty": 2,
+      "tags": [
+        "Cognito"
+      ],
+      "prompt": "Which Cognito component should the company use to handle sign-up, sign-in, and Google or Facebook federation for the app's users?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Cognito identity pool",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Cognito user pool",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "IAM Identity Center",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "AWS Directory Service",
+          "correct": false
+        }
+      ],
+      "scenarioId": "secure-access-sc-1",
+      "explanation": "A user pool is the user directory that handles sign-up, sign-in, and social federation and issues tokens. An identity pool exchanges identities for AWS credentials rather than providing the directory. IAM Identity Center is for workforce access. Directory Service provides managed Active Directory, not a customer sign-in service.",
+      "sources": [
+        "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html"
+      ]
+    },
+    {
+      "id": "secure-access-009",
+      "type": "scenario",
+      "difficulty": 2,
+      "tags": [
+        "Cognito",
+        "S3"
+      ],
+      "prompt": "How can the mobile app upload directly to S3 without any long-lived AWS keys inside the app?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Exchange the user's token with a Cognito identity pool for temporary credentials of an IAM role",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Ship one shared IAM user access key in the app and rotate it each release",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Make the S3 bucket writable by anonymous users",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Have each user create an IAM user in the account",
+          "correct": false
+        }
+      ],
+      "scenarioId": "secure-access-sc-1",
+      "explanation": "A Cognito identity pool exchanges the authenticated token for short-lived credentials of a scoped IAM role. A shared key in the app can be extracted. Anonymous write access exposes the bucket. Creating IAM users for millions of customers does not scale.",
+      "sources": [
+        "https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-identity.html"
+      ]
+    },
+    {
+      "id": "secure-access-010",
+      "type": "matching",
+      "difficulty": 1,
+      "tags": [
+        "IAM Identity Center",
+        "Cognito",
+        "Organizations",
+        "IAM Access Analyzer"
+      ],
+      "prompt": "Match each service to its primary purpose.",
+      "pairs": [
+        {
+          "left": "IAM Identity Center",
+          "right": "Single sign-on for the workforce across AWS accounts"
+        },
+        {
+          "left": "Amazon Cognito",
+          "right": "Sign-up and sign-in for an application's customers"
+        },
+        {
+          "left": "Service control policy",
+          "right": "Organization-level permission guardrail"
+        },
+        {
+          "left": "IAM Access Analyzer",
+          "right": "Finds resources shared outside the account or organization"
+        }
+      ],
+      "explanation": "Each pairing reflects the service's documented purpose: workforce SSO, customer identity, guardrails, and external access findings.",
+      "sources": [
+        "https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html",
+        "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html",
+        "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html",
+        "https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html"
+      ]
+    }
+  ]
+}

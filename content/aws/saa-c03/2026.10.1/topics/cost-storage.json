@@ -1,0 +1,234 @@
+{
+    "schemaVersion": 1,
+    "topicId": "cost-storage",
+    "domainId": "cost",
+    "name": "Design cost-optimized storage solutions",
+    "lesson": {
+        "summary": "Storage cost depends on choosing the right service, tier and volume type for how often data is read and how fast it must come back. S3 offers storage classes and lifecycle rules, EBS offers volume types sized to the workload, and EFS offers infrequent-access tiers.",
+        "keyPoints": [
+            "S3 Standard for frequently accessed data, Standard-IA and One Zone-IA for infrequent access with a 30 day minimum storage duration",
+            "S3 Intelligent-Tiering moves objects between access tiers automatically for unknown or changing access patterns, with no retrieval fee",
+            "S3 Glacier Instant Retrieval gives millisecond access to archives, Flexible Retrieval takes minutes to hours, Deep Archive is the cheapest and takes hours",
+            "Lifecycle rules transition objects between classes, expire objects and noncurrent versions, and abort incomplete multipart uploads",
+            "EBS gp3 costs less per GB than gp2 and lets you set IOPS and throughput independently; st1 and sc1 HDD volumes suit throughput-heavy or cold data",
+            "EFS lifecycle management moves files that are not accessed to EFS Infrequent Access or Archive storage classes"
+        ],
+        "docLinks": [
+            "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html",
+            "https://docs.aws.amazon.com/AmazonS3/latest/userguide/intro-lifecycle-rules.html",
+            "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html",
+            "https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html",
+            "https://docs.aws.amazon.com/efs/latest/ug/features.html"
+        ]
+    },
+    "scenarios": [
+        {
+            "id": "cost-storage-sc-1",
+            "text": "A company stores about 40 TB of application log files in an S3 bucket with versioning enabled. Logs are read often during the first 30 days. After that they are almost never read, but they must be kept for seven years for audit, and an auditor can wait up to 24 hours for a retrieval. The bucket also holds many noncurrent object versions and abandoned multipart uploads that nobody needs."
+        }
+    ],
+    "questions": [
+        {
+            "id": "cost-storage-001",
+            "type": "mcq",
+            "difficulty": 1,
+            "tags": [
+                "S3",
+                "S3 Glacier"
+            ],
+            "prompt": "A media company must archive footage that is rarely accessed, perhaps once per quarter, but when it is requested the data must be available in milliseconds. Which S3 storage class is the most cost-effective choice?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "S3 Standard",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "S3 Glacier Flexible Retrieval",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "S3 Glacier Deep Archive",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "S3 Glacier Instant Retrieval",
+                    "correct": true
+                }
+            ],
+            "explanation": "S3 Glacier Instant Retrieval is built for rarely accessed archive data that still needs millisecond access at a low storage price. S3 Standard works but has a much higher storage price for data read this rarely. Glacier Flexible Retrieval needs minutes to hours to restore data. Glacier Deep Archive needs hours to restore data.",
+            "sources": [
+                "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html"
+            ]
+        },
+        {
+            "id": "cost-storage-002",
+            "type": "multi",
+            "difficulty": 2,
+            "tags": [
+                "S3"
+            ],
+            "prompt": "A team wants to reduce S3 cost for a versioned bucket without any code changes. Which TWO lifecycle configuration actions reduce cost? (Choose two.)",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Add a rule that permanently expires noncurrent object versions after a set number of days",
+                    "correct": true
+                },
+                {
+                    "id": "b",
+                    "text": "Enable Requester Pays on the bucket so that readers pay for storage",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Add a rule that aborts incomplete multipart uploads after a set number of days",
+                    "correct": true
+                },
+                {
+                    "id": "d",
+                    "text": "Suspend versioning so existing noncurrent versions are deleted immediately",
+                    "correct": false
+                },
+                {
+                    "id": "e",
+                    "text": "Move every object to S3 Standard-IA on the day it is created",
+                    "correct": false
+                }
+            ],
+            "explanation": "Expiring noncurrent versions and aborting incomplete multipart uploads both remove storage you pay for and are supported lifecycle rule actions. Requester Pays shifts request and data transfer charges, not storage charges. Suspending versioning does not delete existing noncurrent versions. Standard-IA has a 30 day minimum storage duration and retrieval fees, and lifecycle transitions to it from Standard require the object to be at least 30 days old.",
+            "sources": [
+                "https://docs.aws.amazon.com/AmazonS3/latest/userguide/intro-lifecycle-rules.html",
+                "https://docs.aws.amazon.com/AmazonS3/latest/userguide/RequesterPaysBuckets.html"
+            ]
+        },
+        {
+            "id": "cost-storage-003",
+            "type": "scenario",
+            "scenarioId": "cost-storage-sc-1",
+            "difficulty": 2,
+            "tags": [
+                "S3",
+                "S3 Glacier"
+            ],
+            "prompt": "Which lifecycle design for the current log objects meets the requirements at the lowest storage cost?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Transition objects to S3 Glacier Instant Retrieval after 1 day and keep them there for seven years",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "Keep objects in S3 Standard for seven years and rely on the high durability",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Transition objects to S3 Glacier Deep Archive after 30 days and expire them after seven years",
+                    "correct": true
+                },
+                {
+                    "id": "d",
+                    "text": "Transition objects to S3 One Zone-IA after 30 days and expire them after seven years",
+                    "correct": false
+                }
+            ],
+            "explanation": "Deep Archive is the lowest-cost class and its standard retrieval completes within about 12 hours, which fits the 24 hour tolerance, while Standard serves the first 30 days of frequent reads. Moving to Glacier Instant Retrieval after 1 day would hurt the frequent reads in month one and costs more than Deep Archive for data nobody reads. Keeping everything in Standard pays the highest price for cold data. One Zone-IA is cheaper than Standard but far more expensive than Deep Archive, and it stores data in a single AZ, which is a poor fit for audit logs.",
+            "sources": [
+                "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html",
+                "https://docs.aws.amazon.com/AmazonS3/latest/userguide/restoring-objects-retrieval-options.html"
+            ]
+        },
+        {
+            "id": "cost-storage-004",
+            "type": "scenario",
+            "scenarioId": "cost-storage-sc-1",
+            "difficulty": 1,
+            "tags": [
+                "S3"
+            ],
+            "prompt": "The company wants to stop paying for the unneeded noncurrent versions and abandoned multipart uploads. What is the simplest approach?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Add S3 Lifecycle rules to expire noncurrent versions and abort incomplete multipart uploads",
+                    "correct": true
+                },
+                {
+                    "id": "b",
+                    "text": "Write a Lambda function that lists the bucket nightly and deletes old versions",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Create a new bucket without versioning and copy the current objects over manually",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "Enable S3 Transfer Acceleration on the bucket",
+                    "correct": false
+                }
+            ],
+            "explanation": "Lifecycle rules do both jobs natively with no code to maintain. A custom Lambda function can work but adds code, permissions and operational overhead for something S3 already does. Copying to a new bucket is a manual, error-prone migration that loses version history the company may need. Transfer Acceleration speeds up long-distance transfers and adds cost, it does not remove stored data.",
+            "sources": [
+                "https://docs.aws.amazon.com/AmazonS3/latest/userguide/intro-lifecycle-rules.html"
+            ]
+        },
+        {
+            "id": "cost-storage-005",
+            "type": "truefalse",
+            "difficulty": 2,
+            "tags": [
+                "S3",
+                "S3 Intelligent-Tiering"
+            ],
+            "statement": "S3 Intelligent-Tiering charges a per-GB retrieval fee when an object moves back to the Frequent Access tier after it was accessed.",
+            "answer": false,
+            "explanation": "S3 Intelligent-Tiering has no retrieval charges and no charge for moving objects between its access tiers. It does charge a small monthly monitoring and automation fee per object, which is why it suits data with unknown or changing access patterns.",
+            "sources": [
+                "https://docs.aws.amazon.com/AmazonS3/latest/userguide/intelligent-tiering.html"
+            ]
+        },
+        {
+            "id": "cost-storage-006",
+            "type": "matching",
+            "difficulty": 2,
+            "tags": [
+                "EBS",
+                "EFS",
+                "S3"
+            ],
+            "prompt": "Match each workload to the most cost-effective storage option.",
+            "pairs": [
+                {
+                    "left": "General purpose volume where IOPS must be set independently of size",
+                    "right": "EBS gp3"
+                },
+                {
+                    "left": "Large sequential log processing that needs high throughput at low cost per GB",
+                    "right": "EBS st1"
+                },
+                {
+                    "left": "Shared file system where most files are not touched for months",
+                    "right": "EFS with lifecycle management to Infrequent Access"
+                },
+                {
+                    "left": "Object data with unpredictable access patterns",
+                    "right": "S3 Intelligent-Tiering"
+                }
+            ],
+            "explanation": "gp3 lets you set IOPS and throughput independently of volume size and costs less per GB than gp2. st1 is a low-cost HDD type for large sequential throughput workloads. EFS lifecycle management moves cold files to a cheaper class automatically. Intelligent-Tiering adapts to changing access without retrieval charges.",
+            "sources": [
+                "https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html",
+                "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html",
+                "https://docs.aws.amazon.com/efs/latest/ug/features.html",
+                "https://docs.aws.amazon.com/AmazonS3/latest/userguide/intelligent-tiering.html"
+            ]
+        }
+    ]
+}

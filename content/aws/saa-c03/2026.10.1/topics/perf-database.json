@@ -1,0 +1,256 @@
+{
+    "schemaVersion": 1,
+    "topicId": "perf-database",
+    "domainId": "performant",
+    "name": "Determine high-performing database solutions",
+    "lesson": {
+        "summary": "Match the database to the access pattern, then remove bottlenecks: read replicas and caching for read-heavy loads, connection pooling for spiky clients, and the right capacity mode for NoSQL.",
+        "keyPoints": [
+            "Read replicas scale reads; the standby in a classic Multi-AZ instance deployment is for availability, not reads",
+            "Aurora supports up to 15 Aurora Replicas",
+            "DAX is an in-memory cache for DynamoDB with microsecond reads",
+            "ElastiCache offloads repeated reads from databases",
+            "RDS Proxy pools connections for Lambda and spiky clients",
+            "DynamoDB on-demand suits unpredictable traffic; provisioned with auto scaling suits predictable traffic"
+        ],
+        "docLinks": [
+            "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html",
+            "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.html",
+            "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/WhatIs.html",
+            "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html",
+            "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/capacity-mode.html"
+        ]
+    },
+    "scenarios": [
+        {
+            "id": "perf-database-sc-1",
+            "text": "A SaaS application uses AWS Lambda functions that connect directly to an Amazon RDS for PostgreSQL instance. During traffic spikes thousands of functions run at once and the database logs too many connections errors."
+        }
+    ],
+    "questions": [
+        {
+            "id": "perf-database-001",
+            "type": "mcq",
+            "difficulty": 1,
+            "tags": [
+                "RDS"
+            ],
+            "prompt": "A reporting-heavy application is overloading the primary Amazon RDS for MySQL instance with read queries. What is the simplest way to offload reads?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Enable Multi-AZ and query the standby instance",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "Create one or more read replicas and send read traffic to them",
+                    "correct": true
+                },
+                {
+                    "id": "c",
+                    "text": "Increase the backup retention period",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "Move the database to a larger gp2 volume only",
+                    "correct": false
+                }
+            ],
+            "explanation": "Read replicas use asynchronous replication and serve read queries. In a classic Multi-AZ instance deployment the standby cannot be read from, backup retention does nothing for load, and a larger volume does not remove CPU contention on the primary.",
+            "sources": [
+                "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html",
+                "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html"
+            ]
+        },
+        {
+            "id": "perf-database-002",
+            "type": "mcq",
+            "difficulty": 2,
+            "tags": [
+                "DynamoDB",
+                "DAX"
+            ],
+            "prompt": "A read-heavy application uses DynamoDB and needs response times in microseconds for repeated reads, with minimal application changes. Which service should be added?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Amazon ElastiCache for Memcached with custom cache code",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "DynamoDB Accelerator (DAX)",
+                    "correct": true
+                },
+                {
+                    "id": "c",
+                    "text": "A DynamoDB global table in a second Region",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "Amazon RDS read replicas",
+                    "correct": false
+                }
+            ],
+            "explanation": "DAX is a fully managed, API-compatible in-memory cache for DynamoDB, so existing code needs little change. ElastiCache requires custom caching logic, global tables address multi-Region availability, and RDS replicas do not apply to DynamoDB.",
+            "sources": [
+                "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.html"
+            ]
+        },
+        {
+            "id": "perf-database-003",
+            "type": "multi",
+            "difficulty": 2,
+            "tags": [
+                "ElastiCache",
+                "RDS"
+            ],
+            "prompt": "A relational database is slowed by many repeated identical read queries. Which TWO actions reduce the load most directly?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Place Amazon ElastiCache in front of the database and cache frequent query results",
+                    "correct": true
+                },
+                {
+                    "id": "b",
+                    "text": "Route read-only queries to read replicas",
+                    "correct": true
+                },
+                {
+                    "id": "c",
+                    "text": "Convert the instance to Multi-AZ and expect reads to be served by the standby",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "Increase the automated backup window",
+                    "correct": false
+                },
+                {
+                    "id": "e",
+                    "text": "Disable Enhanced Monitoring",
+                    "correct": false
+                }
+            ],
+            "explanation": "Caching removes repeated reads from the database and read replicas spread the remaining reads over additional instances. A classic Multi-AZ standby does not serve reads, and backup or monitoring settings do not change query load.",
+            "sources": [
+                "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/Strategies.html",
+                "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html"
+            ]
+        },
+        {
+            "id": "perf-database-004",
+            "type": "scenario",
+            "difficulty": 3,
+            "tags": [
+                "RDS Proxy",
+                "Lambda"
+            ],
+            "prompt": "What is the best way to fix the connection errors with the least application change?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Add an RDS Proxy between the Lambda functions and the database",
+                    "correct": true
+                },
+                {
+                    "id": "b",
+                    "text": "Cap the Lambda memory at 128 MB",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Move the database to a smaller instance class",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "Increase the Lambda timeout to 15 minutes",
+                    "correct": false
+                }
+            ],
+            "explanation": "RDS Proxy pools and shares database connections, which protects the database from connection storms caused by many concurrent Lambda environments. Lowering memory, shrinking the instance and lengthening timeouts do not reduce the number of open connections.",
+            "sources": [
+                "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html"
+            ],
+            "scenarioId": "perf-database-sc-1"
+        },
+        {
+            "id": "perf-database-005",
+            "type": "scenario",
+            "difficulty": 2,
+            "tags": [
+                "RDS"
+            ],
+            "prompt": "The company also runs heavy reporting queries that slow the primary instance. How can reporting be isolated with minimal operational effort?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Run the reports on the primary during business hours",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "Create a read replica and point the reporting tool at it",
+                    "correct": true
+                },
+                {
+                    "id": "c",
+                    "text": "Create a manual snapshot every hour and restore it",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "Disable the application during reports",
+                    "correct": false
+                }
+            ],
+            "explanation": "A read replica gives reporting its own compute while staying continuously in sync. Reporting on the primary keeps the contention, hourly snapshot restores are slow and operationally heavy, and taking the application offline is not a design solution.",
+            "sources": [
+                "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html"
+            ],
+            "scenarioId": "perf-database-sc-1"
+        },
+        {
+            "id": "perf-database-006",
+            "type": "matching",
+            "difficulty": 2,
+            "tags": [
+                "DynamoDB",
+                "ElastiCache",
+                "Redshift",
+                "Aurora"
+            ],
+            "prompt": "Match each requirement to the AWS database service.",
+            "pairs": [
+                {
+                    "left": "Key-value access with single-digit millisecond latency at any scale",
+                    "right": "Amazon DynamoDB"
+                },
+                {
+                    "left": "In-memory caching with sub-millisecond latency",
+                    "right": "Amazon ElastiCache"
+                },
+                {
+                    "left": "Petabyte-scale SQL data warehouse for analytics",
+                    "right": "Amazon Redshift"
+                },
+                {
+                    "left": "MySQL-compatible database with up to 15 low-lag read replicas",
+                    "right": "Amazon Aurora"
+                }
+            ],
+            "explanation": "Each service is purpose-built for its pattern: DynamoDB for key-value, ElastiCache for in-memory caching, Redshift for analytical warehousing, and Aurora for relational workloads with many replicas.",
+            "sources": [
+                "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html",
+                "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/elasticache-use-cases.html",
+                "https://docs.aws.amazon.com/redshift/latest/mgmt/welcome.html",
+                "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Replication.html"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,1501 @@
+{
+  "schemaVersion": 1,
+  "verifier": "independent verifier agents (4 passes: 2 initial, 2 re-verification after fixes)",
+  "verifiedOn": "2026-10-23",
+  "status": "verified",
+  "summary": {
+    "checked": 186,
+    "passed": 186,
+    "failed": 0
+  },
+  "items": [
+    {
+      "kind": "question",
+      "id": "secure-access-001",
+      "result": "pass",
+      "reason": "Instance profile role gives temporary credentials; stored/baked keys are long-term; answer c confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "secure-access-002",
+      "result": "pass",
+      "reason": "SCP sets max permissions for member-account principals incl. admins (not management account); permissions boundary is per-identity; answer d confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "secure-access-003",
+      "result": "pass",
+      "reason": "Boundary enforced via iam:PermissionsBoundary condition caps delegated roles; answer b confirmed; SCP deny-all would block role creation.",
+      "urlChecked": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "secure-access-004",
+      "result": "pass",
+      "reason": "Docs: cross-account needs Allow in identity policy AND resource-based policy; answer a confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies-cross-account-resource-access.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "secure-access-005",
+      "result": "pass",
+      "reason": "Best practices page lists MFA and temporary credentials via roles; root-password sharing, long-lived keys, admin-for-all are anti-patterns; a,d confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "secure-access-006",
+      "result": "pass",
+      "reason": "Page states an SCP never grants permissions; answer false confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "secure-access-007",
+      "result": "pass",
+      "reason": "Order (create role+trust, attach permissions, allow caller, AssumeRole) consistent with cross-account role docs; correctOrder [1,3,2,0] matches.",
+      "urlChecked": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies-cross-account-resource-access.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "secure-access-008",
+      "result": "pass",
+      "reason": "Cognito user pool = directory for sign-up/sign-in incl. Google/Facebook; identity pool issues AWS credentials; answer b confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "secure-access-009",
+      "result": "pass",
+      "reason": "Identity pool exchanges tokens (incl. social) for temporary AWS credentials of a narrow IAM role; answer a confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-identity.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "secure-access-010",
+      "result": "pass",
+      "reason": "All four pairings match service descriptions (Identity Center workforce SSO, Cognito customer sign-in, SCP guardrail, Access Analyzer external sharing).",
+      "urlChecked": "https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html",
+      "carried": true
+    },
+    {
+      "kind": "lesson",
+      "id": "secure-access",
+      "result": "pass",
+      "reason": "Summary and key points (explicit deny, SCP/boundary caps, SCPs never grant, Cognito pools, Identity Center) supported; all 5 docLinks load with relevant content.",
+      "urlChecked": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "secure-workloads-001",
+      "result": "pass",
+      "reason": "security-group-rules.html (now cited) states a security group ID can be the rule source and the rule covers all instances in that group via private IPs; answer c confirmed (options re-ordered, marked option is the SG reference).",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/security-group-rules.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "secure-workloads-002",
+      "result": "pass",
+      "reason": "NAT gateway: private instances reach out, external services cannot initiate; answer d confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "secure-workloads-003",
+      "result": "pass",
+      "reason": "WAF filters HTTP(S) requests on ALB with managed rules; Shield Standard is DDoS; answer a confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "secure-workloads-004",
+      "result": "pass",
+      "reason": "Gateway endpoint for S3: route-table entry, no additional charge, no IGW/NAT needed; interface endpoint is at additional cost (vpc-endpoints-s3.html); Lambda in a VPC gets no internet or public IP from a public subnet (lambda configuration-vpc.html); answer c confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "secure-workloads-005",
+      "result": "pass",
+      "reason": "Shield Advanced adds DDoS detection/response; WAF rate-based rules limit abusive request rates; a,b confirmed, no other option defensible. (CloudFront edge absorption not stated on cited pages, generally true.)",
+      "urlChecked": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-rate-based.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "secure-workloads-006",
+      "result": "pass",
+      "reason": "SGs stateful (response traffic allowed) and NACLs stateless; answer true confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "secure-workloads-007",
+      "result": "pass",
+      "reason": "GuardDuty (CloudTrail/VPC flow/DNS), Inspector (EC2, ECR, Lambda), Network Firewall (stateful+stateless), Firewall Manager (central WAF/SG policies) all confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/inspector/latest/user/what-is-inspector.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "secure-workloads-008",
+      "result": "pass",
+      "reason": "Secrets Manager supports automatic rotation (managed or Lambda-based) and replaces hard-coded credentials (intro.html); answer d confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "secure-workloads-009",
+      "result": "pass",
+      "reason": "Instance profile role gives apps temporary credentials without distributing keys; least-privilege scoping advised; answer a confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "secure-workloads-010",
+      "result": "pass",
+      "reason": "Network Firewall: stateful inspection, Suricata IPS, domain-based filtering, Firewall Manager central management; answer b confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/network-firewall/latest/developerguide/what-is-aws-network-firewall.html",
+      "carried": true
+    },
+    {
+      "kind": "lesson",
+      "id": "secure-workloads",
+      "result": "pass",
+      "reason": "Key points (SG stateful/NACL stateless, NAT, free gateway endpoints, WAF/Shield, Secrets Manager rotation, GuardDuty/Inspector/Firewall Manager) supported; docLinks load.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "data-security-001",
+      "result": "pass",
+      "reason": "SSE-KMS with customer managed key gives key control and CloudTrail logging; answer c confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingEncryption.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "data-security-002",
+      "result": "pass",
+      "reason": "aws:SecureTransport deny statement enforces TLS; answer b confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "data-security-003",
+      "result": "pass",
+      "reason": "Object Lock compliance mode: not deletable/overwritable by any user incl. root; governance can be bypassed; answer d confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "data-security-004",
+      "result": "pass",
+      "reason": "Snapshots encrypted with the AWS managed key cannot be shared; need customer managed key and share the key; encryption cannot be removed (ebs-encryption.html); answer a confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-modifying-snapshot-permissions.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "data-security-005",
+      "result": "pass",
+      "reason": "ACM cert on HTTPS listener and TLS to RDS protect in transit; others are at rest; a,c confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.SSL.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "data-security-006",
+      "result": "pass",
+      "reason": "rotate-keys.html (now cited): rotation changes only key material, same logical key, properties unchanged, old material still decrypts; statement false confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "data-security-007",
+      "result": "pass",
+      "reason": "CloudHSM single-tenant HSMs, ACM public cert issuance/renewal, Backup Vault Lock WORM, key policy is primary access control for a KMS key: all confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "data-security-008",
+      "result": "pass",
+      "reason": "Customer managed key supports optional automatic rotation (default 365 days) with no code changes; AWS managed keys rotate yearly and cannot be controlled; answer c confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "data-security-009",
+      "result": "pass",
+      "reason": "Related multi-Region keys share key ID and material; decrypt in another Region without a cross-Region call; answer b confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "data-security-010",
+      "result": "pass",
+      "reason": "Macie discovers sensitive data in S3 using ML and pattern matching; rubric accepts macie; confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html",
+      "carried": true
+    },
+    {
+      "kind": "lesson",
+      "id": "data-security",
+      "result": "pass",
+      "reason": "docLinks now all live (rotate-keys.html replaces the dead stub); key points supported by concepts.html, rotate-keys.html, multi-region-keys-overview.html, object-lock.html (compliance mode), macie what-is-macie.html, S3 in-transit page (aws:SecureTransport).",
+      "urlChecked": "https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "scalable-decoupled-001",
+      "result": "pass",
+      "reason": "FIFO: strict order, message groups, exactly-once/no duplicates; answer c confirmed (options re-ordered; marked c is FIFO with customer ID group).",
+      "urlChecked": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-fifo-queues.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "scalable-decoupled-002",
+      "result": "pass",
+      "reason": "SNS topic with one SQS queue per consumer gives each its own durable copy; answer b confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/sns/latest/dg/sns-sqs-as-subscriber.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "scalable-decoupled-003",
+      "result": "pass",
+      "reason": "Long polling (ReceiveMessageWaitTimeSeconds > 0) reduces empty responses and cost; answer d confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-short-and-long-polling.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "scalable-decoupled-004",
+      "result": "pass",
+      "reason": "Confirmed: set visibility timeout to at least six times the function timeout (extra time lets Lambda retry on throttling), plus MaximumBatchingWindowInSeconds when a batch window is used; sqs-visibility-timeout.html confirms redelivery after expiry; answer a confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/lambda/latest/dg/services-sqs-configure.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "scalable-decoupled-005",
+      "result": "pass",
+      "reason": "S3 event notifications can target Lambda; Lambda is serverless and scales automatically; answer a confirmed (explanation remark about CloudFront is not on cited pages but is not load-bearing).",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/EventNotifications.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "scalable-decoupled-006",
+      "result": "pass",
+      "reason": "RDS Proxy pools/shares connections and handles surges without code changes; answer d confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "scalable-decoupled-007",
+      "result": "pass",
+      "reason": "SQS and EventBridge decouple producers/consumers; hard-coded IPs, shared local file, mandatory sync calls couple them; b,d confirmed. Nit: prompt lacks the (Choose two.) suffix used elsewhere.",
+      "urlChecked": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "scalable-decoupled-008",
+      "result": "pass",
+      "reason": "No unsupported claim now: ElastiCache page shows user sessions kept in the cache (session:{id}); instance-store-lifetime.html confirms instance store data is lost on stop/terminate; ALB sticky-sessions page confirms stickiness only binds a client to one target; b,c confirmed; a,d,e wrong for the stated reasons.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/ecommerce-caching-valkey.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "scalable-decoupled-009",
+      "result": "pass",
+      "reason": "SQS decouples components, stores messages durably on multiple servers and scales to absorb spikes; answer c confirmed (options re-ordered).",
+      "urlChecked": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "scalable-decoupled-010",
+      "result": "pass",
+      "reason": "DLQ with redrive policy maxReceiveCount isolates unprocessed messages for inspection; answer a confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "scalable-decoupled-011",
+      "result": "pass",
+      "reason": "SNS pushes to subscribers, SQS holds for polling; false confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/sns/latest/dg/welcome.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "scalable-decoupled-012",
+      "result": "pass",
+      "reason": "Send, receive (visibility timeout starts), process, delete; correctOrder [1,3,2,0] matches.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "scalable-decoupled-013",
+      "result": "pass",
+      "reason": "Kinesis row now supported: key-concepts.html (shard = ordered sequence of records, retention 24h up to 365 days so records stay readable, multiple applications consume independently) and introduction.html (multiple apps consume same stream concurrently); SQS, SNS fan-out, EventBridge rows also supported.",
+      "urlChecked": "https://docs.aws.amazon.com/streams/latest/dev/key-concepts.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "scalable-decoupled-014",
+      "result": "pass",
+      "reason": "Step Functions workflows as state machines with retries/catch/branching; typed rubric fine; confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html",
+      "carried": true
+    },
+    {
+      "kind": "lesson",
+      "id": "scalable-decoupled",
+      "result": "pass",
+      "reason": "Six-times visibility timeout confirmed (services-sqs-configure.html); backlog-per-instance scaling confirmed (as-using-sqs-queue.html); DynamoDB/ElastiCache/EFS for offloading session data and S3 for large objects confirmed by official Well-Architected REL05-BP06. ADVISORY: that page is not in docLinks (only the reliability-pillar welcome index is); recommend adding it.",
+      "urlChecked": "https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_stateless.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "highly-available-001",
+      "result": "pass",
+      "reason": "Multi-AZ DB instance deployment: one standby for failover, does not serve read traffic; answer b confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "highly-available-002",
+      "result": "pass",
+      "reason": "EFS stores across multiple AZs and mounts via NFS; EBS Multi-Attach limited to instances in the same AZ (ebs-volumes-multi.html, verified though not cited); answer b confirmed. Suggest adding the EBS Multi-Attach URL to sources.",
+      "urlChecked": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volumes-multi.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "highly-available-003",
+      "result": "pass",
+      "reason": "Zonal NAT gateways operate in a single AZ; regional NAT gateway expands across AZs automatically; per-AZ zonal gateway with same-AZ routes (nat-gateway-scenarios.html) is the right fix; wording accurate; answer a confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateways-regional.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "highly-available-004",
+      "result": "pass",
+      "reason": "Failover routing (active-passive) with health check on primary; answer d confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "highly-available-005",
+      "result": "pass",
+      "reason": "DynamoDB global tables are multi-active, any replica serves reads and writes; answer c confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "highly-available-006",
+      "result": "pass",
+      "reason": "States both source and destination buckets must have versioning enabled; Object Lock only needed if source has it; answer a confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-requirements.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "highly-available-007",
+      "result": "pass",
+      "reason": "ELB needs AZs enabled and targets in multiple AZs; a,b confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/how-elastic-load-balancing-works.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "highly-available-008",
+      "result": "pass",
+      "reason": "Default ASG health check is EC2 status only; ELB health checks plus app-level target group check replace hung instances; a,b confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/health-checks-overview.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "highly-available-009",
+      "result": "pass",
+      "reason": "Aurora Global Database replicates with latency typically under a second and supports cross-Region failover; fits RTO 15 min / RPO ~1 min with low effort; answer a confirmed. \"about a second\" is slightly loose vs \"under a second\".",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "highly-available-010",
+      "result": "pass",
+      "reason": "Whitepaper: Global Accelerator uses anycast static IPs, health-checked routing, and avoids DNS caching issues; answer c confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "highly-available-011",
+      "result": "pass",
+      "reason": "Docs: Multi-AZ DB instance deployment standby provides failover support but does not serve read traffic; false confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "highly-available-012",
+      "result": "pass",
+      "reason": "Whitepaper: backup and restore, pilot light, warm standby, multi-site active/active; correctOrder [1,3,0,2] matches.",
+      "urlChecked": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "highly-available-013",
+      "result": "pass",
+      "reason": "Route 53 health-check failover, AWS Backup central backups, Elastic Disaster Recovery replication, ELB multi-AZ healthy targets: confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/drs/latest/userguide/what-is-drs.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "highly-available-014",
+      "result": "pass",
+      "reason": "S3 Cross-Region Replication copies objects across Regions; rubric answer confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html",
+      "carried": true
+    },
+    {
+      "kind": "lesson",
+      "id": "highly-available",
+      "result": "pass",
+      "reason": "NAT point now zonal-vs-regional and accurate; Multi-AZ instance standby does not serve reads (Concepts.MultiAZ.html); Route 53 DNS failover, Global Accelerator no-DNS-caching, DR ordering, Aurora global DB/DynamoDB global tables, AWS Backup/DRS, S3 versioning supported by the whitepaper and linked pages.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateways-regional.html",
+      "carried": false
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-secure-001",
+      "result": "pass",
+      "reason": "IAM role: temporary credentials for trusted principals.",
+      "urlChecked": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-secure-002",
+      "result": "pass",
+      "reason": "SCP sets maximum permissions, never grants.",
+      "urlChecked": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-secure-003",
+      "result": "pass",
+      "reason": "Permissions boundary sets maximum permissions identity policies can grant.",
+      "urlChecked": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-secure-004",
+      "result": "pass",
+      "reason": "STS issues temporary, short-term credentials.",
+      "urlChecked": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-secure-005",
+      "result": "pass",
+      "reason": "Identity Center is workforce SSO across accounts/apps.",
+      "urlChecked": "https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-secure-006",
+      "result": "pass",
+      "reason": "User pool handles sign-up/sign-in and tokens.",
+      "urlChecked": "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-secure-007",
+      "result": "pass",
+      "reason": "Identity pool issues temporary AWS credentials.",
+      "urlChecked": "https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-identity.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-secure-008",
+      "result": "pass",
+      "reason": "Access Analyzer finds externally shared resources and generates/validates policies.",
+      "urlChecked": "https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-secure-009",
+      "result": "pass",
+      "reason": "Stateful, resource-level confirmed; allow-rules-only is on security-group-rules.html rather than the cited page (true there; consider adding).",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-secure-010",
+      "result": "pass",
+      "reason": "NACL stateless, numbered allow/deny rules.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-secure-011",
+      "result": "pass",
+      "reason": "Gateway endpoint: route-table target for S3/DynamoDB, no additional charge.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-secure-012",
+      "result": "pass",
+      "reason": "WAF filters HTTP(S) requests to CloudFront, ALB, API Gateway etc.",
+      "urlChecked": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-secure-014",
+      "result": "pass",
+      "reason": "GuardDuty analyzes CloudTrail, VPC flow logs, DNS logs.",
+      "urlChecked": "https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-secure-015",
+      "result": "pass",
+      "reason": "Secrets Manager stores and rotates secrets.",
+      "urlChecked": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-secure-016",
+      "result": "pass",
+      "reason": "KMS creates and controls cryptographic keys.",
+      "urlChecked": "https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-secure-017",
+      "result": "pass",
+      "reason": "Object Lock WORM with governance and compliance modes.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-secure-018",
+      "result": "pass",
+      "reason": "Macie uses ML/pattern matching for sensitive data in S3.",
+      "urlChecked": "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-resilient-001",
+      "result": "pass",
+      "reason": "SQS buffers messages, consumers pull.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-resilient-002",
+      "result": "pass",
+      "reason": "Visibility timeout definition correct (note: AWS recommends six times function timeout for Lambda).",
+      "urlChecked": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-resilient-003",
+      "result": "pass",
+      "reason": "DLQ receives messages exceeding max receive count.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-resilient-004",
+      "result": "pass",
+      "reason": "Long polling wait time > 0 reduces empty responses.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-short-and-long-polling.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-resilient-005",
+      "result": "pass",
+      "reason": "SNS fan-out to SQS queue per consumer.",
+      "urlChecked": "https://docs.aws.amazon.com/sns/latest/dg/sns-sqs-as-subscriber.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-resilient-006",
+      "result": "pass",
+      "reason": "EventBridge event bus routes events to targets by rules.",
+      "urlChecked": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-resilient-007",
+      "result": "pass",
+      "reason": "Step Functions workflows as state machines with retries/branching.",
+      "urlChecked": "https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-resilient-008",
+      "result": "pass",
+      "reason": "RDS Proxy pools/shares connections and handles surges (Lambda not named on the page, accurate in practice).",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-resilient-009",
+      "result": "pass",
+      "reason": "Multi-AZ standby for failover, not reads (DB instance deployment).",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-resilient-010",
+      "result": "pass",
+      "reason": "Read replicas asynchronous; cross-Region replicas supported.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-resilient-011",
+      "result": "pass",
+      "reason": "Aurora Global Database storage-level replication, latency typically under a second, cross-Region failover.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-resilient-012",
+      "result": "pass",
+      "reason": "Global tables multi-active; any replica serves reads and writes.",
+      "urlChecked": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-resilient-014",
+      "result": "pass",
+      "reason": "Pilot light: replicated data and core infrastructure, scale up on disaster.",
+      "urlChecked": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-secure-013",
+      "result": "pass",
+      "reason": "Shield Standard automatic at no extra charge; Advanced is a subscription for higher levels of protection; unsupported cost-protection claim removed.",
+      "urlChecked": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-overview.html",
+      "carried": false
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-resilient-013",
+      "result": "pass",
+      "reason": "Page defines RTO (max acceptable delay between interruption and restoration) and RPO (max acceptable time since last recovery point); matches card.",
+      "urlChecked": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/disaster-recovery-dr-objectives.html",
+      "carried": false
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-resilient-015",
+      "result": "pass",
+      "reason": "Static anycast IPs (what-is-global-accelerator.html) and avoiding DNS caching issues (DR whitepaper) both confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "cost-compute-001",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "cost-compute-002",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is-compute-optimizer.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "cost-compute-003",
+      "result": "pass",
+      "reason": "Compute Savings Plans apply regardless of instance family, size, OS, tenancy, Region and also to Fargate and Lambda; EC2 Instance SP is tied to a family and Region; 1 or 3 year terms. Answer a correct.",
+      "urlChecked": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "cost-compute-004",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "cost-compute-005",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://aws.amazon.com/lambda/pricing/",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "cost-compute-006",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is-compute-optimizer.html",
+      "carried": true
+    },
+    {
+      "kind": "lesson",
+      "id": "cost-compute",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "cost-database-001",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "cost-database-002",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.TableClasses.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "cost-database-003",
+      "result": "pass",
+      "reason": "Page says provisioned mode suits steady, predictable workloads; TTL deletes without consuming write throughput. Cheaper with auto scaling is implied, not stated.",
+      "urlChecked": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "cost-database-004",
+      "result": "pass",
+      "reason": "RDS stop is limited to a maximum of 7 consecutive days, then RDS auto-starts the instance; storage and backups still billed. False is correct.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_StopInstance.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "cost-database-005",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithReservedDBInstances.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "cost-database-006",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithReservedDBInstances.html",
+      "carried": true
+    },
+    {
+      "kind": "lesson",
+      "id": "cost-database",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "cost-network-001",
+      "result": "pass",
+      "reason": "Gateway endpoint for S3 has no additional charge; NAT gateway bills per hour and per GB (nat-gateway-pricing).",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "cost-network-002",
+      "result": "pass",
+      "reason": "CloudFront caches at edge; origin-to-CloudFront transfer from AWS origins is free. Advisory: Transfer Acceleration fee claim is not on the cited page.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "cost-network-003",
+      "result": "pass",
+      "reason": "EC2 on-demand pricing page states cross-AZ transfer is charged 0.01 USD/GB each direction and public/Elastic IPv4 traffic 0.01 USD/GB each direction; answers a+c correct. Inter-Region and NAT claims in the explanation are not on that page (weak but not key). [carried; my fetch tool could not render the EC2 pricing data-transfer section, but nat-gateway-pricing.html corroborates cross-AZ charges]",
+      "urlChecked": "https://aws.amazon.com/ec2/pricing/on-demand/",
+      "carried": true
+    },
+    {
+      "kind": "question",
+      "id": "cost-network-004",
+      "result": "pass",
+      "reason": "Gateway endpoints for S3 and DynamoDB, no additional charge.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "cost-network-005",
+      "result": "pass",
+      "reason": "Gateway endpoint is the type with no charge for S3.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "cost-network-006",
+      "result": "pass",
+      "reason": "c correct: pricing page says port hours charged even when idle, plus per-GB DTO (0.02 USD US-to-US), data transfer in 0.00; no tie to VPN rate; internet DTO deferred to EC2 pricing, as explanation says.",
+      "urlChecked": "https://aws.amazon.com/directconnect/pricing/",
+      "carried": false
+    },
+    {
+      "kind": "lesson",
+      "id": "cost-network",
+      "result": "pass",
+      "reason": "Direct Connect KP now matches pricing page (port-hours + per-GB DTO 0.02 USD, no charge in); NAT KP on linked nat-gateway-pricing.html; gateway endpoints, CloudFront origin transfer confirmed. Advisory: Transit Gateway/shared-LB KP and general data-in-free have no docLink.",
+      "urlChecked": "https://aws.amazon.com/directconnect/pricing/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "cost-storage-001",
+      "result": "pass",
+      "reason": "Glacier Instant Retrieval: rarely accessed archive with millisecond access; Flexible minutes-hours; Deep Archive hours.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "cost-storage-002",
+      "result": "pass",
+      "reason": "a+c correct: lifecycle supports NoncurrentVersionExpiration and AbortIncompleteMultipartUpload; Requester Pays shifts request/download cost, owner still pays storage. Advisory: the 30-day-before-transition remark is true but not on a cited page.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/intro-lifecycle-rules.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "cost-storage-003",
+      "result": "pass",
+      "reason": "Deep Archive standard retrieval within 12 hours and lowest cost; One Zone-IA is single AZ; Glacier IR/Standard options costlier.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/restoring-objects-retrieval-options.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "cost-storage-004",
+      "result": "pass",
+      "reason": "Lifecycle rules natively expire noncurrent versions and abort incomplete multipart uploads (intro-lifecycle-rules.html).",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/intro-lifecycle-rules.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "cost-storage-005",
+      "result": "pass",
+      "reason": "False confirmed: Intelligent-Tiering has no retrieval charges or tier-move charges; small monitoring/automation fee.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/intelligent-tiering.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "cost-storage-006",
+      "result": "pass",
+      "reason": "gp3 independent IOPS and cheaper than gp2 (general-purpose.html), st1 for log processing (ebs-volume-types), EFS lifecycle to IA, Intelligent-Tiering all confirmed; efs features.html loads.",
+      "urlChecked": "https://docs.aws.amazon.com/efs/latest/ug/features.html",
+      "carried": false
+    },
+    {
+      "kind": "lesson",
+      "id": "cost-storage",
+      "result": "pass",
+      "reason": "Dead EFS docLink replaced by features.html (loads); gp3 price/independent IOPS now on linked general-purpose.html; all KPs supported and docLinks load.",
+      "urlChecked": "https://docs.aws.amazon.com/efs/latest/ug/features.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-compute-001",
+      "result": "pass",
+      "reason": "Target tracking keeps a metric near target (example: 50% average CPU) and manages alarms; step scaling needs more tuning.",
+      "urlChecked": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-compute-002",
+      "result": "pass",
+      "reason": "Cluster placement group packs instances in one AZ for low-latency HPC; partition/spread prioritize isolation.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-compute-003",
+      "result": "pass",
+      "reason": "Fargate removes server management for ECS and EKS; EC2 launch type, self-managed nodes, Docker on EC2 do not.",
+      "urlChecked": "https://docs.aws.amazon.com/eks/latest/userguide/fargate.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-compute-004",
+      "result": "pass",
+      "reason": "Order template > group > policy supported: ASG uses launch templates (what-is page) and target tracking policy is attached to a group.",
+      "urlChecked": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-compute-005",
+      "result": "pass",
+      "reason": "Target tracking scaling policy keeps a metric near a target value.",
+      "urlChecked": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-compute-006",
+      "result": "pass",
+      "reason": "Provisioned concurrency pre-initializes execution environments to reduce cold starts.",
+      "urlChecked": "https://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html",
+      "carried": false
+    },
+    {
+      "kind": "lesson",
+      "id": "perf-compute",
+      "result": "pass",
+      "reason": "KPs supported by linked pages (target tracking, placement groups, Lambda provisioned concurrency, Fargate). Advisory: instance family KP has no docLink.",
+      "urlChecked": "https://docs.aws.amazon.com/lambda/latest/dg/lambda-concurrency.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-database-001",
+      "result": "pass",
+      "reason": "Read replicas use asynchronous replication and serve reads; Multi-AZ DB instance deployment standby does not serve read traffic.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-database-002",
+      "result": "pass",
+      "reason": "DAX is API-compatible in-memory cache, microsecond reads, minimal changes.",
+      "urlChecked": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-database-003",
+      "result": "pass",
+      "reason": "Caching and read replicas reduce read load; Multi-AZ standby does not serve reads.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/Strategies.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-database-004",
+      "result": "pass",
+      "reason": "RDS Proxy pools/shares connections and handles surges; other options do not reduce connections.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-database-005",
+      "result": "pass",
+      "reason": "Read replica isolates reporting reads from primary; replication is continuous.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-database-006",
+      "result": "pass",
+      "reason": "All pairs supported: DynamoDB single-digit ms (Introduction), ElastiCache submillisecond (use-cases), Redshift petabyte-scale warehouse, Aurora up to 15 replicas with minimal lag.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Replication.html",
+      "carried": false
+    },
+    {
+      "kind": "lesson",
+      "id": "perf-database",
+      "result": "pass",
+      "reason": "KPs true (read replicas, DAX microseconds, ElastiCache, RDS Proxy, DynamoDB modes). Advisory: Aurora up to 15 replicas is confirmed on Aurora.Replication.html, which is not among the lesson docLinks.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-ingestion-001",
+      "result": "pass",
+      "reason": "Retention period and multiple independent consuming applications confirmed on key-concepts; SQS single-subscriber/delete-after-process confirmed on SQS welcome page.",
+      "urlChecked": "https://docs.aws.amazon.com/streams/latest/dev/key-concepts.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-ingestion-002",
+      "result": "pass",
+      "reason": "Name is Amazon Data Firehose; fully managed, no applications to write; S3 delivery with compression and transform confirmed (create-destination mentions S3 compression/GZIP).",
+      "urlChecked": "https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-ingestion-003",
+      "result": "pass",
+      "reason": "Exactly a and c are correct: DataSync works with on-prem NFS to S3 over the network, and tasks run on cron/rate schedules; b (Firehose = streaming), d (Glue crawlers catalog), e (CloudFront delivery) are wrong; no Snowball option remains.",
+      "urlChecked": "https://docs.aws.amazon.com/datasync/latest/userguide/task-scheduling.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-ingestion-004",
+      "result": "pass",
+      "reason": "define-crawler.html loads; crawler creates table definitions in Data Catalog; Athena queries cataloged S3 data; order land > crawl > query correct.",
+      "urlChecked": "https://docs.aws.amazon.com/glue/latest/dg/define-crawler.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-ingestion-005",
+      "result": "pass",
+      "reason": "Glue serverless ETL + catalog, Athena SQL on S3, MSK fully managed Kafka, Transfer Family SFTP/FTPS/FTP into S3 all confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/transfer/latest/userguide/what-is-aws-transfer-family.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-ingestion-006",
+      "result": "pass",
+      "reason": "Glue is serverless with Data Catalog and Spark-based ETL engine.",
+      "urlChecked": "https://docs.aws.amazon.com/glue/latest/dg/what-is-glue.html",
+      "carried": false
+    },
+    {
+      "kind": "lesson",
+      "id": "perf-ingestion",
+      "result": "pass",
+      "reason": "Snowball Edge KP now states it is closed to new customers, matching its page (DataSync / Data Transfer Terminal alternatives); Kinesis, Firehose, DataSync schedule, Glue, Athena confirmed. Advisory: MSK KP has no docLink (verified on MSK page).",
+      "urlChecked": "https://docs.aws.amazon.com/snowball/latest/developer-guide/whatisedge.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-network-001",
+      "result": "pass",
+      "reason": "CloudFront caches at edge locations for lower latency.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-network-002",
+      "result": "pass",
+      "reason": "Listeners support TCP and UDP; static anycast IPs; AWS global network to optimal/healthy endpoints.",
+      "urlChecked": "https://docs.aws.amazon.com/global-accelerator/latest/dg/about-listeners.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-network-003",
+      "result": "pass",
+      "reason": "a+b correct per NLB guide (layer 4, millions of requests/s, static IP per AZ) and ALB guide (path conditions, listed as benefit over Classic); c, d, e wrong.",
+      "urlChecked": "https://docs.aws.amazon.com/elasticloadbalancing/latest/network/introduction.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-network-004",
+      "result": "pass",
+      "reason": "Route 53 latency routing sends traffic to the Region with best latency.",
+      "urlChecked": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-network-005",
+      "result": "pass",
+      "reason": "Direct Connect is a dedicated link bypassing ISPs; consistency of bandwidth/latency is implied rather than stated (same note as first pass).",
+      "urlChecked": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-network-006",
+      "result": "pass",
+      "reason": "Site-to-Site VPN supports IPsec encrypted connections between VPC and on-premises; speed of setup is general knowledge, not on page (same as first pass).",
+      "urlChecked": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html",
+      "carried": false
+    },
+    {
+      "kind": "lesson",
+      "id": "perf-network",
+      "result": "pass",
+      "reason": "KPs now supported: CloudFront, GA TCP/UDP + global network, ALB L7 path / NLB L4 millions rps + static IP per AZ, Route 53 latency, Direct Connect. Advisory: VPN is internet-based is not stated on a linked page.",
+      "urlChecked": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-storage-001",
+      "result": "pass",
+      "reason": "io1/io2 are for latency-sensitive sustained IOPS; sc1/st1 HDD use cases confirmed; instance store is not an EBS type.",
+      "urlChecked": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-storage-002",
+      "result": "pass",
+      "reason": "Parallel connections/concurrent parts and byte-range fetches both recommended; single prefix, Versioning, Deep Archive do not help throughput.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance-guidelines.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-storage-003",
+      "result": "pass",
+      "reason": "False confirmed: instance store data does not persist when stopped, hibernated or terminated.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-store-lifetime.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-storage-004",
+      "result": "pass",
+      "reason": "All four pairs confirmed: EFS NFS/Regional multi-AZ Linux; FSx Lustre HPC + S3; FSx Windows SMB; io1/io2 for IOPS-intensive DB workloads.",
+      "urlChecked": "https://docs.aws.amazon.com/fsx/latest/WindowsGuide/what-is.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-storage-005",
+      "result": "pass",
+      "reason": "FSx for Lustre (HPC, sub-ms, S3-linked) is correct; Multi-Attach is io1/io2 only, up to 16 Nitro instances in one AZ, so option c is wrong; instance store and EFS are inferior.",
+      "urlChecked": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volumes-multi.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "perf-storage-006",
+      "result": "pass",
+      "reason": "Scratch deployment is for temporary, short-term processing and cost-optimized; results exported to S3 so deletion is fine.",
+      "urlChecked": "https://docs.aws.amazon.com/fsx/latest/LustreGuide/using-fsx-lustre.html",
+      "carried": false
+    },
+    {
+      "kind": "lesson",
+      "id": "perf-storage",
+      "result": "pass",
+      "reason": "KPs now supported: gp3 independent IOPS/throughput, io2, instance store, EFS NFS/Linux/Regional multi-AZ, Lustre HPC+S3, S3 byte-range/prefix guidance; docLinks load.",
+      "urlChecked": "https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html",
+      "carried": false
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-performant-001",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-performant-002",
+      "result": "pass",
+      "reason": "gp3 3,000 IOPS baseline and independent IOPS/throughput confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html",
+      "carried": false
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-performant-003",
+      "result": "pass",
+      "reason": "Instance store data lost on stop, hibernate, terminate confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-store-lifetime.html",
+      "carried": false
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-performant-004",
+      "result": "pass",
+      "reason": "NFS and Regional file system confirmed; Linux across AZs is implied rather than stated.",
+      "urlChecked": "https://docs.aws.amazon.com/efs/latest/ug/performance.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-performant-005",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-performant-006",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-performant-007",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-performant-008",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-performant-009",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-performant-010",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-performant-011",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-performant-012",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-performant-013",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-performant-014",
+      "result": "pass",
+      "reason": "Static anycast IPs, TCP and UDP listeners, AWS global network confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/global-accelerator/latest/dg/about-listeners.html",
+      "carried": false
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-performant-015",
+      "result": "pass",
+      "reason": "Uses current name Amazon Data Firehose; S3/Redshift/OpenSearch, no applications to write confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html",
+      "carried": false
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-cost-001",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/intelligent-tiering.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-cost-002",
+      "result": "pass",
+      "reason": "Lifecycle transitions, expiry, noncurrent version expiry and abort incomplete multipart uploads confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/intro-lifecycle-rules.html",
+      "carried": false
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-cost-003",
+      "result": "pass",
+      "reason": "Retrieval times of hours confirmed; lowest-cost is stated for Glacier classes on the S3 Glacier product page, not on the cited page.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-cost-004",
+      "result": "pass",
+      "reason": "gp3 about 20 percent lower price per GiB than gp2 and independent IOPS/throughput confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html",
+      "carried": false
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-cost-005",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-cost-006",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-cost-007",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is-compute-optimizer.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-cost-008",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-cost-009",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithReservedDBInstances.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-cost-010",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/capacity-mode.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-cost-011",
+      "result": "pass",
+      "reason": "Answer, explanation and facts match the cited page(s).",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html",
+      "carried": true
+    },
+    {
+      "kind": "flashcard",
+      "id": "fc-cost-012",
+      "result": "pass",
+      "reason": "NAT gateway billed per hour available and per GB processed; endpoint advice confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-pricing.html",
+      "carried": false
+    }
+  ]
+}
