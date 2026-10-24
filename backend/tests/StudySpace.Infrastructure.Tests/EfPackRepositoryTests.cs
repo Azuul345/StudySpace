@@ -127,6 +127,18 @@ public class EfPackRepositoryTests
     }
 
     [Fact]
+    public async Task Save_StoresLessonDiagrams_AndReplacesThemOnANewVersion()
+    {
+        using var db = new TestDb();
+        var pack = Pack();
+        await Save(db, pack with { Topics = [pack.Topics[0] with { Diagrams = ["vpc-public-private"] }] }, "h1");
+        await Save(db, pack with { Version = "2026.10.2", Topics = [pack.Topics[0] with { Diagrams = ["sqs-decoupling"] }] }, "h2");
+
+        await using var c = db.NewContext();
+        Assert.Equal("[\"sqs-decoupling\"]", (await c.Lessons.SingleAsync()).DiagramsJson);
+    }
+
+    [Fact]
     public async Task Save_StoresCaveatsOnlyForTheQuestionsThatHaveOne_AndClearsThemOnANewVersion()
     {
         using var db = new TestDb();

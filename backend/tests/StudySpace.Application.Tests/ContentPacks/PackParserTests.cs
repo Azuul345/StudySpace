@@ -105,6 +105,18 @@ public class PackParserTests
     }
 
     [Fact]
+    public void Parse_ReadsLessonDiagrams_AndDefaultsToNone()
+    {
+        Assert.Empty(Assert.Single(Parse().Topics).Diagrams!);
+
+        var files = PackSamples.ValidPack();
+        var i = files.FindIndex(f => f.Name.StartsWith("topics/", StringComparison.Ordinal));
+        files[i] = new(files[i].Name, files[i].Content.Replace("\"docLinks\":", "\"diagrams\": [\"vpc-public-private\"], \"docLinks\":", StringComparison.Ordinal));
+
+        Assert.Equal(["vpc-public-private"], Assert.Single(PackParser.Parse(files).Topics).Diagrams);
+    }
+
+    [Fact]
     public void Parse_ReadsQuestionCaveats()
     {
         var pack = Parse("""

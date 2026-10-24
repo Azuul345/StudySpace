@@ -73,6 +73,29 @@ public class CatalogEndpointTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Topic_ReturnsLessonDiagramIds()
+    {
+        await _factory.SeedAsync(ApiSamples.VerifiedPack(version: "2026.10.2", diagrams: "[\"vpc-public-private\"]"));
+        var exam = await _client.GetFromJsonAsync<JsonElement>("/api/v1/exams/API-1");
+        var topicId = exam.GetProperty("domains")[1].GetProperty("topics")[0].GetProperty("id").GetInt32();
+
+        var topic = await _client.GetFromJsonAsync<JsonElement>($"/api/v1/topics/{topicId}");
+
+        Assert.Equal(["vpc-public-private"], topic.GetProperty("lesson").GetProperty("diagrams").EnumerateArray().Select(e => e.GetString()));
+    }
+
+    [Fact]
+    public async Task Topic_WithoutDiagrams_ReturnsAnEmptyList()
+    {
+        var exam = await _client.GetFromJsonAsync<JsonElement>("/api/v1/exams/API-1");
+        var topicId = exam.GetProperty("domains")[1].GetProperty("topics")[0].GetProperty("id").GetInt32();
+
+        var topic = await _client.GetFromJsonAsync<JsonElement>($"/api/v1/topics/{topicId}");
+
+        Assert.Empty(topic.GetProperty("lesson").GetProperty("diagrams").EnumerateArray());
+    }
+
+    [Fact]
     public async Task Topic_Unknown_Is404()
     {
         Assert.Equal(HttpStatusCode.NotFound, (await _client.GetAsync("/api/v1/topics/9999")).StatusCode);

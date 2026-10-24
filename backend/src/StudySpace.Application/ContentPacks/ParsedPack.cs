@@ -25,7 +25,8 @@ public sealed record ParsedTopic(
     IReadOnlyList<string> KeyPoints,
     IReadOnlyList<string> DocLinks,
     IReadOnlyList<ParsedScenario> Scenarios,
-    IReadOnlyList<ParsedQuestion> Questions);
+    IReadOnlyList<ParsedQuestion> Questions,
+    IReadOnlyList<string>? Diagrams = null);
 
 public sealed record ParsedScenario(string Id, string Text);
 

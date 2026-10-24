@@ -43,6 +43,7 @@ public class LessonEntity
     public string Summary { get; set; } = "";
     public string KeyPointsJson { get; set; } = "[]";
     public string DocLinksJson { get; set; } = "[]";
+    public string DiagramsJson { get; set; } = "[]";
 }
 
 public class ScenarioEntity

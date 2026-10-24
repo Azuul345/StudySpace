@@ -37,6 +37,7 @@ export interface Lesson {
   summary: string
   keyPoints: string[]
   docLinks: string[]
+  diagrams?: string[]
 }
 
 export interface TopicDetail {

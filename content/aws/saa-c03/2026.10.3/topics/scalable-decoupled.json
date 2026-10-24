@@ -13,6 +13,7 @@
       "RDS Proxy pools connections so bursty Lambda or microservice traffic does not exhaust the database",
       "EventBridge routes events by rule; Step Functions orchestrates workflows; Kinesis Data Streams handles per-shard ordered, replayable streams"
     ],
+    "diagrams": ["sqs-decoupling"],
     "docLinks": [
       "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html",
       "https://docs.aws.amazon.com/sns/latest/dg/welcome.html",

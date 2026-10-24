@@ -21,3 +21,15 @@ th, td { text-align: left; padding: 0.4rem 0.5rem; border-bottom: 1px solid #888
 .level.strong { color: #1b7a3a; font-weight: 600; }
 .caveat { border-left: 4px solid #b26a00; background: #b26a0014; padding: 0.4rem 0.75rem; margin: 0.75rem 0; }
 .check-list > li { border-bottom: 1px solid #8884; padding-bottom: 1rem; margin-bottom: 1rem; }
+
+.diagram { margin: 1.5rem 0; }
+.diagram svg { width: 100%; height: auto; max-width: 640px; display: block; color: inherit; }
+.diagram figcaption { margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.85; }
+.dg-box { fill: #8881; stroke: currentColor; stroke-width: 1.5; }
+.dg-accent { stroke: #2563eb; stroke-width: 2.5; }
+.dg-group { fill: none; stroke: currentColor; stroke-opacity: 0.5; stroke-dasharray: 2 4; stroke-width: 1.5; }
+.dg-group-label { fill: currentColor; font-size: 13px; font-weight: 600; opacity: 0.8; }
+.dg-label { fill: currentColor; font-size: 14px; font-weight: 600; }
+.dg-sub { fill: currentColor; font-size: 12px; opacity: 0.85; }
+.dg-arrow { stroke: currentColor; stroke-width: 1.8; }
+.dg-dashed { stroke-dasharray: 6 4; }
