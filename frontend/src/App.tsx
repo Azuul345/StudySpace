@@ -21,7 +21,15 @@ function NotFound() {
 export function App() {
   return (
     <>
-      <nav aria-label="Main">
+      <nav aria-label="Main" className="topbar">
+        <Link to="/" className="brand">
+          <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
+            <rect width="24" height="24" rx="7" fill="var(--primary)" />
+            <path d="M5.5 8.2c2.3-.9 4.4-.7 6.5.7 2.1-1.4 4.2-1.6 6.5-.7v8.3c-2.3-.9-4.4-.7-6.5.7-2.1-1.4-4.2-1.6-6.5-.7z" fill="none" stroke="var(--primary-ink)" strokeWidth="1.7" strokeLinejoin="round" />
+            <path d="M12 8.9v8.3" stroke="var(--primary-ink)" strokeWidth="1.7" />
+          </svg>
+          StudySpace
+        </Link>
         <NavLink to="/" end>
           Dashboard
         </NavLink>

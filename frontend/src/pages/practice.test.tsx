@@ -46,7 +46,7 @@ describe('start links', () => {
 
   it('topic page starts a topic drill', async () => {
     renderAt('/topics/7')
-    expect(await screen.findByRole('link', { name: /start drill/i })).toHaveAttribute(
+    expect(await screen.findByRole('link', { name: /practice this topic/i })).toHaveAttribute(
       'href', '/practice?form=drill&examCode=SAA-C03&topicId=7')
   })
 })

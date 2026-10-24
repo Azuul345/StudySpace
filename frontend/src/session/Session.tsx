@@ -101,7 +101,7 @@ export function Session({ attempt }: { attempt: Attempt }) {
       )}
 
       {result && question && (
-        <div className="feedback" role="status">
+        <div className={`feedback${result.needsConfirmation && confirmedCorrect === null ? '' : confirmedCorrect ? ' ok' : ' bad'}`} role="status">
           {result.needsConfirmation && confirmedCorrect === null ? (
             <>
               <p>
