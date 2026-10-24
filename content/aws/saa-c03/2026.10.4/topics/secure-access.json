@@ -13,6 +13,7 @@
       "Cognito user pools authenticate customers; identity pools issue AWS credentials",
       "IAM Identity Center provides workforce SSO across accounts"
     ],
+    "diagrams": ["iam-cross-account-role"],
     "docLinks": [
       "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html",
       "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html",

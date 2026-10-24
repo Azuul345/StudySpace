@@ -13,6 +13,7 @@
             "RDS Proxy pools connections for Lambda and spiky clients",
             "DynamoDB on-demand suits unpredictable traffic; provisioned with auto scaling suits predictable traffic"
         ],
+        "diagrams": ["cache-and-read-replicas"],
         "docLinks": [
             "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html",
             "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.html",

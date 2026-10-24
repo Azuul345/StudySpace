@@ -12,6 +12,7 @@
             "FSx for Lustre is built for HPC and integrates with S3",
             "S3 performance improves with parallel connections, byte-range fetches and Transfer Acceleration; spread very high request rates across prefixes"
         ],
+        "diagrams": ["storage-types"],
         "docLinks": [
             "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html",
             "https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html",

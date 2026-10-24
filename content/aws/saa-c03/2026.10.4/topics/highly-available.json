@@ -13,6 +13,7 @@
       "DR strategies by rising cost and falling RTO: backup and restore, pilot light, warm standby, multi-site active/active",
       "S3 replication needs versioning; AWS Backup and Elastic Disaster Recovery protect data and servers centrally"
     ],
+    "diagrams": ["multi-az-web-tier"],
     "docLinks": [
       "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html",
       "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html",

@@ -30,8 +30,17 @@ export function Box({ x, y, w, h, label, sub, accent }: { x: number; y: number; 
   )
 }
 
-export function Arrow({ from, to, dashed }: { from: [number, number]; to: [number, number]; dashed?: boolean }) {
-  return <line className={dashed ? 'dg-arrow dg-dashed' : 'dg-arrow'} x1={from[0]} y1={from[1]} x2={to[0]} y2={to[1]} markerEnd="url(#ss-arrow)" />
+export function Arrow({ from, to, dashed, noHead }: { from: [number, number]; to: [number, number]; dashed?: boolean; noHead?: boolean }) {
+  return (
+    <line
+      className={dashed ? 'dg-arrow dg-dashed' : 'dg-arrow'}
+      x1={from[0]}
+      y1={from[1]}
+      x2={to[0]}
+      y2={to[1]}
+      markerEnd={noHead ? undefined : 'url(#ss-arrow)'}
+    />
+  )
 }
 
 export function Note({ x, y, anchor = 'start', children }: { x: number; y: number; anchor?: 'start' | 'middle' | 'end'; children: ReactNode }) {
@@ -39,5 +48,33 @@ export function Note({ x, y, anchor = 'start', children }: { x: number; y: numbe
     <text className="dg-sub" x={x} y={y} textAnchor={anchor}>
       {children}
     </text>
+  )
+}
+
+/// A numbered marker that ties an arrow to a line in Steps.
+export function Badge({ x, y, n }: { x: number; y: number; n: number }) {
+  return (
+    <g>
+      <circle className="dg-badge" cx={x} cy={y} r={9} />
+      <text className="dg-badge-text" x={x} y={y + 4} textAnchor="middle">
+        {n}
+      </text>
+    </g>
+  )
+}
+
+/// Numbered explanation lines under a diagram.
+export function Steps({ x, y, items }: { x: number; y: number; items: string[] }) {
+  return (
+    <g>
+      {items.map((text, i) => (
+        <g key={text}>
+          <Badge x={x + 9} y={y + i * 22 - 4} n={i + 1} />
+          <text className="dg-sub dg-step" x={x + 26} y={y + i * 22}>
+            {text}
+          </text>
+        </g>
+      ))}
+    </g>
   )
 }
