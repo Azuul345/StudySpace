@@ -13,7 +13,7 @@ export function S3StorageLifecycleBody() {
       <Arrow from={[450, 80]} to={[490, 80]} />
       <Note x={10} y={150}>Storage price per GB falls</Note>
       <Arrow from={[10, 158]} to={[610, 158]} dashed />
-      <Note x={10} y={188}>Retrieval takes longer and costs more</Note>
+      <Note x={10} y={188}>Retrieval gets slower and adds per-GB fees</Note>
       <Arrow from={[10, 196]} to={[610, 196]} dashed />
     </>
   )
