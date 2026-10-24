@@ -74,9 +74,13 @@ describe('Exam page', () => {
     renderAt('/exams/SAA-C03')
     expect(await screen.findByRole('heading', { name: /Design Secure Architectures/ })).toBeInTheDocument()
     expect(screen.getByText(/30%/)).toBeInTheDocument()
-    const link = screen.getByRole('link', { name: /S3 security and access/ })
-    expect(link).toHaveAttribute('href', '/topics/7')
-    expect(link).toHaveTextContent('12 questions')
+    const lesson = screen.getByRole('link', { name: /^S3 security and access/ })
+    expect(lesson).toHaveAttribute('href', '/topics/7')
+    expect(lesson).toHaveTextContent('Read the lesson')
+    const practice = screen.getByRole('link', { name: /^Practice S3 security and access/ })
+    expect(practice).toHaveAttribute('href', expect.stringContaining('form=drill'))
+    expect(practice).toHaveAttribute('href', expect.stringContaining('topicId=7'))
+    expect(practice).toHaveTextContent('12 questions')
   })
 
   it('shows a not-found message on 404', async () => {

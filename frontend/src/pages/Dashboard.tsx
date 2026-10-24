@@ -7,7 +7,10 @@ export function Dashboard() {
   const exams = useLoad(getExams)
   return (
     <section>
-      <h1>Dashboard</h1>
+      <header className="page-head">
+        <h1>Dashboard</h1>
+        <p className="lede">Pick an exam to read lessons and practice.</p>
+      </header>
       <Async state={exams}>
         {(list) =>
           list.length === 0 ? (
@@ -16,10 +19,12 @@ export function Dashboard() {
             <ul className="cards">
               {list.map((e) => (
                 <li key={e.code}>
-                  <Link to={`/exams/${encodeURIComponent(e.code)}`}>
-                    <strong>{e.code}</strong> {e.name}
+                  <Link className="card exam-card" to={`/exams/${encodeURIComponent(e.code)}`}>
+                    <h2>
+                      {e.code} <span className="pill">v{e.version}</span>
+                    </h2>
+                    <span className="muted">{e.name}</span>
                   </Link>
-                  <small> v{e.version}</small>
                 </li>
               ))}
             </ul>
