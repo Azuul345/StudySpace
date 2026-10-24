@@ -13,6 +13,7 @@
       "EC2 Auto Scaling adds and removes instances with demand so you do not pay for idle capacity",
       "Lambda and Fargate charge for what you use, which suits spiky or infrequent workloads; Graviton processors lower price per unit of work"
     ],
+    "diagrams": ["ec2-purchase-options"],
     "docLinks": [
       "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html",
       "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html",

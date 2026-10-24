@@ -13,6 +13,7 @@
             "Glue is serverless ETL with a Data Catalog; Athena queries S3 with SQL",
             "MSK is managed Apache Kafka"
         ],
+        "diagrams": ["streaming-ingestion-pipeline"],
         "docLinks": [
             "https://docs.aws.amazon.com/streams/latest/dev/key-concepts.html",
             "https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html",
