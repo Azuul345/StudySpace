@@ -13,6 +13,7 @@
             "EBS gp3 costs less per GB than gp2 and lets you set IOPS and throughput independently; st1 and sc1 HDD volumes suit throughput-heavy or cold data",
             "EFS lifecycle management moves files that are not accessed to EFS Infrequent Access or Archive storage classes"
         ],
+        "diagrams": ["s3-storage-lifecycle"],
         "docLinks": [
             "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html",
             "https://docs.aws.amazon.com/AmazonS3/latest/userguide/intro-lifecycle-rules.html",

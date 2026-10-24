@@ -286,6 +286,10 @@ namespace StudySpace.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("DiagramsJson")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("DocLinksJson")
                         .IsRequired()
                         .HasColumnType("TEXT");

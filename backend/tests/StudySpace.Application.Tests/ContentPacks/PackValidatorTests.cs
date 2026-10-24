@@ -34,6 +34,30 @@ public class PackValidatorTests
         Assert.True(result.IsValid, string.Join("; ", result.Errors.Select(e => $"{e.File} {e.Path}: {e.Message}")));
     }
 
+    private static string TopicWithDiagrams(string diagramsJson) =>
+        PackSamples.Topic.Replace("\"docLinks\":", $"\"diagrams\": {diagramsJson}, \"docLinks\":", StringComparison.Ordinal);
+
+    [Fact]
+    public void Validate_LessonDiagrams_AreOptionalAndAcceptSlugs()
+    {
+        Assert.True(ValidateWithTopic(PackSamples.Topic).IsValid);
+        var result = ValidateWithTopic(TopicWithDiagrams("[\"vpc-public-private\", \"sqs-decoupling\"]"));
+
+        Assert.True(result.IsValid, string.Join("; ", result.Errors.Select(e => e.Path + ": " + e.Message)));
+    }
+
+    [Theory]
+    [InlineData("[\"Not A Slug\"]")]
+    [InlineData("[\"<script>\"]")]
+    [InlineData("[\"a\", \"a\"]")]
+    [InlineData("[\"a\", \"b\", \"c\", \"d\", \"e\"]")]
+    [InlineData("\"vpc\"")]
+    [InlineData("[1]")]
+    public void Validate_LessonDiagrams_BadValuesAreRejected(string diagrams)
+    {
+        AssertRejected(ValidateWithTopic(TopicWithDiagrams(diagrams)), "topics/s3-security.json", "lesson.diagrams");
+    }
+
     [Fact]
     public void Validate_MissingManifest_IsRejected()
     {
