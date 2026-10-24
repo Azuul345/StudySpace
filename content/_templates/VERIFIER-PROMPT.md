@@ -32,8 +32,10 @@ Write `{{pack folder}}/verification.json` and nothing else:
       "status": "verified" | "failed",
       "summary": { "checked": 0, "passed": 0, "failed": 0 },
       "items": [
-        { "kind": "question" | "lesson" | "flashcard", "id": "<id>", "result": "pass" | "fail", "reason": "<one line>", "urlChecked": "<url>" }
+        { "kind": "question" | "lesson" | "flashcard", "id": "<id>", "result": "pass" | "fail", "reason": "<one line>", "urlChecked": "<url>", "caveat": "<optional, questions only>" }
       ]
     }
 
 `status` is `verified` only if every item passes. Otherwise it is `failed`, and the failed items are the to-do list for the author. Never mark something `pass` you did not open and check. Say so plainly if you could not check an item; that item is a `fail` with the reason "could not verify".
+
+**Caveats.** A question can pass on its key claim (the correct answer is supported) while part of its explanation, or a wrong-option rationale, is not on any cited page, or you could not load the cited page and confirmed it another way. Do not hide that. Mark it `pass` and add a `caveat`: one or two plain sentences saying what is confirmed and exactly what is not. The app shows every caveat to the learner and lists these questions on a "Needs checking" screen so a person can look them up. Leave `caveat` out when everything is supported. Never use a caveat to soften a real mismatch; that is a `fail`.

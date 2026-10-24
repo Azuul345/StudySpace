@@ -127,6 +127,23 @@ public class EfPackRepositoryTests
     }
 
     [Fact]
+    public async Task Save_StoresCaveatsOnlyForTheQuestionsThatHaveOne_AndClearsThemOnANewVersion()
+    {
+        using var db = new TestDb();
+
+        await Save(db, Pack() with { Caveats = new Dictionary<string, string> { ["q-1"] = "Not on the page." } }, "h1");
+        await using (var c = db.NewContext())
+        {
+            Assert.Equal("Not on the page.", (await c.Questions.SingleAsync(q => q.Slug == "q-1")).VerificationCaveat);
+            Assert.Null((await c.Questions.SingleAsync(q => q.Slug == "q-2")).VerificationCaveat);
+        }
+
+        await Save(db, Pack(version: "2026.10.2"), "h2");
+        await using var after = db.NewContext();
+        Assert.All(await after.Questions.ToListAsync(), q => Assert.Null(q.VerificationCaveat));
+    }
+
+    [Fact]
     public async Task FullImport_ThroughTheImporter_IsIdempotent()
     {
         using var db = new TestDb();

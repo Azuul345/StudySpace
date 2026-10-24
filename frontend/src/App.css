@@ -19,3 +19,5 @@ table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
 th, td { text-align: left; padding: 0.4rem 0.5rem; border-bottom: 1px solid #8884; }
 .level.weak { color: #b00020; font-weight: 600; }
 .level.strong { color: #1b7a3a; font-weight: 600; }
+.caveat { border-left: 4px solid #b26a00; background: #b26a0014; padding: 0.4rem 0.75rem; margin: 0.75rem 0; }
+.check-list > li { border-bottom: 1px solid #8884; padding-bottom: 1rem; margin-bottom: 1rem; }

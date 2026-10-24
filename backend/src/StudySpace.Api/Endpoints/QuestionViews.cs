@@ -58,6 +58,40 @@ public static class QuestionViews
     private static string Scramble(int questionId, string text) =>
         Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes($"{questionId}:{text}")));
 
+    /// The right answer as plain text, for the audit list.
+    public static string AnswerText(QuestionEntity q)
+    {
+        switch (q.Type)
+        {
+            case "mcq" or "multi" or "scenario":
+                return string.Join("; ", q.Options.Where(o => o.IsCorrect).OrderBy(o => o.SortOrder).Select(o => $"{o.Slug}) {o.Text}"));
+            case "truefalse":
+                using (var doc = JsonDocument.Parse(q.DataJson!))
+                {
+                    return doc.RootElement.GetProperty("answer").GetBoolean() ? "True" : "False";
+                }
+
+            case "ordering":
+                using (var doc = JsonDocument.Parse(q.DataJson!))
+                {
+                    var steps = doc.RootElement.GetProperty("steps").EnumerateArray().Select(s => s.GetString()!).ToList();
+                    return string.Join(" → ", doc.RootElement.GetProperty("correctOrder").EnumerateArray().Select(e => steps[e.GetInt32()]));
+                }
+
+            case "matching":
+                using (var doc = JsonDocument.Parse(q.DataJson!))
+                {
+                    return string.Join("; ", doc.RootElement.EnumerateArray().Select(p => $"{p.GetProperty("left").GetString()} → {p.GetProperty("right").GetString()}"));
+                }
+
+            default:
+                using (var doc = JsonDocument.Parse(q.DataJson!))
+                {
+                    return string.Join("; ", doc.RootElement.EnumerateArray().Select(g => string.Join(" / ", g.GetProperty("any").EnumerateArray().Select(t => t.GetString()))));
+                }
+        }
+    }
+
     /// What the client sees after answering: the right answer in the same shape as an answer.
     public static object CorrectAnswer(QuestionEntity q)
     {

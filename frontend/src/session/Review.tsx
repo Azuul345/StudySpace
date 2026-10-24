@@ -1,4 +1,5 @@
 import type { AttemptSummary, Question } from '../api/client'
+import { Caveat } from '../components/Caveat'
 import { formatCorrect } from './formatCorrect'
 
 /// Result of a finished attempt: score, then every question with the right answer and explanation.
@@ -22,6 +23,7 @@ export function Review({ summary, questions, timedOut }: { summary: AttemptSumma
               </p>
               {question && !r.isCorrect && <p>Answer: {formatCorrect(question, r.correct)}</p>}
               <p>{r.explanation}</p>
+              <Caveat text={r.caveat} />
             </li>
           )
         })}

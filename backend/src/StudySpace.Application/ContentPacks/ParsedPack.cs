@@ -2,6 +2,7 @@ namespace StudySpace.Application.ContentPacks;
 
 public enum VerificationStatus { Pending, Verified, Failed }
 
+/// Caveats map a question id to what the verifier could not fully confirm. A question without an entry was fully verified.
 public sealed record ParsedPack(
     string PackId,
     string Version,
@@ -10,7 +11,8 @@ public sealed record ParsedPack(
     VerificationStatus Status,
     IReadOnlyList<ParsedDomain> Domains,
     IReadOnlyList<ParsedTopic> Topics,
-    IReadOnlyList<ParsedFlashcard> Flashcards);
+    IReadOnlyList<ParsedFlashcard> Flashcards,
+    IReadOnlyDictionary<string, string>? Caveats = null);
 
 public sealed record ParsedDomain(string Id, string Name, int WeightPercent, int SortOrder);
 

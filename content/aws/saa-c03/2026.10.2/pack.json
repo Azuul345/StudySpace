@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "packId": "aws-saa-c03",
-  "version": "2026.10.1",
+  "version": "2026.10.2",
   "exam": { "code": "SAA-C03", "name": "AWS Certified Solutions Architect – Associate" },
   "domains": [
     { "id": "secure", "name": "Design Secure Architectures", "weightPercent": 30, "sortOrder": 1 },

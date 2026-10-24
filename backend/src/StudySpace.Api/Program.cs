@@ -32,6 +32,7 @@ api.MapCatalog();
 api.MapAttempts();
 api.MapProgress();
 api.MapFlashcards();
+api.MapChecking();
 
 app.Run();
 

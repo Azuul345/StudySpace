@@ -22,6 +22,18 @@ public class AnswerEndpointTests : ApiTestBase
         Assert.Equal(["b"], body.GetProperty("correct").GetProperty("selected").EnumerateArray().Select(e => e.GetString()));
     }
 
+    [Fact]
+    public async Task Answer_ReturnsTheCaveatOnlyForQuestionsTheVerifierCouldNotFullyConfirm()
+    {
+        var attempt = await StartDrill("S3 security");
+
+        var flagged = await Json(await Answer(attempt, Question(attempt, "Pick b."), new { selected = new[] { "b" } }));
+        var clean = await Json(await Answer(attempt, Question(attempt, "Pick b and c."), new { selected = new[] { "b", "c" } }));
+
+        Assert.Equal("Page does not state the limit.", flagged.GetProperty("caveat").GetString());
+        Assert.Equal(System.Text.Json.JsonValueKind.Null, clean.GetProperty("caveat").ValueKind);
+    }
+
     [Trait("Req", "REQ-Q-002")]
     [Fact]
     public async Task Answer_MultiResponse_IsAllOrNothing()

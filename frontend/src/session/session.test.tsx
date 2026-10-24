@@ -52,6 +52,25 @@ describe('practice session', () => {
     expect(screen.getByText(/question 2 of 2/i)).toBeInTheDocument()
   })
 
+  it('discloses a caveat in feedback only when the question has one', async () => {
+    vi.mocked(client.submitAnswer).mockResolvedValue({
+      questionId: 1, isCorrect: true, needsConfirmation: false, explanation: 'Alpha is right.', caveat: 'Limit not on the page.', correct: { selected: ['a'] },
+    })
+    render(<Session attempt={attempt('drill', [mcq])} />)
+    await userEvent.click(screen.getByRole('radio', { name: 'Alpha' }))
+    await userEvent.click(screen.getByRole('button', { name: /submit answer/i }))
+    expect(await screen.findByText(/not fully verified/i)).toBeInTheDocument()
+    expect(screen.getByText(/limit not on the page/i)).toBeInTheDocument()
+  })
+
+  it('shows no caveat note for a fully verified question', async () => {
+    render(<Session attempt={attempt('drill', [mcq])} />)
+    await userEvent.click(screen.getByRole('radio', { name: 'Alpha' }))
+    await userEvent.click(screen.getByRole('button', { name: /submit answer/i }))
+    await screen.findByText('Correct')
+    expect(screen.queryByText(/not fully verified/i)).toBeNull()
+  })
+
   it('shows Incorrect feedback', async () => {
     vi.mocked(client.submitAnswer).mockResolvedValue({
       questionId: 1, isCorrect: false, needsConfirmation: false, explanation: 'No.', correct: { selected: ['b'] },
