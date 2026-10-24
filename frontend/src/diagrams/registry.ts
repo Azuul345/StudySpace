@@ -4,6 +4,11 @@ import { MultiAzWebBody } from './multiAzWeb'
 import { StorageTypesBody } from './storageTypes'
 import { AutoScalingTargetTrackingBody } from './autoScalingTargetTracking'
 import { CacheAndReplicasBody } from './cacheAndReplicas'
+import { CloudfrontEdgeBody } from './cloudfrontEdge'
+import { StreamingIngestionBody } from './streamingIngestion'
+import { Ec2PurchaseOptionsBody } from './ec2PurchaseOptions'
+import { DynamoCapacityModesBody } from './dynamoCapacityModes'
+import { EndpointVsNatBody } from './endpointVsNat'
 import { VpcPublicPrivateBody } from './vpcPublicPrivate'
 import { SqsDecouplingBody } from './sqsDecoupling'
 import { S3StorageLifecycleBody } from './s3StorageLifecycle'
@@ -73,5 +78,40 @@ export const diagramRegistry: Record<string, DiagramDef> = {
       'The application checks an ElastiCache cache first, which answers hot reads from memory. On a miss, reads go to read replicas, which scale read traffic. All writes go to the primary database, which replicates to the replicas asynchronously, so replicas can lag slightly. A cache can also hold stale data until entries expire.',
     viewBox: '0 0 640 250',
     Body: CacheAndReplicasBody,
+  },
+  'cloudfront-edge-caching': {
+    title: 'How CloudFront caches content at the edge',
+    description:
+      'A user request is routed to a nearby CloudFront edge location. On a cache hit the edge returns its cached copy immediately. On a cache miss the edge requests the object from the origin, often through a regional edge cache, where the origin can be an S3 bucket or a load balancer. CloudFront caches the response and returns it, so later users get it from the edge.',
+    viewBox: '0 0 640 260',
+    Body: CloudfrontEdgeBody,
+  },
+  'streaming-ingestion-pipeline': {
+    title: 'A streaming ingestion pipeline into a data lake',
+    description:
+      'Producers such as applications and devices write records to Kinesis Data Streams. Custom consumers such as Lambda functions can process the stream, and Amazon Data Firehose can load it into Amazon S3 without custom code, in near real time. Athena then queries the data in S3 with SQL.',
+    viewBox: '0 0 640 205',
+    Body: StreamingIngestionBody,
+  },
+  'ec2-purchase-options': {
+    title: 'Matching EC2 purchase options to the workload',
+    description:
+      'Cover a steady, always-on baseline with a Savings Plan or Reserved Instances in exchange for a one or three year commitment (AWS recommends Savings Plans over Reserved Instances). Use On-Demand for spiky or unpredictable demand with no commitment. Use Spot Instances for fault-tolerant, flexible work that can handle interruption, such as batch jobs.',
+    viewBox: '0 0 640 270',
+    Body: Ec2PurchaseOptionsBody,
+  },
+  'dynamodb-capacity-modes': {
+    title: 'DynamoDB provisioned and on-demand capacity modes',
+    description:
+      'In provisioned mode you set read and write capacity, which can be cheaper for steady, predictable traffic when the capacity is well used, and can use auto scaling. In on-demand mode you pay per request and plan no capacity, which suits spiky or unknown traffic.',
+    viewBox: '0 0 640 185',
+    Body: DynamoCapacityModesBody,
+  },
+  'gateway-endpoint-vs-nat': {
+    title: 'Reaching S3 from a private subnet: gateway endpoint or NAT gateway',
+    description:
+      'An instance in a private subnet can reach S3 through a NAT gateway and internet gateway, which adds an hourly charge and per-GB data processing charges. A gateway endpoint for S3 or DynamoDB lets the instance reach the service without a NAT gateway or internet gateway, and has no additional charge.',
+    viewBox: '0 0 640 250',
+    Body: EndpointVsNatBody,
   },
 }

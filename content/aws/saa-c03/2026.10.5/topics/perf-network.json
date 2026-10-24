@@ -12,6 +12,7 @@
             "Route 53 latency routing sends users to the lowest-latency Region",
             "Direct Connect is a dedicated private network connection to AWS; Site-to-Site VPN is the internet-based alternative"
         ],
+        "diagrams": ["cloudfront-edge-caching"],
         "docLinks": [
             "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html",
             "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html",

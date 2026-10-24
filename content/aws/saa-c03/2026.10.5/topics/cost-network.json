@@ -13,6 +13,7 @@
             "Direct Connect is billed as port-hour charges plus per-GB data transfer out at a published rate (for example 0.02 USD per GB from a US Region to a US Direct Connect location), with no charge for data transfer in",
             "Transit Gateway and a shared load balancer with path or host rules can replace many peering links and many load balancers"
         ],
+        "diagrams": ["gateway-endpoint-vs-nat"],
         "docLinks": [
             "https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html",
             "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-pricing.html",
