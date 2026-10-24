@@ -12,6 +12,7 @@
             "Fargate runs containers without managing servers",
             "Choose instance families (compute, memory, accelerated, Graviton) to match the workload"
         ],
+        "diagrams": ["auto-scaling-target-tracking"],
         "docLinks": [
             "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html",
             "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html",

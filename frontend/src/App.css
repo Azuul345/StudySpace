@@ -33,3 +33,6 @@ th, td { text-align: left; padding: 0.4rem 0.5rem; border-bottom: 1px solid #888
 .dg-sub { fill: currentColor; font-size: 12px; opacity: 0.85; }
 .dg-arrow { stroke: currentColor; stroke-width: 1.8; }
 .dg-dashed { stroke-dasharray: 6 4; }
+.dg-badge { fill: #2563eb; }
+.dg-badge-text { fill: #fff; font-size: 11px; font-weight: 700; }
+.dg-step { opacity: 1; }

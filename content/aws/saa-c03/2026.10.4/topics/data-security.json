@@ -14,6 +14,7 @@
       "S3 Object Lock compliance mode gives immutable retention",
       "Macie discovers sensitive data in S3; CloudHSM offers dedicated HSMs"
     ],
+    "diagrams": ["kms-envelope-encryption"],
     "docLinks": [
       "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingEncryption.html",
       "https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html",
