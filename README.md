@@ -4,6 +4,14 @@ A personal study platform for certification exams. Launch exam: AWS Certified So
 
 Runs locally. Single user, no login in v1.
 
+## Run it
+
+Needs the .NET SDK and Node. From the repo folder, run:
+
+    .start.cmd
+
+It imports the content packs into `studyspace.db`, starts the API on 127.0.0.1:5080 and the web app on http://localhost:5173, and opens the browser. Press Ctrl+C to stop. It works from any folder, for example `C:path	oStudySpacestart.cmd`.
+
 ## Start here
 
 - Agents and contributors: read `docs/00-HANDOFF.md` first.
