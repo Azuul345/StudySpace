@@ -1509,41 +1509,41 @@
       "kind": "question",
       "id": "cost-compute-007",
       "result": "pass",
-      "reason": "Graviton page says instances cost up to 20% less than comparable x86, supporting option c.",
+      "reason": "Key claim (Graviton costs less than comparable x86) confirmed; Arm/Linux and wrong-option rationales still absent.",
       "urlChecked": "https://aws.amazon.com/ec2/graviton/",
-      "caveat": "The page confirms lower cost than comparable x86. It does not state Arm or Linux support, and the wrong-option rationales (larger x86, Capacity Reservation, dedicated host) are not on it."
+      "caveat": "The page confirms Graviton-based instances cost up to 20% less than comparable x86 instances. It does not state Arm or Linux support, and the reasons the other options are wrong are not on it."
     },
     {
       "kind": "question",
       "id": "cost-compute-008",
       "result": "pass",
-      "reason": "Page confirms one Auto Scaling group can mix On-Demand and Spot across multiple instance types for stateless web servers.",
+      "reason": "Mixed On-Demand and Spot groups confirmed; base capacity detail and wrong-option reasons are on subpages or absent.",
       "urlChecked": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-mixed-instances-groups.html",
-      "caveat": "The page confirms mixed On-Demand and Spot groups. On-Demand base capacity detail is on linked subpages, and the Reserved Instance and single-type rationales are not on this page."
+      "caveat": "The page confirms one Auto Scaling group can mix On-Demand and Spot across multiple instance types, and that Spot suits interruptible stateless work. The On-Demand base capacity setting is on linked subpages, and the single-type and Reserved Instance reasoning is not on the page."
     },
     {
       "kind": "question",
       "id": "cost-compute-009",
       "result": "pass",
-      "reason": "Page lists memory optimized for large in-memory data sets, matching option a.",
+      "reason": "Memory optimized for in-memory workloads confirmed; no memory-to-vCPU ratios on the page.",
       "urlChecked": "https://aws.amazon.com/ec2/instance-types/",
-      "caveat": "The page confirms memory optimized suits in-memory workloads. It gives no memory-to-vCPU ratios, so the compute optimized and Savings Plan rationales are not confirmed there."
+      "caveat": "The page confirms memory optimized instances are built for workloads that process large data sets in memory. It gives no memory-to-vCPU ratios, so the compute optimized and Savings Plan reasoning is not on it."
     },
     {
       "kind": "question",
       "id": "cost-compute-010",
       "result": "pass",
-      "reason": "Page confirms Fargate Spot runs interruption-tolerant ECS tasks at a discount on spare capacity.",
+      "reason": "Fargate Spot discount and interruption confirmed; Savings Plan, EC2 and idle rationales not on page.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-capacity-providers.html",
-      "caveat": "Fargate Spot discount and interruption are confirmed. The Savings Plan, always-on EC2 and idle Fargate rationales are not on this page."
+      "caveat": "The page confirms Fargate Spot runs interruption-tolerant tasks at a discount on spare capacity. The Savings Plan, always-on EC2 and idle Fargate cost reasoning is not on it."
     },
     {
       "kind": "question",
       "id": "cost-compute-011",
       "result": "pass",
-      "reason": "Savings Plans page confirms Compute Savings Plans are flexible across family and Region, so the less flexible EC2 Instance plan fits a fixed fleet.",
+      "reason": "Compute Savings Plan flexibility confirmed; EC2 Instance Savings Plan details are on a linked page.",
       "urlChecked": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html",
-      "caveat": "The page confirms Compute Savings Plan flexibility. The EC2 Instance Savings Plan family and Region lock and its deeper discount are on a linked page, not this one."
+      "caveat": "The page confirms Compute Savings Plans apply regardless of family or Region, which implies the less flexible plan is the deeper-discount one. The EC2 Instance Savings Plan family and Region lock and its deeper discount are on a linked page, not this one."
     },
     {
       "kind": "question",
@@ -1556,9 +1556,9 @@
       "kind": "question",
       "id": "cost-compute-013",
       "result": "pass",
-      "reason": "Page confirms AWS Batch schedules containerized jobs and runs on Spot or On-Demand instances to reduce cost.",
+      "reason": "Managed batch scheduling, containers and Spot or On-Demand confirmed; dependencies and Lambda limit not on page.",
       "urlChecked": "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html",
-      "caveat": "Scheduling, containers and Spot are confirmed. Job dependencies and the Lambda 15-minute limit are not on this page."
+      "caveat": "The page confirms AWS Batch schedules containerized batch jobs on Spot or On-Demand compute to reduce cost. Job dependencies, retries and the Lambda 15-minute limit are not on it."
     },
     {
       "kind": "question",
@@ -1571,129 +1571,129 @@
       "kind": "question",
       "id": "cost-compute-015",
       "result": "pass",
-      "reason": "Spot page confirms suitability for interruptible batch and background processing, matching b and c.",
+      "reason": "Batch and background work suit Spot confirmed; CI workers, S3 checkpointing and wrong-option reasons not named.",
       "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html",
-      "caveat": "The page confirms batch and background work suit Spot. Stateless CI workers and S3 checkpointing are not named there, and the wrong-option rationales are inferred."
+      "caveat": "The page confirms Spot suits interruptible work such as data analysis, batch jobs and background processing. Stateless CI workers and S3 checkpointing are not named, and the wrong-option reasoning is inferred."
     },
     {
       "kind": "question",
       "id": "cost-compute-016",
       "result": "pass",
-      "reason": "Page confirms S3 object-created events invoke a Lambda function, supporting option a.",
+      "reason": "S3 object-created events invoking Lambda confirmed; cost comparison not on page.",
       "urlChecked": "https://docs.aws.amazon.com/lambda/latest/dg/with-s3.html",
-      "caveat": "S3-to-Lambda invocation is confirmed. The cost comparison with Savings Plans, Spot and Fargate is not on this page, and the scenario text was not part of this check."
+      "caveat": "The page confirms S3 can invoke a Lambda function when an object is created. The cost comparison with Savings Plans, Spot and Fargate, and per-execution billing, are not on it."
     },
     {
       "kind": "question",
       "id": "cost-compute-017",
       "result": "pass",
-      "reason": "Compute Savings Plans cover EC2 across families and Regions plus Fargate and Lambda; purchasing options page confirms On-Demand and Spot uses.",
+      "reason": "Compute Savings Plan covering EC2, Fargate and Lambda and Spot interruptible use confirmed; Lambda billing and On-Demand page content not confirmed.",
       "urlChecked": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html",
-      "caveat": "Compute Savings Plan, Spot and On-Demand matches are confirmed. The Lambda billing-per-execution claim is not on either cited page."
+      "caveat": "The Savings Plans page confirms Compute Savings Plans apply across family, Region, Fargate and Lambda, and the Spot page confirms Spot suits interruptible work. The purchasing options page returned no usable content, and Lambda billing only for execution is not on a cited page."
     },
     {
       "kind": "question",
       "id": "cost-database-007",
       "result": "pass",
-      "reason": "Aurora I/O-Optimized has no per-request I/O charges and is best when I/O is 25% or more of spend; pricing page shows higher instance and storage rates.",
-      "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Overview.StorageReliability.html",
-      "caveat": "Confirmed: I/O-Optimized has no I/O charges, higher rates, and storage is replicated across three AZs. Not on the cited pages: the remark that Serverless v1 does not change I/O billing, and that extra replicas do not reduce write I/O."
+      "reason": "Pricing page confirms I/O-Optimized removes I/O charges for higher instance/storage rates; replicas carry instance charges.",
+      "urlChecked": "https://aws.amazon.com/rds/aurora/pricing/",
+      "caveat": "Confirmed: I/O-Optimized has no read/write I/O charges and higher rates, and replicas add instance charges. Not on any cited page: that Serverless v1 leaves I/O billing unchanged."
     },
     {
       "kind": "question",
       "id": "cost-database-008",
       "result": "pass",
-      "reason": "DAX page says it serves eventually consistent reads from cache and reduces the need to overprovision read capacity for hot, repeated reads.",
+      "reason": "DAX page confirms it caches eventually consistent reads and reduces the need to overprovision read capacity.",
       "urlChecked": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.html",
-      "caveat": "Confirmed: DAX offloads repeated eventually consistent reads and cuts read capacity cost. Not on the cited page: the wrong-option reasons for global tables and S3 exports."
+      "caveat": "Confirmed: DAX offloads repeated eventually consistent reads and reduces provisioned read capacity. The reasons against global tables and S3 exports are still not on the cited page."
     },
     {
       "kind": "question",
       "id": "cost-database-009",
       "result": "pass",
-      "reason": "Aurora Serverless v2 page lists a topic on scaling to 0 ACUs with automatic pause and resume, and cites dev/test as a use case.",
+      "reason": "Page lists scaling to zero ACUs with automatic pause and resume and dev/test use, and says idle capacity is not paid for.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html",
-      "caveat": "Confirmed: the page lists scaling to zero ACUs with auto pause and resume, and dev/test use. The detail page for auto-pause (minimum 0 ACUs, PostgreSQL support) was not opened, and the wrong-option rationales are not on the cited page."
+      "caveat": "Confirmed: scaling to zero ACUs with automatic pause and resume, and dev/test use. The linked auto-pause detail page and the wrong-option reasoning are not on the cited page."
     },
     {
       "kind": "question",
       "id": "cost-database-010",
       "result": "pass",
-      "reason": "Page shows gp3 on PostgreSQL at 400 GiB or more has a 12,000 IOPS baseline; magnetic is legacy with a 1,000 IOPS cap, so d is the only defensible answer.",
+      "reason": "Page confirms gp3 at 400 GiB or more on PostgreSQL has 12,000 IOPS baseline and that magnetic storage is deprecated.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html",
-      "caveat": "The page does not state that gp3 is cheaper than io1 (it points to the RDS pricing page), and it does not say a Multi-AZ standby adds an instance charge. The 2 TiB io1 cost increase is also inferred, not stated."
+      "caveat": "Confirmed: gp3 at 400 GiB or more includes a 12,000 IOPS baseline, and magnetic is deprecated. Not on the cited page: gp3 being cheaper than io1 in price terms, and Multi-AZ standby instance charges."
     },
     {
       "kind": "question",
       "id": "cost-database-011",
       "result": "pass",
-      "reason": "DynamoDB provisioned pricing page describes reserved capacity for WCU/RCU on 1 or 3 year terms, and Standard-IA as a storage-cost option.",
+      "reason": "Page confirms 1 or 3 year reserved capacity discounts; Standard-IA lowers storage price but raises request prices.",
       "urlChecked": "https://aws.amazon.com/dynamodb/pricing/provisioned/",
-      "caveat": "Confirmed: reserved capacity with 1 or 3 year terms, and Standard-IA lowers storage price. Not on the cited page: the remarks about on-demand costing more for steady traffic and about TTL. Three-year terms are limited to some Regions."
+      "caveat": "Confirmed: reserved capacity (1 or 3 year, three-year in limited Regions), provisioned being cheaper for steady traffic, and Standard-IA lowering storage price only. The page does not cover TTL."
     },
     {
       "kind": "question",
       "id": "cost-database-012",
       "result": "pass",
-      "reason": "Athena page says it queries data directly in S3 with SQL, is serverless, and you pay only for the queries you run.",
+      "reason": "Page confirms Athena is serverless, queries S3 data in place and you pay only for queries you run.",
       "urlChecked": "https://docs.aws.amazon.com/athena/latest/ug/what-is.html",
-      "caveat": "Confirmed: serverless, queries S3 in place, pay per query. Not on the cited page: billing by data scanned, CSV/Parquet support, and the idle-cost reasons for Redshift, RDS and EMR."
+      "caveat": "Confirmed: serverless, queries S3 in place, pay per query. Billing by data scanned and the idle-cost reasoning for Redshift, RDS and EMR are not on the cited page."
     },
     {
       "kind": "question",
       "id": "cost-database-013",
       "result": "pass",
-      "reason": "Instance class page confirms db.r6g is a Graviton2-powered memory-optimized class.",
+      "reason": "Page confirms db.r6g is a memory-optimized class powered by Graviton2 processors.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html",
-      "caveat": "Confirmed: db.r6g is Graviton2-based. Not on the fetched page: that RDS for MySQL supports it (on a sub-page), the price-performance claim, and the wrong-option rationales."
+      "caveat": "Confirmed: db.r6g is Graviton2-based. That RDS for MySQL supports it (on a sub-page), the price-performance claim and the wrong-option reasons are not on the cited page."
     },
     {
       "kind": "question",
       "id": "cost-database-014",
       "result": "pass",
-      "reason": "RDS stop page confirms stopping non-production instances saves instance-hour charges; Single-AZ and scheduling are correct, reserved/PIOPS/cross-Region options add cost.",
+      "reason": "Stop page confirms no DB instance hour charges while stopped and a scheduling approach; Multi-AZ page explains the standby.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_StopInstance.html",
-      "caveat": "Confirmed: stopping removes instance-hour charges (storage still billed, 7-day limit, and it links to a scheduling approach). The Multi-AZ overview page does not state that Single-AZ suits dev/test, and the wrong-option reasons are not on a cited page."
+      "caveat": "Confirmed: stopping removes instance-hour charges (storage still billed, 7-day limit, schedule via Step Functions link). Single-AZ suiting dev/test and the wrong-option reasons are not on a cited page."
     },
     {
       "kind": "question",
       "id": "cost-database-015",
       "result": "pass",
-      "reason": "Backups page confirms backup storage is billed as the sum of automated backups and manual snapshots, manual snapshots persist until deleted, and copying to another Region adds backup storage.",
+      "reason": "Page confirms backup storage is automated backups plus manual snapshots, manual snapshots persist until deleted, and cross-Region copies add storage.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html",
-      "caveat": "Confirmed: backup storage is billed for automated backups plus manual snapshots, retention-based recovery, and Region copies add storage. Not on the fetched page: the 35-day maximum and that a longer retention period raises cost, or the Multi-AZ remark."
+      "caveat": "Confirmed: backup storage billing, manual snapshots kept until deleted, Region copies adding storage. The 35-day maximum, longer retention raising cost, and the Multi-AZ remark are not on the cited page."
     },
     {
       "kind": "question",
       "id": "cost-database-016",
       "result": "pass",
-      "reason": "DMS page covers schema conversion and data migration to Aurora/RDS as a cost-efficient managed engine; Aurora page confirms managed patching, backup and storage and PostgreSQL compatibility; scenario matches.",
+      "reason": "DMS page confirms schema conversion and data migration to managed engines; Aurora page confirms automated patching, backup and storage growth.",
       "urlChecked": "https://docs.aws.amazon.com/dms/latest/userguide/Welcome.html",
-      "caveat": "Confirmed: DMS and schema conversion tooling, and Aurora automates patching, backup and storage. Not on the cited pages: the license-fee and Savings Plan or Dedicated Host reasoning."
+      "caveat": "Confirmed: DMS with Schema Conversion/SCT, and Aurora automating patching, backup and storage, PostgreSQL-compatible. License-fee savings and the Savings Plan or Dedicated Host reasoning are not on the cited pages."
     },
     {
       "kind": "question",
       "id": "cost-database-017",
       "result": "pass",
-      "reason": "Reserved DB instance page confirms a reservation is a commitment tied to instance type and Region, so buying after right-sizing is sound; monitoring page confirms CPU, memory and connection metrics in CloudWatch.",
+      "reason": "Reserved page confirms discounts are tied to instance type; monitoring page lists CPU, memory and connections.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithReservedDBInstances.html",
-      "caveat": "Confirmed: reservations are tied to instance type and RDS exposes CPU, memory and connection monitoring. The measure, resize, verify, then reserve ordering is best practice, not stated on either cited page."
+      "caveat": "Confirmed: reservations are tied to instance type and RDS exposes CPU, memory and connection monitoring. The measure, resize, verify, then reserve ordering is best practice and is not stated on either cited page."
     },
     {
       "kind": "question",
       "id": "cost-network-007",
       "result": "pass",
-      "reason": "Peering has no creation charge and same-AZ transfer is free; Transit Gateway bills per-attachment hourly plus per-GB processing.",
+      "reason": "Peering page confirms no creation charge and charges only for cross-AZ/Region transfer; Transit Gateway page confirms hourly attachment plus per-GB processing.",
       "urlChecked": "https://docs.aws.amazon.com/vpc/latest/peering/what-is-vpc-peering.html",
-      "caveat": "Peering and Transit Gateway costs are confirmed. Cross-AZ peering traffic is charged, and the VPN and internet gateway rationales are not on either cited page."
+      "caveat": "Peering has no creation charge and Transit Gateway adds hourly and per-GB fees, both confirmed. The Site-to-Site VPN throughput and internet gateway public IPv4 rationales are not on either cited page."
     },
     {
       "kind": "question",
       "id": "cost-network-008",
       "result": "pass",
-      "reason": "Egress-only internet gateway is IPv6 outbound-only with no charge; NAT gateway has hourly and per-GB charges.",
+      "reason": "Egress-only gateway page confirms IPv6 outbound-only and no charge, and says NAT gateway is for IPv4; pricing page confirms NAT hourly and per-GB charges.",
       "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/egress-only-internet-gateway.html",
-      "caveat": "The egress-only gateway and NAT gateway facts are confirmed. The interface endpoint and virtual private gateway rationales are not on a cited page."
+      "caveat": "The egress-only gateway (IPv6 outbound, no charge) and NAT gateway hourly and per-GB charges are confirmed. The interface endpoint hourly billing and virtual private gateway rationales are not on either cited page."
     },
     {
       "kind": "question",
@@ -1706,15 +1706,15 @@
       "kind": "question",
       "id": "cost-network-010",
       "result": "pass",
-      "reason": "Public IPv4 addresses, including Elastic IPs, are billed hourly per the VPC pricing page, so removing them from private-subnet servers cuts cost.",
+      "reason": "VPC pricing page confirms hourly public IPv4 charge for in-use and idle addresses including Elastic IPs.",
       "urlChecked": "https://aws.amazon.com/vpc/pricing/",
-      "caveat": "Hourly public IPv4 and Elastic IP charges are confirmed. The ALB page does not say targets can sit in private subnets, and the Region-move rationale is not on a cited page."
+      "caveat": "The hourly public IPv4 and Elastic IP charge is confirmed. The ALB page does not say targets can sit in private subnets, and the Region-move rationale is not on a cited page."
     },
     {
       "kind": "question",
       "id": "cost-network-011",
       "result": "pass",
-      "reason": "Site-to-Site VPN uses encrypted IPsec tunnels over the internet; Direct Connect dedicated 10 Gbps port costs $2.25 per hour.",
+      "reason": "VPN page confirms encrypted IPsec tunnels and hourly connection charges; Direct Connect pricing confirms per-hour port charges.",
       "urlChecked": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html",
       "caveat": "VPN encryption and the Direct Connect port charge are confirmed. Direct Connect lead time, the Snowball Edge rationale and the Transit Gateway peering rationale are not on a cited page."
     },
@@ -1722,9 +1722,9 @@
       "kind": "question",
       "id": "cost-network-012",
       "result": "pass",
-      "reason": "Pricing page states data transfer between CloudFront and AWS origins is waived when served through CloudFront.",
+      "reason": "Page states data transfer between CloudFront and AWS origins is waived, but only in flat-rate plan text; pay-as-you-go details are on a separate page.",
       "urlChecked": "https://aws.amazon.com/cloudfront/pricing/",
-      "caveat": "The origin-transfer waiver is confirmed only in the flat-rate plan text on the fetched page. The pay-as-you-go viewer delivery and request charges and the cache-hit billing rationale are not on the fetched page."
+      "caveat": "The origin-transfer waiver is stated only in the flat-rate plan text on the cited page. Pay-as-you-go viewer delivery and request charges and the cache-hit billing rationale are not on it."
     },
     {
       "kind": "question",
@@ -1737,49 +1737,49 @@
       "kind": "question",
       "id": "cost-network-014",
       "result": "pass",
-      "reason": "Gateway endpoint for S3 has no additional charge and avoids NAT for S3 traffic; fewer NAT gateways reduce hourly cost.",
+      "reason": "S3 gateway endpoint page confirms no additional charge and no NAT device needed; NAT gateway page is an overview only.",
       "urlChecked": "https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html",
-      "caveat": "The free S3 gateway endpoint is confirmed. The cited NAT gateway page is only an overview and does not show the hourly charge or the single-NAT saving, and the Flow Logs and Elastic IP rationales are not on a cited page."
+      "caveat": "The free S3 gateway endpoint is confirmed. The cited NAT gateway page is an overview with no hourly charge or single-NAT saving, and the Flow Logs and Elastic IP rationales are not on a cited page."
     },
     {
       "kind": "question",
       "id": "cost-network-015",
       "result": "pass",
-      "reason": "Inbound data transfer is free and same-AZ transfer is free; cross-AZ traffic and internet egress are charged.",
+      "reason": "Blog confirms inbound data transfer is free, same-AZ transfer is free, and cross-AZ and cross-Region transfer are charged.",
       "urlChecked": "https://aws.amazon.com/blogs/architecture/overview-of-data-transfer-costs-for-common-architectures/",
-      "caveat": "Free inbound and free same-AZ transfer are confirmed. The private-IP-only condition, the public-IP cross-AZ charge and the cross-Region rates are not shown in the fetched text of either cited page."
+      "caveat": "Free inbound transfer and free same-AZ transfer are confirmed, as are charges for cross-Region and internet egress beyond 100 GB. The private-IP-only condition and the public-IP cross-AZ charge are not stated on either cited page."
     },
     {
       "kind": "question",
       "id": "cost-network-016",
       "result": "pass",
-      "reason": "Gateway endpoints for S3 and DynamoDB have no additional charge and remove NAT from that traffic; scenario stem matches the answer.",
-      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-ddb.html",
-      "caveat": "The free gateway endpoints are confirmed, and the pages say interface endpoints cost extra. The per-AZ hourly detail and the NAT instance and Transit Gateway rationales are not on a cited page."
+      "reason": "Both endpoint pages confirm gateway endpoints have no additional charge and that interface endpoints cost extra.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html",
+      "caveat": "Free gateway endpoints for S3 and DynamoDB are confirmed, and interface endpoints are stated to cost extra. The per-AZ hourly detail and the NAT instance and Transit Gateway rationales are not on a cited page."
     },
     {
       "kind": "question",
       "id": "cost-network-017",
       "result": "pass",
-      "reason": "Gateway endpoints have no charge and NAT gateways bill hourly plus per-GB processing, both confirmed on the VPC pricing page.",
+      "reason": "VPC pricing page confirms NAT gateway hourly and per-GB charges and no charge for gateway endpoints.",
       "urlChecked": "https://aws.amazon.com/vpc/pricing/",
-      "caveat": "Gateway endpoint and NAT gateway charges are confirmed. The interface endpoint hourly-per-AZ plus per-GB detail is not on a cited page, and the egress-only gateway no-charge fact is only on a page not cited for this question."
+      "caveat": "Gateway endpoint (free) and NAT gateway (hourly plus per GB) charges are confirmed. Interface endpoint pricing and the egress-only gateway no-charge fact are not on either cited page."
     },
     {
       "kind": "question",
       "id": "cost-storage-007",
       "result": "pass",
-      "reason": "gp3 provisions IOPS independently of size and is cheaper per GiB than gp2; gp2 gives 3 IOPS/GiB so 200 GiB is about 600.",
+      "reason": "gp3 gives 3,000 baseline IOPS, up to 80,000 (16,000 on Outposts) provisioned independently of size, 20% cheaper per GiB than gp2; gp2 is 3 IOPS/GiB (600 at 200 GiB); st1 max 500 IOPS.",
       "urlChecked": "https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html",
-      "caveat": "The key claim and the gp2 baseline are confirmed. The explanation says gp3 IOPS go up to 16,000, but the page now says up to 80,000 (16,000 only on Outposts); the answer is unaffected. The io2 cost remark is not stated on the page."
+      "caveat": "The claim that io2 Block Express costs more than gp3 is not stated on the cited pages (they point to the pricing page); it is consistent with io2 being positioned for >80,000 IOPS and sub-ms latency."
     },
     {
       "kind": "question",
       "id": "cost-storage-008",
       "result": "pass",
-      "reason": "EBS Snapshots Archive is the low-cost tier for rarely accessed snapshots kept 90 days or longer, with up to 75 percent lower storage cost.",
+      "reason": "Archive tier with up to 75 percent lower storage cost confirmed; restore time and wrong-option reasons not on page.",
       "urlChecked": "https://docs.aws.amazon.com/ebs/latest/userguide/snapshot-archive.html",
-      "caveat": "The archive tier and its lower cost are confirmed. The 24 to 72 hour restore time and the reasons the other options are wrong are not on the cited page."
+      "caveat": "The archive tier and its lower cost (up to 75 percent) are confirmed. The 24 to 72 hour restore time and the reasons the other options are wrong are not on the cited page."
     },
     {
       "kind": "question",
@@ -1792,9 +1792,9 @@
       "kind": "question",
       "id": "cost-storage-010",
       "result": "pass",
-      "reason": "S3 Storage Lens gives organization-wide usage and cost-optimization metrics and recommendations, including buckets lacking lifecycle rules for incomplete multipart uploads.",
+      "reason": "Storage Lens organization-wide visibility and incomplete multipart upload lifecycle insight confirmed; other remarks not on page.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage_lens.html",
-      "caveat": "Storage Lens, its organization-wide scope and the multipart-upload lifecycle insight are confirmed. The page does not name a bytes-in-incomplete-multipart-uploads metric, and the CloudTrail, Macie and Transfer Acceleration remarks are not on it."
+      "caveat": "Storage Lens, its organization-wide scope and the incomplete multipart upload lifecycle insight are confirmed. The page does not name a bytes-in-incomplete-multipart-uploads metric, and the CloudTrail, Macie and Transfer Acceleration remarks are not on it."
     },
     {
       "kind": "question",
@@ -1807,7 +1807,7 @@
       "kind": "question",
       "id": "cost-storage-012",
       "result": "pass",
-      "reason": "Tape Gateway provides virtual tape storage that archives to S3 Glacier Flexible Retrieval or Deep Archive; Volume Gateway is volume-based.",
+      "reason": "Tape Gateway virtual tape storage archiving to Glacier Flexible Retrieval or Deep Archive confirmed; iSCSI and Volume Gateway details not on page.",
       "urlChecked": "https://docs.aws.amazon.com/storagegateway/latest/tgw/WhatIsStorageGateway.html",
       "caveat": "Tape Gateway and its archive targets are confirmed. The iSCSI virtual tape library detail and the Volume Gateway EBS-snapshot remark are not on the cited page."
     },
@@ -1822,7 +1822,7 @@
       "kind": "question",
       "id": "cost-storage-014",
       "result": "pass",
-      "reason": "Converting gp2 to gp3 via Elastic Volumes is supported and gp3 has a lower price per GiB; deleting unneeded volumes cuts cost.",
+      "reason": "gp3 20 percent lower price than gp2 and type change without detaching confirmed; other remarks not on cited pages.",
       "urlChecked": "https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html",
       "caveat": "The gp2 to gp3 saving and in-use type change are confirmed. That unattached volumes keep billing, that fast snapshot restore is billed per AZ, and that io2 Block Express costs more are not on the cited pages."
     },
@@ -1837,9 +1837,9 @@
       "kind": "question",
       "id": "cost-storage-016",
       "result": "pass",
-      "reason": "EFS lifecycle management moves inactive files to IA with no app change; Regional file systems span multiple AZs while One Zone does not.",
+      "reason": "EFS lifecycle to IA and Regional versus One Zone resilience confirmed; Deep Archive and st1 remarks not on pages.",
       "urlChecked": "https://docs.aws.amazon.com/efs/latest/ug/lifecycle-management-efs.html",
-      "caveat": "Lifecycle transition to IA and the One Zone versus Regional AZ resilience are confirmed. The Deep Archive restore time and the st1 Multi-Attach remarks are not on the cited pages."
+      "caveat": "Lifecycle transition to IA and the One Zone versus Regional AZ resilience are confirmed. The Deep Archive restore time and the Multi-Attach EBS remarks are not on the cited pages."
     },
     {
       "kind": "question",
@@ -1852,73 +1852,73 @@
       "kind": "question",
       "id": "data-security-011",
       "result": "pass",
-      "reason": "Secrets Manager supports automatic rotation of database credentials without redeploying apps; Secrets Manager is the right choice.",
-      "urlChecked": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html",
-      "caveat": "Automatic rotation of database credentials is confirmed. The cited pages do not say RDS has a managed rotation option (they describe Lambda-based rotation for most secrets), and they do not discuss Parameter Store, S3, or environment variables."
+      "reason": "Automatic rotation of database credentials without app redeploys is confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html",
+      "caveat": "Confirmed that Secrets Manager does automatic rotation of database credentials without app changes. The cited pages do not say RDS specifically has managed rotation (managed rotation is described for most managed secrets, others use Lambda), and they do not mention Parameter Store, S3 or AMI environment variables."
     },
     {
       "kind": "question",
       "id": "data-security-012",
       "result": "pass",
-      "reason": "Macie discovers sensitive data such as financial and PII in S3 using managed data identifiers and discovery jobs.",
+      "reason": "Macie managed data identifiers detect PII and financial data in S3 objects; GuardDuty described as log-based activity monitoring.",
       "urlChecked": "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html",
-      "caveat": "Macie as the answer is confirmed, and the page describes GuardDuty as log and activity monitoring. The page does not mention GuardDuty S3 protection by name or AWS Config."
+      "caveat": "Macie detecting sensitive data such as PII and financial information in S3 is confirmed, and GuardDuty is described as log and activity monitoring. GuardDuty S3 protection by name and AWS Config are not on the cited page."
     },
     {
       "kind": "question",
       "id": "data-security-013",
       "result": "pass",
-      "reason": "S3 Bucket Keys cut SSE-KMS request traffic to KMS by up to 99 percent using a short-lived bucket-level key.",
+      "reason": "Bucket Keys cut SSE-KMS request costs by up to 99 percent; per-object KMS calls without them are confirmed.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucket-key.html",
-      "caveat": "The Bucket Key claim and the per-object KMS call behavior are confirmed. Remarks about SSE-C and Intelligent-Tiering are not on the cited page."
+      "caveat": "The Bucket Key benefit and the per-object KMS call without it are confirmed. The remarks on SSE-C, AWS managed keys and Intelligent-Tiering are not on the cited page."
     },
     {
       "kind": "question",
       "id": "data-security-014",
       "result": "pass",
-      "reason": "Page says RDS can be encrypted only at creation; the way to encrypt an existing instance is snapshot, encrypted copy, restore.",
+      "reason": "Page states encryption only at creation; encrypted snapshot copy and restore is the path for an existing instance.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Encryption.html",
-      "caveat": "The correct approach and the no-in-place-encryption limit are confirmed. The remarks about an S3 backup bucket and KMS key policies are not stated on the page."
+      "caveat": "Confirmed that an existing unencrypted instance is encrypted by copying a snapshot with encryption and restoring. The remarks about backups not being in a bucket you configure and key policies not encrypting an instance are not stated on the page."
     },
     {
       "kind": "question",
       "id": "data-security-015",
       "result": "pass",
-      "reason": "Cited page confirms EFS encryption in transit is separate from encryption at rest and is achieved by mounting with in-transit encryption.",
+      "reason": "Page confirms EFS encryption in transit exists as a separate option from at rest.",
       "urlChecked": "https://docs.aws.amazon.com/efs/latest/ug/encryption.html",
-      "caveat": "The page is an overview and does not itself name the EFS mount helper or the tls option. The remarks on same-AZ placement and security groups are also not on it."
+      "caveat": "The cited overview confirms EFS encrypts data in transit separately from at rest, but it does not name the mount helper or the tls option, and says nothing on same-AZ placement or security groups."
     },
     {
       "kind": "question",
       "id": "data-security-016",
       "result": "pass",
-      "reason": "Cross-account KMS key use needs permission in both the owner key policy and an IAM policy in the external account.",
+      "reason": "Page states cross-account KMS use needs both the key policy and an IAM policy in the external account.",
       "urlChecked": "https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-modifying-external-accounts.html",
-      "caveat": "The key and IAM policy requirement and cross-account KMS use are confirmed. The remarks about Transfer Acceleration and VPC peering are not on the cited pages."
+      "caveat": "Both the key policy and the IAM policy requirement for cross-account use are confirmed. The remarks about Transfer Acceleration, VPC peering and SSE-S3 are not on the cited pages."
     },
     {
       "kind": "question",
       "id": "data-security-017",
       "result": "pass",
-      "reason": "All DynamoDB data is encrypted at rest by default, with a choice of AWS owned, AWS managed, or customer managed KMS keys.",
+      "reason": "Page confirms all data encrypted at rest by default with AWS owned, AWS managed or customer managed key choices.",
       "urlChecked": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/EncryptionAtRest.html",
-      "caveat": "The default encryption and key choice are confirmed. The remarks about VPC placement and client-side attribute encryption are not on the page."
+      "caveat": "Default encryption of all tables and the three key choices are confirmed. The remarks about VPC placement and optional client-side attribute encryption are not on the page."
     },
     {
       "kind": "question",
       "id": "data-security-018",
       "result": "pass",
-      "reason": "Page confirms default encryption can be set to SSE-KMS on a bucket so new objects are encrypted automatically.",
+      "reason": "Page confirms default encryption automatically encrypts new objects in every bucket.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingEncryption.html",
-      "caveat": "Default encryption is confirmed. The cited page does not cover bucket policies that deny PutObject without encryption headers, versioning, Transfer Acceleration, or lifecycle rules."
+      "caveat": "Default encryption of new objects is confirmed. The cited page does not cover bucket policies that deny PutObject without encryption headers, versioning, Transfer Acceleration or lifecycle rules."
     },
     {
       "kind": "question",
       "id": "data-security-019",
       "result": "pass",
-      "reason": "Page confirms the rule needs a destination-Region KMS key and the role needs kms:Decrypt on the source key and kms:Encrypt on the destination key.",
+      "reason": "Page confirms ReplicaKmsKeyID in the rule, kms:Decrypt on source key, kms:Encrypt on destination key, and versioning enabled.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-config-for-kms-objects.html",
-      "caveat": "The two correct options are confirmed. The page says S3 Replication does support SSE-C objects, so the explanation remark that SSE-C is not suited is not supported there, although converting to SSE-C is still not required."
+      "caveat": "The two correct options are confirmed. The page says S3 Replication supports SSE-C objects, so the explanation remark that SSE-C is not suited is not supported there; converting to SSE-C is still not required and would not give KMS-encrypted replicas."
     },
     {
       "kind": "question",
@@ -1931,17 +1931,17 @@
       "kind": "question",
       "id": "data-security-021",
       "result": "pass",
-      "reason": "Page confirms compliance mode blocks deletion and overwrite by any user including root, while governance mode can be bypassed with special permissions.",
+      "reason": "Page confirms compliance mode blocks deletion even by root, while governance mode can be bypassed with special permission.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html",
-      "caveat": "Compliance versus governance mode is confirmed. Claims about Block Public Access, SSE-KMS key control, MFA delete, AWS managed keys, and EBS snapshots are not on the cited pages."
+      "caveat": "Compliance versus governance mode is confirmed. Block Public Access, customer managed key control with SSE-KMS, MFA delete, AWS managed keys and EBS snapshots are not covered on the cited pages."
     },
     {
       "kind": "question",
       "id": "highly-available-015",
       "result": "pass",
-      "reason": "SQS decouples components and stores messages redundantly; unprocessed messages stay in the queue.",
+      "reason": "SQS page confirms decoupling and redundant storage on multiple servers.",
       "urlChecked": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html",
-      "caveat": "Confirmed: decoupling and redundant storage on multiple servers. Not stated on the page: storage specifically across AZs, and the wrong-option rationales."
+      "caveat": "The page confirms SQS decouples components and stores messages redundantly on multiple servers. It does not say storage is specifically across Availability Zones, and the wrong-option reasons are not on it."
     },
     {
       "kind": "question",
@@ -1954,25 +1954,25 @@
       "kind": "question",
       "id": "highly-available-017",
       "result": "pass",
-      "reason": "Page says to specify VPC subnets in multiple Availability Zones for high availability, matching option b.",
+      "reason": "Lambda resilience page says to specify subnets in multiple AZs for high availability when attached to a VPC.",
       "urlChecked": "https://docs.aws.amazon.com/lambda/latest/dg/security-resilience.html",
-      "caveat": "The remarks that a public subnet gives a Lambda function no public IP and that a longer timeout does not help with an AZ failure are not on the cited page."
+      "caveat": "The page confirms subnets in multiple AZs are needed for high availability. The remarks about public subnets giving no public IP and timeouts not helping with an AZ failure are not on it."
     },
     {
       "kind": "question",
       "id": "highly-available-018",
       "result": "pass",
-      "reason": "EC2 Auto Scaling replaces impaired instances to maintain desired capacity and can span multiple AZs.",
+      "reason": "Page confirms Auto Scaling replaces impaired instances to maintain desired capacity and spans multiple AZs.",
       "urlChecked": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html",
-      "caveat": "Confirmed: instance replacement and multi-AZ groups. The size-1 configuration and the cost and wrong-option remarks are not stated on the page."
+      "caveat": "The page confirms instance replacement to maintain desired capacity and multi-AZ groups. The size-1 configuration specifically and the cost and wrong-option remarks are not on it."
     },
     {
       "kind": "question",
       "id": "highly-available-019",
       "result": "pass",
-      "reason": "RDS Proxy pools connections and reconnects to the standby while preserving application connections, with no code changes for most apps.",
+      "reason": "RDS Proxy page confirms connection pooling and automatic connection to the standby on failure.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html",
-      "caveat": "Confirmed for RDS Proxy. The rationales for Global Accelerator, ElastiCache and SQS are not on the cited page."
+      "caveat": "The page confirms RDS Proxy pools connections and connects to a standby during failure. The reasons the other three options are wrong are not on it."
     },
     {
       "kind": "question",
@@ -1985,9 +1985,9 @@
       "kind": "question",
       "id": "highly-available-021",
       "result": "pass",
-      "reason": "AWS Backup plans can copy backups to another Region automatically on a schedule.",
+      "reason": "Page confirms scheduled backup plans can copy backups across Regions automatically.",
       "urlChecked": "https://docs.aws.amazon.com/aws-backup/latest/devguide/cross-region-backup.html",
-      "caveat": "Confirmed: scheduled cross-Region copy in a backup plan. EBS is mentioned but EFS support is not listed on this page, and the wrong-option rationales are not on it."
+      "caveat": "The page confirms a scheduled backup plan can copy backups to another Region. The reasons the cron, Lambda and manual options are worse are not on it."
     },
     {
       "kind": "question",
@@ -2000,25 +2000,25 @@
       "kind": "question",
       "id": "highly-available-023",
       "result": "pass",
-      "reason": "Snapshots are replicated across all AZs in the Region so volumes can be restored in any AZ; Data Lifecycle Manager automates snapshots.",
+      "reason": "Page confirms snapshots are replicated across AZs in the Region, volumes can be restored in any AZ, and DLM automates snapshots.",
       "urlChecked": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-snapshots.html",
-      "caveat": "Confirmed: regional snapshots, restore in any AZ, DLM. The same-AZ attach rule and the Multi-Attach limitation are not on this page."
+      "caveat": "The page confirms regional snapshots, restore in any AZ in the Region, and automation with Data Lifecycle Manager. The rules that a volume attaches only within its own AZ and that Multi-Attach is single-AZ are not on it."
     },
     {
       "kind": "question",
       "id": "highly-available-024",
       "result": "pass",
-      "reason": "Multi-AZ ElastiCache replication group promotes a replica on primary or AZ failure and propagates the DNS name, so a shared session store survives loss.",
-      "urlChecked": "https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/AutoFailover.html",
-      "caveat": "The ElastiCache claim is confirmed. The sticky-sessions page returned no usable content, so the sticky-session rationale and the other wrong-option reasons are not verified from a cited page."
+      "reason": "ElastiCache auto-failover claim previously confirmed; sticky-sessions page again returned no usable content.",
+      "urlChecked": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/sticky-sessions.html",
+      "caveat": "The ElastiCache claim is confirmed. The sticky-sessions page still returned no usable content, so the sticky-session rationale and the other wrong-option reasons are not verified from a cited page."
     },
     {
       "kind": "question",
       "id": "highly-available-025",
       "result": "pass",
-      "reason": "Whitepaper confirms Route 53 health-check DNS failover to a recovery Region and Auto Scaling across AZs for resiliency.",
+      "reason": "Whitepaper confirms Route 53 health-check DNS failover and Auto Scaling resilience across AZs.",
       "urlChecked": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html",
-      "caveat": "Confirmed: Route 53 Regional failover and Auto Scaling resilience across AZs. RDS Multi-AZ standby failover, Auto Scaling health-check replacement and load balancer routing to healthy targets are not stated on this page."
+      "caveat": "The page confirms Route 53 health-check DNS failover and Auto Scaling resilience across AZs. RDS Multi-AZ standby promotion, Auto Scaling health-check replacement and load balancer routing to healthy targets are not stated on it."
     },
     {
       "kind": "question",
@@ -2038,9 +2038,9 @@
       "kind": "question",
       "id": "perf-compute-009",
       "result": "pass",
-      "reason": "Memory optimized family (R, X, U, z1d) is the right category for in-memory workloads.",
+      "reason": "Memory optimized is the right category; the cited page lists the family but gives no ratio detail.",
       "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html",
-      "caveat": "The page lists the memory optimized family but does not state the high memory-to-vCPU ratio or describe the other categories; those remarks are not confirmed on the cited page."
+      "caveat": "The cited page confirms a memory optimized instance family exists, but the high memory-to-vCPU ratio and the descriptions of the other categories are not on it."
     },
     {
       "kind": "question",
@@ -2053,49 +2053,49 @@
       "kind": "question",
       "id": "perf-compute-011",
       "result": "pass",
-      "reason": "AWS Batch plans, schedules and runs containerized batch workloads and provisions compute for them.",
+      "reason": "AWS Batch provisioning and scheduling of containerized batch jobs confirmed; wrong-option remarks not on page.",
       "urlChecked": "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html",
-      "caveat": "The batch service description is confirmed; the remarks about Elastic Beanstalk, Lightsail and a cron script on Auto Scaling are not on the cited page."
+      "caveat": "The page confirms AWS Batch plans, schedules and runs containerized batch workloads and provisions compute automatically. The remarks about Elastic Beanstalk, Lightsail and a cron script on Auto Scaling are not on the cited page."
     },
     {
       "kind": "question",
       "id": "perf-compute-012",
       "result": "pass",
-      "reason": "Accelerated computing family (G, P, Trn, Inf, DL) is the category for deep learning training.",
+      "reason": "Accelerated computing (GPU, Trainium for training) confirmed; claim that other categories have no GPUs not stated.",
       "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html",
-      "caveat": "The page lists accelerated computing instances and Trainium for training, but does not itself say that the other categories have no GPUs."
+      "caveat": "The page lists accelerated computing instances (GPU instances, Trainium for training), but it does not say the other categories have no GPUs."
     },
     {
       "kind": "question",
       "id": "perf-compute-013",
       "result": "pass",
-      "reason": "Graviton is described as designed for best price performance; Graviton on arm64 is the correct choice.",
+      "reason": "Graviton best price performance on EC2 confirmed; arm64 rebuild and Linux not on page.",
       "urlChecked": "https://aws.amazon.com/ec2/graviton/",
-      "caveat": "The price performance claim is confirmed; the page does not mention Linux or the need to rebuild for arm64, and does not address the wrong options."
+      "caveat": "The page confirms Graviton gives better price performance on EC2. It does not mention arm64, Linux or the need to rebuild software, and does not address the wrong options."
     },
     {
       "kind": "question",
       "id": "perf-compute-014",
       "result": "pass",
-      "reason": "Mixed On-Demand and Spot groups with diversified instance types and capacity-aware allocation are the supported approach; the other options are clearly worse.",
+      "reason": "Mixed On-Demand and Spot groups confirmed; allocation strategy and diversification advice only linked, not on page.",
       "urlChecked": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-mixed-instances-groups.html",
-      "caveat": "The page confirms mixed On-Demand and Spot groups, but price-capacity-optimized and the diversification advice are on a linked allocation strategies page, not the cited one."
+      "caveat": "The page confirms one Auto Scaling group can mix On-Demand and Spot with multiple instance types. Price-capacity-optimized and the diversification advice are only linked to an allocation strategies page, not on the cited page."
     },
     {
       "kind": "question",
       "id": "perf-compute-015",
       "result": "pass",
-      "reason": "Lambda CPU scales with memory, and arm64 (Graviton2) gives better price and performance.",
+      "reason": "Memory-to-CPU scaling and arm64 better price performance confirmed; lower per-ms price and concurrency remarks not on pages.",
       "urlChecked": "https://docs.aws.amazon.com/lambda/latest/dg/configuration-memory.html",
-      "caveat": "Memory-to-CPU scaling and arm64 better price performance are confirmed (foundation-arch page also checked); the lower per-millisecond price and the remarks on provisioned and reserved concurrency are not on the cited pages."
+      "caveat": "Confirmed: Lambda allocates CPU in proportion to memory, and arm64 (Graviton2) gives significantly better price and performance. Not on the cited pages: the lower price per millisecond and the remarks on timeout, provisioned concurrency and reserved concurrency."
     },
     {
       "kind": "question",
       "id": "perf-compute-016",
       "result": "pass",
-      "reason": "Fargate runs containers without managing servers and Lambda's maximum is 15 minutes, so a 40 minute job needs Fargate.",
-      "urlChecked": "https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html",
-      "caveat": "Fargate serverless containers and the 15 minute Lambda limit are confirmed; launching ECS tasks from S3 events through EventBridge and the remarks on idle cost and patching are not on the cited pages."
+      "reason": "Fargate serverless containers and 15 minute Lambda limit confirmed; EventBridge trigger and idle cost remarks not on pages.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html",
+      "caveat": "Confirmed: Fargate runs containers without managing servers, and Lambda runs up to 15 minutes. Launching ECS tasks from S3 events through EventBridge and the remarks on idle cost and patching are not on the cited pages."
     },
     {
       "kind": "question",
@@ -2108,81 +2108,81 @@
       "kind": "question",
       "id": "perf-database-007",
       "result": "pass",
-      "reason": "Page confirms on-demand mode needs no capacity planning and bills per request.",
+      "reason": "Page confirms on-demand needs no capacity planning and suits variable workloads; provisioned is for steady predictable workloads.",
       "urlChecked": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/capacity-mode.html",
-      "caveat": "The on-demand claim is confirmed. The remarks on fixed provisioned capacity, scheduled scaling and RDS are not on the page."
+      "caveat": "Confirmed that on-demand removes capacity planning and that provisioned mode suits steady, predictable workloads. The remarks on throttling at spikes, scheduled scaling and RDS are not on the cited page."
     },
     {
       "kind": "question",
       "id": "perf-database-008",
       "result": "pass",
-      "reason": "Page confirms Neptune is a purpose-built graph database for highly connected data with millisecond queries.",
+      "reason": "Page confirms Neptune is a purpose-built graph engine for highly connected datasets with millisecond queries.",
       "urlChecked": "https://docs.aws.amazon.com/neptune/latest/userguide/intro.html",
-      "caveat": "The Neptune claim is confirmed. The rationales for Redshift, Memcached and DynamoDB scans are not on the page."
+      "caveat": "Confirmed that Neptune is a purpose-built graph database for highly connected data with millisecond latency. The reasons given for rejecting Redshift, Memcached and DynamoDB scans are not on the cited page."
     },
     {
       "kind": "question",
       "id": "perf-database-009",
       "result": "pass",
-      "reason": "Page confirms Aurora Serverless v2 scales automatically in 0.5 ACU steps for spiky workloads.",
+      "reason": "Page confirms Aurora Serverless scales in 0.5 ACU steps, with no disruption, for spiky workloads.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html",
-      "caveat": "Automatic fine-grained scaling is confirmed. MySQL compatibility, the disruption from manual resizing, and the Redshift and DynamoDB remarks are not stated on this page."
+      "caveat": "Confirmed automatic scaling in half-ACU steps without disruption for unpredictable workloads. MySQL compatibility and the remarks on manual resizing disruption, Redshift and DynamoDB are not on the cited page."
     },
     {
       "kind": "question",
       "id": "perf-database-010",
       "result": "pass",
-      "reason": "Page confirms a GSI with a different partition key supports queries on non-key attributes instead of scans.",
+      "reason": "Page confirms a GSI gives a Query path on a different key and that scans on non-key attributes become slow and inefficient.",
       "urlChecked": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GSI.html",
-      "caveat": "The GSI claim is confirmed. The remarks on S3 export and read consistency are not on the page."
+      "caveat": "Confirmed that a GSI with a different partition key supports efficient queries instead of scans. The remarks on S3 export and on read consistency not changing queryable keys are not stated on the cited page."
     },
     {
       "kind": "question",
       "id": "perf-database-011",
       "result": "pass",
-      "reason": "Comparison table shows Memcached has no replication or failover while Valkey/Redis OSS has replication and automatic failover.",
+      "reason": "Comparison table confirms Redis OSS/Valkey have replication and optional automatic failover while Memcached has neither.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/SelectEngine.html",
-      "caveat": "Replication and failover differences are confirmed. The page does not use the term Multi-AZ, and the single-node and S3 remarks are not on it."
+      "caveat": "Confirmed that Redis OSS supports replication and automatic failover and Memcached does not. The page does not describe a Multi-AZ failover setup for node-based Redis OSS, and the single-node and S3 remarks are not on it."
     },
     {
       "kind": "question",
       "id": "perf-database-012",
       "result": "pass",
-      "reason": "Page confirms Timestream is a purpose-built time series database for IoT sensor data at very high ingestion volume.",
+      "reason": "Page confirms Timestream is a purpose-built time series database for IoT sensor data with recent data kept in memory.",
       "urlChecked": "https://docs.aws.amazon.com/timestream/latest/developerguide/what-is-timestream.html",
-      "caveat": "The time-series claim is confirmed, but the page describes Timestream for LiveAnalytics and points to Timestream for InfluxDB as the alternative. The wrong-option remarks are not on the page."
+      "caveat": "Confirmed that Timestream is a purpose-built time series database suited to IoT sensor data. The page describes Timestream for LiveAnalytics and points to Timestream for InfluxDB as the alternative, and the wrong-option remarks are not on it."
     },
     {
       "kind": "question",
       "id": "perf-database-013",
       "result": "pass",
-      "reason": "Page confirms DocumentDB runs the same application code, drivers and tools used with MongoDB.",
+      "reason": "Page confirms DocumentDB is fully managed and runs the same MongoDB application code, drivers and tools.",
       "urlChecked": "https://docs.aws.amazon.com/documentdb/latest/developerguide/what-is.html",
-      "caveat": "MongoDB compatibility is confirmed. The remarks on Keyspaces, Redshift and ElastiCache are not on the page."
+      "caveat": "Confirmed MongoDB compatibility with the same application code, drivers and tools. The remarks on Keyspaces, Redshift and ElastiCache are not on the cited page."
     },
     {
       "kind": "question",
       "id": "perf-database-014",
       "result": "pass",
-      "reason": "Page confirms Provisioned IOPS gives low, consistent I/O latency for OLTP and Multi-AZ is for fault tolerance.",
+      "reason": "Page confirms Provisioned IOPS gives low, consistent I/O latency for OLTP and that Multi-AZ is about fault tolerance.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html",
-      "caveat": "The Provisioned IOPS part and the Multi-AZ-for-availability point are confirmed. The memory-optimized class raising the cache hit ratio is not stated on the page, and the Glacier remark is not on it either."
+      "caveat": "Confirmed the Provisioned IOPS option and that Multi-AZ is for fault tolerance rather than speed. That a memory-optimized class raises the buffer cache hit ratio is not stated on the cited page, and neither is the Glacier remark."
     },
     {
       "kind": "question",
       "id": "perf-database-015",
       "result": "pass",
-      "reason": "Page frames the goal as uniform activity across partition keys and links to write sharding guidance.",
+      "reason": "Page confirms designing for uniform activity across partition keys; sharding details sit only on linked subpages.",
       "urlChecked": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-partition-key-design.html",
-      "caveat": "The uniform-distribution principle is confirmed. High cardinality and suffix sharding are detailed only on linked subpages that were not opened, and the scan and lowered-capacity remarks are not on the page."
+      "caveat": "Confirmed the principle of uniform activity across partition keys. High cardinality and suffix write sharding are detailed only on linked subpages that are not cited, and the scan and lowered-capacity remarks are not on this page."
     },
     {
       "kind": "question",
       "id": "perf-database-016",
       "result": "pass",
-      "reason": "Page confirms sub-second typical cross-Region replication, local-latency reads in secondary Regions and Region failover.",
+      "reason": "Page confirms Global Database replicates cross-Region typically under a second, serves local-latency reads and gives fast regional recovery.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-global-database.html",
-      "caveat": "Global Database replication, local reads and recovery are confirmed. A promotion time of minutes is not stated, and the remarks on snapshots, same-Region replicas and EC2 replicas are not on the page."
+      "caveat": "Confirmed sub-second typical replication, local reads in secondary Regions and faster recovery with lower RPO and RTO. A promotion time in minutes is not stated, and the remarks on snapshots, same-Region replicas and EC2 replicas are not on the page."
     },
     {
       "kind": "question",
@@ -2202,25 +2202,25 @@
       "kind": "question",
       "id": "perf-ingestion-008",
       "result": "pass",
-      "reason": "Firehose converts JSON to Parquet/ORC, columnar formats that enable faster queries than JSON.",
+      "reason": "Firehose JSON-to-Parquet/ORC conversion and columnar vs row-oriented JSON benefit confirmed.",
       "urlChecked": "https://docs.aws.amazon.com/firehose/latest/dev/record-format-conversion.html",
-      "caveat": "The key claim is confirmed. The rationales for the gzip, RDS and buffer-size options are not stated on the cited pages (the Athena tuning page is only an index)."
+      "caveat": "Parquet conversion and the columnar-versus-row-JSON benefit are confirmed. The gzip, RDS and buffer-size remarks are not on any cited page; the Athena tuning page is only an index."
     },
     {
       "kind": "question",
       "id": "perf-ingestion-009",
       "result": "pass",
-      "reason": "Transfer Family offers fully managed SFTP into S3 with no server infrastructure and unchanged partner clients.",
+      "reason": "Transfer Family managed SFTP into S3 with no server infrastructure confirmed.",
       "urlChecked": "https://docs.aws.amazon.com/transfer/latest/userguide/what-is-aws-transfer-family.html",
-      "caveat": "The correct answer is confirmed. The rationales for why DataSync and Kinesis do not fit are not stated on the cited page."
+      "caveat": "Managed SFTP into S3 for partner uploads without servers is confirmed. Why DataSync and Kinesis do not fit, and the EC2 SFTP remark, are not stated on the cited page."
     },
     {
       "kind": "question",
       "id": "perf-ingestion-010",
       "result": "pass",
-      "reason": "Job bookmarks persist state so reruns process only new data and avoid reprocessing old data.",
+      "reason": "Job bookmarks track processed data so reruns handle only new data; confirmed.",
       "urlChecked": "https://docs.aws.amazon.com/glue/latest/dg/monitor-continuations.html",
-      "caveat": "The key claim is confirmed. The remarks on table versioning, DPUs and crawlers are not on the cited page."
+      "caveat": "Job bookmarks processing only new data is confirmed. The remarks on table versioning, DPUs and crawler scheduling are not stated on the cited page."
     },
     {
       "kind": "question",
@@ -2233,79 +2233,79 @@
       "kind": "question",
       "id": "perf-ingestion-012",
       "result": "pass",
-      "reason": "Managed Service for Apache Flink processes streaming data with SQL or Flink code on managed infrastructure.",
+      "reason": "Managed Flink processes streaming data on managed infrastructure; confirmed.",
       "urlChecked": "https://docs.aws.amazon.com/managed-flink/latest/java/what-is.html",
-      "caveat": "Managed streaming with SQL/Flink is confirmed. Windowed aggregation and Kinesis as source and sink are not named on the cited page, and the Glue, Athena and EMR remarks are not on it."
+      "caveat": "Managed stream processing and time-series analytics on provisioned infrastructure are confirmed. Windowed aggregation, Kinesis as source and sink, and the Glue, Athena and EMR remarks are not on the cited page."
     },
     {
       "kind": "question",
       "id": "perf-ingestion-013",
       "result": "pass",
-      "reason": "Partitioning restricts data scanned per query and Athena scans only the partition named in WHERE; non-Hive layouts need ALTER TABLE ADD PARTITION.",
+      "reason": "Partitioning restricts data scanned; non-Hive partitions added manually; confirmed.",
       "urlChecked": "https://docs.aws.amazon.com/athena/latest/ug/partitions.html",
-      "caveat": "Partitioning is confirmed. The rationales for the date suffix, Glacier and Transfer Acceleration options are not on the cited pages."
+      "caveat": "Date partitioning limiting the data scanned, and registering partitions, are confirmed. The date-suffix, Glacier and Transfer Acceleration remarks are not on a cited page."
     },
     {
       "kind": "question",
       "id": "perf-ingestion-014",
       "result": "pass",
-      "reason": "Firehose delivers to S3 and OpenSearch, among others, and can invoke Lambda to transform records; Redshift is not the only destination.",
+      "reason": "S3/OpenSearch/Redshift destinations and Lambda transformation confirmed.",
       "urlChecked": "https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html",
-      "caveat": "Options a, d and e are confirmed. That Firehose has no shards and no multi-consumer replay is not stated on the cited pages."
+      "caveat": "Options a and d are confirmed, and Firehose listing many destinations contradicts option e. That Firehose has no shards and no multi-consumer replay is not stated on the cited pages."
     },
     {
       "kind": "question",
       "id": "perf-ingestion-015",
       "result": "pass",
-      "reason": "DataSync supports on-premises SMB sources with data integrity verification options.",
+      "reason": "DataSync SMB-to-S3 transfer and checksum verification confirmed.",
       "urlChecked": "https://docs.aws.amazon.com/datasync/latest/userguide/configure-data-verification-options.html",
-      "caveat": "SMB to S3 and verification are confirmed. The agent requirement and the Firehose, Glue and CloudFront rationales are not on the cited pages."
+      "caveat": "SMB to S3 transfer and data verification are confirmed. The on-premises agent requirement and the Firehose, Glue and CloudFront rationales are not on the cited pages."
     },
     {
       "kind": "question",
       "id": "perf-ingestion-016",
       "result": "pass",
-      "reason": "Firehose can read from a Kinesis data stream and convert to Parquet for S3, with no servers, matching the scenario.",
-      "urlChecked": "https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html",
-      "caveat": "Firehose reading from a stream and Parquet conversion are confirmed. Lambda processing of the stream and the SQS and Kafka rationales are not on the cited pages."
+      "reason": "Firehose reading from a Kinesis stream, Parquet conversion and independent multiple consumers confirmed.",
+      "urlChecked": "https://docs.aws.amazon.com/streams/latest/dev/key-concepts.html",
+      "caveat": "Firehose reading from a stream, Parquet conversion and several independent consumers of one stream are confirmed. Lambda processing of the stream and the SQS, Glue crawler and Kafka rationales are not on the cited pages."
     },
     {
       "kind": "question",
       "id": "perf-ingestion-017",
       "result": "pass",
-      "reason": "Create bucket, create Firehose stream targeting it, send records, then verify objects is a sound order; Firehose buffers before delivery.",
+      "reason": "Firehose stream, producers sending records and buffered delivery to S3 confirmed.",
       "urlChecked": "https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html",
-      "caveat": "The buffering behaviour is confirmed. The bucket-must-exist-first ordering is not stated on the cited pages (the basic-create page is only an index of subtopics)."
+      "caveat": "Buffering before delivery to S3 and producers sending to a stream are confirmed. The bucket-first ordering is not stated on the cited pages; the basic-create page is only an index."
     },
     {
       "kind": "question",
       "id": "perf-network-07",
       "result": "pass",
-      "reason": "Transfer Acceleration routes uploads via CloudFront edge locations to S3 over an optimized path and uses the s3-accelerate endpoint.",
+      "reason": "Cited page confirms edge-location routing to S3 over an optimized path for long-distance uploads.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html",
-      "caveat": "The key claim is confirmed. The wrong-option remarks (per-Region buckets, storage class, ALB in front of S3) are not stated on the cited page."
+      "caveat": "The page confirms Transfer Acceleration uses edge locations and the accelerate endpoint for long-distance uploads. The wrong-option remarks (per-Region buckets, storage class, ALB in front of S3) are not on the cited page."
     },
     {
       "kind": "question",
       "id": "perf-network-08",
       "result": "pass",
-      "reason": "A Direct Connect gateway connects a private virtual interface to VPCs (via virtual private gateways) in the same or different Regions.",
+      "reason": "Page confirms a Direct Connect gateway associates with VPCs in the same or different Regions.",
       "urlChecked": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/direct-connect-gateways.html",
-      "caveat": "The Direct Connect gateway multi-Region claim is confirmed. The remarks about separate connections, router peering and NAT gateways are not on the cited page."
+      "caveat": "The page confirms a Direct Connect gateway reaches VPCs in the same or different Regions. The remarks about separate connections, router peering and NAT gateways are not on the cited page."
     },
     {
       "kind": "question",
       "id": "perf-network-09",
       "result": "pass",
-      "reason": "Transit Gateway is a network transit hub interconnecting VPCs and on-premises networks, with VPN and Direct Connect gateway attachments.",
+      "reason": "Page confirms Transit Gateway is a hub connecting VPCs and on-premises networks via attachments (VPC, VPN, Direct Connect gateway).",
       "urlChecked": "https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html",
-      "caveat": "The hub and attachment claims are confirmed. The remarks on scripted peering, internet gateways and load balancers are not on the cited page, and the page does not use the word regional."
+      "caveat": "The page confirms the hub role and the VPC, VPN and Direct Connect attachments. The remarks on scripted peering, internet gateways and load balancers are not on the page, and it does not call the gateway regional."
     },
     {
       "kind": "question",
       "id": "perf-network-010",
       "result": "pass",
-      "reason": "Cluster placement group packs instances close in one AZ for low-latency HPC node-to-node traffic; spread separates hardware to reduce correlated failures.",
+      "reason": "Page confirms cluster packs instances close in one AZ for low latency and spread uses distinct hardware.",
       "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html",
       "caveat": "Cluster and spread behavior is confirmed. The remark that different Regions or accounts add latency is not on the cited page."
     },
@@ -2320,15 +2320,15 @@
       "kind": "question",
       "id": "perf-network-012",
       "result": "pass",
-      "reason": "ALB supports path conditions in listener rules that forward to different target groups based on the URL.",
+      "reason": "Page confirms ALB listener rules with path conditions route requests to different target groups.",
       "urlChecked": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html",
-      "caveat": "ALB path-based routing is confirmed. The remarks about NLB layer 4, Gateway Load Balancer and DNS records are not on the cited page."
+      "caveat": "ALB path-based routing at layer 7 is confirmed. The remarks about NLB layer 4 inspection, Gateway Load Balancer purpose and DNS records are not on the cited page."
     },
     {
       "kind": "question",
       "id": "perf-network-013",
       "result": "pass",
-      "reason": "Gateway Load Balancer deploys and scales virtual appliances such as firewalls behind a transparent network gateway.",
+      "reason": "Page confirms Gateway Load Balancer deploys and scales virtual appliances with a transparent network gateway.",
       "urlChecked": "https://docs.aws.amazon.com/elasticloadbalancing/latest/gateway/introduction.html",
       "caveat": "The Gateway Load Balancer claim is confirmed. The remarks about ALB, NLB and CloudFront are not on the cited page."
     },
@@ -2336,25 +2336,25 @@
       "kind": "question",
       "id": "perf-network-014",
       "result": "pass",
-      "reason": "Cluster placement group is for low-latency tightly coupled traffic and ENA provides enhanced networking; a=cluster and b=ENA are correct.",
-      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html",
-      "caveat": "Cluster placement and ENA enhanced networking are confirmed. The pages do not state that ENA gives higher bandwidth and lower latency, and the remarks on EBS size and cross-Region placement are not on them."
+      "reason": "Placement page confirms cluster low-latency packing; ENA page confirms ENA enhanced networking.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/enhanced-networking-ena.html",
+      "caveat": "Cluster placement and ENA enhanced networking are confirmed. The ENA page does not state higher bandwidth or lower latency, and the remarks on EBS size and cross-Region placement are not on the cited pages."
     },
     {
       "kind": "question",
       "id": "perf-network-015",
       "result": "pass",
-      "reason": "Gateway endpoints need no internet gateway or NAT, and S3 interface endpoints keep traffic on the Amazon network; a and b are correct.",
-      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html",
-      "caveat": "Both endpoint types are confirmed. The remark that S3 is not a VPC and cannot be peered is not on the cited pages."
+      "reason": "Pages confirm both gateway and interface endpoints for S3 and that traffic stays on the AWS network.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/privatelink-interface-endpoints.html",
+      "caveat": "Both endpoint types and the AWS-network path are confirmed. The remark that S3 is not a VPC and cannot be peered is not on the cited pages."
     },
     {
       "kind": "question",
       "id": "perf-network-016",
       "result": "pass",
-      "reason": "Global Accelerator gives two static anycast IPs and routes to healthy ALB/NLB endpoints across Regions; b matches the page.",
+      "reason": "Page confirms two static anycast IPs, ALB endpoints in multiple Regions and health-based routing.",
       "urlChecked": "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html",
-      "caveat": "Static anycast IPs, ALB endpoints and health-based routing are confirmed. The scenario requirements text was not part of this check, and the remarks on DNS caching, CloudFront and changing ALB IPs are not on the cited page."
+      "caveat": "Static anycast IPs, ALB endpoints and health-based routing are confirmed. The remarks on DNS caching, CloudFront and changing ALB IPs are not on the cited page."
     },
     {
       "kind": "question",
@@ -2367,33 +2367,33 @@
       "kind": "question",
       "id": "perf-storage-07",
       "result": "pass",
-      "reason": "Page confirms gp3 provisions IOPS up to 80,000 independent of size and is the lowest-cost SSD, while gp2 needs about 3,334 GiB for 10,000 IOPS (3 IOPS per GiB).",
+      "reason": "Page confirms gp3 independent IOPS (up to 80,000) and gp2 3 IOPS per GiB; HDD remark absent.",
       "urlChecked": "https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html",
-      "caveat": "The cited page covers only gp2 and gp3. The remarks that st1 and sc1 are HDD types unsuited to random database I/O are not on it."
+      "caveat": "The gp3 versus gp2 IOPS and cost reasoning is confirmed on the cited page. The remark that st1 and sc1 are HDD types unsuited to random database I/O is still not on it."
     },
     {
       "kind": "question",
       "id": "perf-storage-08",
       "result": "pass",
-      "reason": "EFS is a managed NFS file system with Regional multi-AZ access and massively parallel access from many instances.",
+      "reason": "Page confirms EFS is managed, NFSv4 and multi-AZ with massively parallel access; wrong-option remarks absent.",
       "urlChecked": "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html",
-      "caveat": "The page confirms EFS is managed, NFS-based, multi-AZ and parallel. It does not mention mount targets per AZ or the rsync, instance store and single NFS server wrong-option remarks."
+      "caveat": "EFS being a managed, multi-AZ NFS file system with parallel access is confirmed. The remarks about per-instance EBS, instance store and a single self-run NFS server are still not on the cited page."
     },
     {
       "kind": "question",
       "id": "perf-storage-09",
       "result": "pass",
-      "reason": "Page states at least 5,500 GET/HEAD requests per second per prefix and that parallelizing across prefixes scales reads.",
-      "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html",
-      "caveat": "The per-prefix rate, prefix parallelization and Transfer Acceleration purpose are confirmed. The remarks about Versioning and Glacier Instant Retrieval are not on the cited pages."
+      "reason": "Per-prefix rates, parallelization and Transfer Acceleration purpose confirmed; Versioning and Glacier IR remarks absent.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance-design-patterns.html",
+      "caveat": "The 5,500 GET per second per prefix rate, spreading across prefixes in parallel, and Transfer Acceleration for long distances are confirmed. The remarks about Versioning and Glacier Instant Retrieval are still not on the cited pages."
     },
     {
       "kind": "question",
       "id": "perf-storage-010",
       "result": "pass",
-      "reason": "FSx for Windows File Server provides SMB shares, Active Directory authentication, Windows ACLs and Multi-AZ high availability.",
+      "reason": "Page confirms SMB, Active Directory, Windows ACLs and Multi-AZ; EFS/S3/Lustre remarks absent.",
       "urlChecked": "https://docs.aws.amazon.com/fsx/latest/WindowsGuide/what-is.html",
-      "caveat": "SMB, Active Directory, Windows ACLs and Multi-AZ are confirmed. The remarks about EFS, S3 and FSx for Lustre are not on this page."
+      "caveat": "Managed SMB shares with Active Directory and Windows ACLs are confirmed. The remarks about EFS, S3 and FSx for Lustre are still not on the cited page."
     },
     {
       "kind": "question",
@@ -2406,17 +2406,17 @@
       "kind": "question",
       "id": "perf-storage-012",
       "result": "pass",
-      "reason": "S3 Express One Zone with a directory bucket in the same AZ is the single-digit millisecond option; supported by the related S3 performance design patterns page, but the cited page did not load.",
+      "reason": "Cited page content could not be read (only title returned); single-digit ms claim is on the S3 design patterns page, not cited here.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-one-zone.html",
-      "caveat": "The cited page returned only a title when fetched twice, so it could not be read. The single-digit millisecond claim is confirmed on the S3 performance design patterns page; same-AZ placement and the other-class remarks are not confirmed from a cited page."
+      "caveat": "The cited page returned no readable content. Single-digit millisecond latency for S3 Express One Zone is stated on the S3 performance design patterns page, but same-AZ placement and the Standard-IA and Glacier remarks are not confirmed from a cited page."
     },
     {
       "kind": "question",
       "id": "perf-storage-013",
       "result": "pass",
-      "reason": "Page lists st1 for big data, data warehouses and log processing, sc1 for infrequently accessed data at 250 MiB/s, and gp3 and io2 as SSD types.",
+      "reason": "Page confirms st1 for log processing at 500 MiB/s and sc1 for infrequent data at 250 MiB/s; SSD-costs-more claim not stated.",
       "urlChecked": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html",
-      "caveat": "Use cases and throughput limits are confirmed. The claim that SSD types cost more per GiB than st1 is not stated on the page."
+      "caveat": "The st1 and sc1 use cases and throughput limits are confirmed. The claim that io2 and gp3 cost more per GiB than st1 is still not stated on the cited page."
     },
     {
       "kind": "question",
@@ -2429,17 +2429,17 @@
       "kind": "question",
       "id": "perf-storage-015",
       "result": "pass",
-      "reason": "Instance store is on disks physically attached to the host, included in instance cost, and data does not persist on stop, hibernate or terminate.",
-      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html",
-      "caveat": "Host-attached disks, no extra charge and non-persistence on stop are confirmed. The high-IOPS wording and the remark that EBS snapshots do not apply to instance store are not stated on the cited pages."
+      "reason": "Page confirms host-attached disks, no extra charge, and data lost on stop or terminate; high-IOPS and snapshot remarks absent.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-store-lifetime.html",
+      "caveat": "Host-attached storage, no extra charge, and loss of data on stop or termination are confirmed. The high IOPS and low latency wording and the remark that EBS snapshots do not apply to instance store are still not on the cited pages."
     },
     {
       "kind": "question",
       "id": "perf-storage-016",
       "result": "pass",
-      "reason": "Transfer Acceleration uses CloudFront edge locations and the s3-accelerate endpoint for long-distance uploads; multipart upload allows parallel parts.",
+      "reason": "Page confirms edge routing, accelerate endpoint and parallel multipart upload; wrong-option remarks absent.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html",
-      "caveat": "Edge routing, the accelerate endpoint and parallel multipart parts are confirmed. The remarks about random buckets, One Zone-IA and an Application Load Balancer are not on the cited pages, and the scenario text itself sits outside this question."
+      "caveat": "Routing through edge locations, the accelerate endpoint and parallel multipart parts for throughput are confirmed. The remarks about random buckets, a storage class change and fronting S3 with an Application Load Balancer are still not on the cited pages."
     },
     {
       "kind": "question",
@@ -2452,17 +2452,17 @@
       "kind": "question",
       "id": "scalable-decoupled-015",
       "result": "pass",
-      "reason": "EventBridge routes events from AWS services and third-party software to targets via rules; answer A correct.",
+      "reason": "Page confirms event buses route events from AWS services and third-party sources to targets via rules.",
       "urlChecked": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html",
-      "caveat": "The page confirms event routing from AWS services and third-party sources to targets using rules. The SQS, Direct Connect and Route 53 rationales are not on the cited page."
+      "caveat": "The cited page confirms EventBridge routes events from AWS, custom and third-party sources to targets using rules. The reasons the SQS, Direct Connect and Route 53 options are wrong are not on that page."
     },
     {
       "kind": "question",
       "id": "scalable-decoupled-016",
       "result": "pass",
-      "reason": "Page confirms multiple Kinesis applications can consume the same stream concurrently and independently; D correct.",
+      "reason": "Page confirms multiple applications consume one stream concurrently and independently.",
       "urlChecked": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html",
-      "caveat": "Multiple independent consumers are confirmed. Retention, replay, per-shard ordering and the SQS/SNS/FIFO rationales are not on the cited page."
+      "caveat": "The cited page confirms multiple independent consumers of one stream and that records remain until they expire. Replay, per-shard ordering and the SQS, SNS and FIFO comparisons are not on that page."
     },
     {
       "kind": "question",
@@ -2503,9 +2503,9 @@
       "kind": "question",
       "id": "scalable-decoupled-022",
       "result": "pass",
-      "reason": "Deregistration delay drains in-flight requests (A) and termination lifecycle hook (C) is the standard pairing; A and C correct, others wrong.",
+      "reason": "Page confirms deregistration delay and draining of in-flight requests.",
       "urlChecked": "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html",
-      "caveat": "The deregistration delay and draining behaviour are confirmed. The termination lifecycle hook is not mentioned on the cited page, and the other wrong-option rationales are not either."
+      "caveat": "The cited page confirms deregistration delay and draining of in-flight requests. The termination lifecycle hook and the wrong-option reasons are not on that page."
     },
     {
       "kind": "question",
@@ -2518,73 +2518,73 @@
       "kind": "question",
       "id": "scalable-decoupled-024",
       "result": "pass",
-      "reason": "Fargate runs containers without managing servers; S3 to SQS with Fargate is the sensible low-ops design; B correct.",
+      "reason": "Page confirms Fargate runs containers without managing servers.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html",
-      "caveat": "The Fargate no-server-management claim is confirmed. The S3-to-SQS buffering, scaling on queue depth and the 15-minute Lambda limit are not on the cited page, and the scenario's 40-minute requirement was not in this question's text."
+      "caveat": "The cited page confirms Fargate runs containers without managing servers or clusters. S3-to-SQS buffering, queue-depth scaling and the 15-minute Lambda limit are not on that page."
     },
     {
       "kind": "question",
       "id": "scalable-decoupled-025",
       "result": "pass",
-      "reason": "Order metric above target, launch, health check pass, then load balancer routing is correct; correctOrder [2,1,3,0] matches.",
+      "reason": "Page confirms scale-out when the metric exceeds the target; health-check-then-routing order is not on it.",
       "urlChecked": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html",
-      "caveat": "The page confirms target tracking scales out when the metric exceeds the target. The health-check-then-routing order is not on this page; it is on the ALB target groups page, which is not cited here."
+      "caveat": "The cited page confirms the group scales out when the metric exceeds the target value. The order of health check passing before the load balancer routes traffic is not on this page; it is on the ALB target groups page, which is not cited here."
     },
     {
       "kind": "question",
       "id": "secure-access-011",
       "result": "pass",
-      "reason": "Secrets Manager supports automatic rotation schedules for database credentials.",
+      "reason": "Page confirms Secrets Manager automatic rotation schedule and that credentials need not be stored with the app.",
       "urlChecked": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html",
-      "caveat": "Rotation in Secrets Manager is confirmed. The remarks about environment variables, packaged files and S3 objects are not on the cited page."
+      "caveat": "Rotation in Secrets Manager is confirmed. The remarks about environment variables, packaged files and S3 objects are still not on the cited page."
     },
     {
       "kind": "question",
       "id": "secure-access-012",
       "result": "pass",
-      "reason": "Roles give temporary credentials, support cross-account assume role and EC2 instance roles.",
+      "reason": "Pages confirm roles give temporary credentials, cross-account role delegation and EC2 roles without stored long-term keys.",
       "urlChecked": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp.html",
-      "caveat": "Temporary credentials, cross-account roles and EC2 roles are confirmed. The remarks on public resources and root keys are not on the cited pages."
+      "caveat": "Temporary credentials, cross-account roles and EC2 roles are confirmed. The remarks on public resources and root keys are still not on the cited pages."
     },
     {
       "kind": "question",
       "id": "secure-access-013",
       "result": "pass",
-      "reason": "SCP deny with a condition exemption is the right design; SCP deny beats IAM allow and the management account is unaffected.",
+      "reason": "Page confirms SCPs never grant, IAM allow cannot override an SCP block, and management account is unaffected; condition-key exemption not shown.",
       "urlChecked": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html",
-      "caveat": "SCPs never grant, an SCP block cannot be overridden by IAM, and SCPs do not affect the management account are confirmed. The aws:PrincipalArn condition key is not shown on the cited page."
+      "caveat": "SCPs never grant, an SCP block cannot be overridden by IAM, and SCPs do not affect the management account are confirmed. The aws:PrincipalArn condition key and exempting a role through it are still not shown on the cited page."
     },
     {
       "kind": "question",
       "id": "secure-access-014",
       "result": "pass",
-      "reason": "Access Analyzer finds S3 buckets and IAM roles shared outside the organization zone of trust.",
+      "reason": "Page confirms Access Analyzer finds S3 buckets and IAM roles shared outside the organization zone of trust.",
       "urlChecked": "https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html",
-      "caveat": "The Access Analyzer claim is confirmed. The remarks about Trusted Advisor, Inspector and Config tagging rules are not on the cited page."
+      "caveat": "The Access Analyzer claim is confirmed. The remarks about Trusted Advisor, Inspector and Config tagging rules are still not on the cited page."
     },
     {
       "kind": "question",
       "id": "secure-access-015",
       "result": "pass",
-      "reason": "Customer managed KMS key with key policy control is the correct choice for key control and auditing.",
+      "reason": "Page confirms KMS key policies control who can use keys; audit and disable not on page.",
       "urlChecked": "https://docs.aws.amazon.com/kms/latest/developerguide/overview.html",
-      "caveat": "Key policies controlling who can use KMS keys are confirmed. CloudTrail logging of key use, disabling a key, and the SSE-S3 and base64 remarks are not on the cited page."
+      "caveat": "Key policies controlling who can use KMS keys are confirmed. CloudTrail logging of key use, disabling a key, and the SSE-S3 and base64 remarks are still not on the cited page."
     },
     {
       "kind": "question",
       "id": "secure-access-016",
       "result": "pass",
-      "reason": "Cited page states an explicit deny overrides an allow.",
+      "reason": "Page states an explicit deny overrides the allow; implicit deny default and order remark not on the fetched page.",
       "urlChecked": "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html",
-      "caveat": "Explicit deny overriding allow is confirmed. The implicit deny default and statement order having no effect are not on the cited page."
+      "caveat": "Explicit deny overriding allow is confirmed. The implicit deny default and statement order having no effect are still not on the cited page."
     },
     {
       "kind": "question",
       "id": "secure-access-017",
       "result": "pass",
-      "reason": "RAM can share VPC subnets with accounts in an organization so no duplicate resources are needed.",
+      "reason": "Page confirms RAM shares resources such as a VPC subnet with accounts in an organization without duplicating resources.",
       "urlChecked": "https://docs.aws.amazon.com/ram/latest/userguide/what-is.html",
-      "caveat": "Subnet sharing through RAM within an organization is confirmed. The remarks about peering, CloudFormation copies and IAM users are not on the cited page."
+      "caveat": "Subnet sharing through RAM within an organization is confirmed. The remarks about peering, CloudFormation copies and IAM users are still not on the cited page."
     },
     {
       "kind": "question",
@@ -2597,15 +2597,15 @@
       "kind": "question",
       "id": "secure-access-019",
       "result": "pass",
-      "reason": "SCPs can deny actions in member accounts and do not affect the management account.",
+      "reason": "Page confirms SCPs restrict member accounts and not the management account; specific actions not named.",
       "urlChecked": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html",
-      "caveat": "SCP denies in member accounts and the management account exemption are confirmed. The specific actions cloudtrail:StopLogging, cloudtrail:DeleteTrail and organizations:LeaveOrganization, and the tags remark, are not on the cited page."
+      "caveat": "SCP denies in member accounts and the management account exemption are confirmed. The specific actions cloudtrail:StopLogging, cloudtrail:DeleteTrail and organizations:LeaveOrganization, and the tags remark, are still not on the cited page."
     },
     {
       "kind": "question",
       "id": "secure-access-020",
       "result": "pass",
-      "reason": "IAM Identity Center with an existing identity provider and permission sets assigned to groups across accounts is the central low-overhead choice.",
+      "reason": "Page confirms connecting an existing identity provider and assigning permission sets across accounts; AD not named.",
       "urlChecked": "https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html",
       "caveat": "Connecting an existing identity provider and assigning permission sets across accounts are confirmed. Active Directory is not named on the cited page, nor are the remarks on custom brokers and shared passwords."
     },
@@ -2613,9 +2613,9 @@
       "kind": "question",
       "id": "secure-access-021",
       "result": "pass",
-      "reason": "Create SCP, attach, detach FullAWSAccess, verify is a sound order and the page warns not to remove FullAWSAccess without a replacement.",
+      "reason": "Page confirms FullAWSAccess must be modified or replaced or all member-account actions fail.",
       "urlChecked": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html",
-      "caveat": "The warning about FullAWSAccess needing a replacement is confirmed. The explicit attach-before-detach order and the no-permissions window are not spelled out on the cited page."
+      "caveat": "The warning about FullAWSAccess needing a replacement is confirmed. The explicit attach-before-detach order and the no-permissions window are still not spelled out on the cited page."
     },
     {
       "kind": "question",
@@ -2628,71 +2628,71 @@
       "kind": "question",
       "id": "secure-workloads-012",
       "result": "pass",
-      "reason": "OAC signs CloudFront requests to S3 and the bucket policy allows only the cloudfront.amazonaws.com principal scoped to the distribution.",
+      "reason": "Cited page confirms OAC with a bucket policy for the CloudFront service principal restricts S3 access.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html",
-      "caveat": "The OAC and bucket policy answer is confirmed. The remarks that S3 buckets do not use security groups and that versioning does not restrict reads are not on the cited page."
+      "caveat": "The OAC and bucket policy answer is confirmed. The remarks that S3 buckets do not use security groups and that versioning does not restrict reads are still not on the cited page."
     },
     {
       "kind": "question",
       "id": "secure-workloads-013",
       "result": "pass",
-      "reason": "GuardDuty ingests CloudTrail management events, VPC flow logs and DNS logs and uses malicious IP threat intelligence.",
+      "reason": "Cited page confirms GuardDuty analyzes CloudTrail events, VPC flow logs and DNS logs with threat intelligence such as malicious IPs.",
       "urlChecked": "https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html",
-      "caveat": "The GuardDuty answer is confirmed. The descriptions of Inspector, Config and Artifact are not on the cited page."
+      "caveat": "The GuardDuty answer is confirmed. The descriptions of Inspector, Config and Artifact are still not on the cited page."
     },
     {
       "kind": "question",
       "id": "secure-workloads-014",
       "result": "pass",
-      "reason": "Macie discovers sensitive data including PII in S3 using machine learning and pattern matching.",
+      "reason": "Cited page confirms Macie discovers sensitive data such as PII in S3 and contrasts with GuardDuty.",
       "urlChecked": "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html",
-      "caveat": "The Macie answer and the GuardDuty and Detective contrasts are supported. The Shield Advanced DDoS remark is not on the cited page."
+      "caveat": "The Macie answer and the GuardDuty and Detective contrasts are supported. The Shield Advanced DDoS remark is still not on the cited page."
     },
     {
       "kind": "question",
       "id": "secure-workloads-015",
       "result": "pass",
-      "reason": "ECS task IAM roles vend role permissions to containers on all compute options including Fargate, with per-task-definition roles recommended for least privilege.",
+      "reason": "Cited page confirms ECS task IAM roles give containers per-task permissions, with least-privilege roles per task definition.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html",
-      "caveat": "The task role answer is confirmed. The remarks about access keys in environment variables or images leaking are not on the cited page."
+      "caveat": "The task role answer is confirmed. The remarks about access keys in environment variables or images leaking are still not on the cited page."
     },
     {
       "kind": "question",
       "id": "secure-workloads-016",
       "result": "pass",
-      "reason": "Cross-account KMS use requires permission in the key policy of the key owner plus an IAM policy in the external account.",
+      "reason": "Cited page confirms cross-account KMS use needs the key policy and an IAM policy in the external account.",
       "urlChecked": "https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-modifying-external-accounts.html",
-      "caveat": "The key policy requirement is confirmed, and the page also says an IAM policy in the analytics account is needed. The wrong-option remarks about Region, Transfer Acceleration and SSE-S3 are not on the cited page."
+      "caveat": "The key policy requirement is confirmed, and the page also says an IAM policy in the analytics account is needed. The wrong-option remarks about Region, Transfer Acceleration and SSE-S3 are still not on the cited page."
     },
     {
       "kind": "question",
       "id": "secure-workloads-017",
       "result": "pass",
-      "reason": "WAF geo match statements match on country of origin, and WAF can protect an Application Load Balancer.",
+      "reason": "Cited page confirms WAF geo match by country code; the key claim is supported.",
       "urlChecked": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-geo-match.html",
-      "caveat": "Geo match by country is confirmed on the cited page. ALB support was seen on the WAF overview page, which is not cited. The security group, network ACL and Config remarks are not on any cited page."
+      "caveat": "Geo match by country is confirmed on the cited page. ALB support appears only on the WAF overview page, which is not cited. The security group, network ACL and Config remarks are not on the cited page."
     },
     {
       "kind": "question",
       "id": "secure-workloads-018",
       "result": "pass",
-      "reason": "Block Public Access overrides public ACLs and policies at account level, and IAM Access Analyzer flags publicly shared S3 buckets.",
+      "reason": "Block Public Access page confirms the setting and mentions Access Analyzer for S3; Access Analyzer page confirms external access findings for S3 buckets.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html",
-      "caveat": "Block Public Access and Access Analyzer are confirmed. The claim that AWS Config detects public buckets is not on either cited page."
+      "caveat": "Block Public Access and Access Analyzer are confirmed. The claim that AWS Config detects public buckets is still not on either cited page."
     },
     {
       "kind": "question",
       "id": "secure-workloads-019",
       "result": "pass",
-      "reason": "EBS encryption uses a specifiable KMS key and CloudTrail records all KMS API calls including cryptographic operations.",
-      "urlChecked": "https://docs.aws.amazon.com/kms/latest/developerguide/logging-using-cloudtrail.html",
-      "caveat": "CloudTrail logging of KMS calls and choosing a KMS key for EBS encryption are confirmed. The wording customer managed key, and the remarks on security groups, network ACLs and user data, are not stated on the cited pages."
+      "reason": "EBS page confirms encryption with a KMS key you choose; KMS page confirms CloudTrail logs all KMS API calls for auditing.",
+      "urlChecked": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-encryption.html",
+      "caveat": "CloudTrail logging of KMS calls and choosing a KMS key for EBS encryption are confirmed. The wording customer managed key, and the remarks on security groups, network ACLs and user data, are still not on the cited pages."
     },
     {
       "kind": "question",
       "id": "secure-workloads-020",
       "result": "pass",
-      "reason": "A Cognito user pool authorizer on API Gateway rejects invalid tokens, and WAF can protect an API Gateway REST API stage.",
+      "reason": "API Gateway page confirms Cognito user pool authorizer; WAF page lists API Gateway REST API as a protected resource.",
       "urlChecked": "https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html",
       "caveat": "The Cognito authorizer and WAF protection of API Gateway are confirmed. The wrong-option remarks about EC2, IAM users and customer IP addresses are not on the cited pages. The scenario stem was not part of this check."
     },
@@ -2700,7 +2700,7 @@
       "kind": "question",
       "id": "secure-workloads-021",
       "result": "pass",
-      "reason": "EC2 roles flow is create role, attach via instance profile, app retrieves temporary credentials; Secrets Manager replaces hard-coded credentials with a runtime call.",
+      "reason": "EC2 page confirms the role, instance profile and temporary credentials flow; Secrets Manager page confirms runtime retrieval instead of hard-coded credentials.",
       "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html",
       "caveat": "The role, instance profile and temporary credentials flow is confirmed. The cited pages do not name GetSecretValue or prescribe this exact step order."
     }

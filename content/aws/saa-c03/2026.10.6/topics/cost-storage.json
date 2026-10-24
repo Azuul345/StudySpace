@@ -267,7 +267,7 @@
                     "correct": false
                 }
             ],
-            "explanation": "gp3 lets you provision IOPS (up to 16,000) independently of volume size and costs less per GB than gp2, so a small volume can reach 10,000 IOPS cheaply. io2 Block Express is not needed at this level and costs more. A 200 GiB gp2 volume only earns about 600 baseline IOPS, so reaching 10,000 would force you to buy a much larger volume. st1 is a throughput-optimized HDD type that is not designed for IOPS-driven database workloads.",
+            "explanation": "gp3 includes a baseline of 3,000 IOPS and lets you provision additional IOPS (up to 80,000, or 16,000 on AWS Outposts) independently of volume size, and it costs less per GiB than gp2, so a small volume can reach 10,000 IOPS cheaply. io2 Block Express is not needed at this level and costs more. A 200 GiB gp2 volume only earns about 600 baseline IOPS, so reaching 10,000 would force you to buy a much larger volume. st1 is a throughput-optimized HDD type that is not designed for IOPS-driven database workloads.",
             "sources": [
                 "https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html",
                 "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html"
