@@ -135,6 +135,7 @@ public sealed class EfPackRepository(StudySpaceDbContext db) : IPackRepository
                 row.DataJson = parsed.DataJson;
                 row.PackId = packRow.Id;
                 row.VerificationStatus = pack.Status;
+                row.VerificationCaveat = pack.Caveats is { } caveats && caveats.TryGetValue(parsed.Id, out var caveat) ? caveat : null;
 
                 row.Options.Clear();
                 var order = 0;

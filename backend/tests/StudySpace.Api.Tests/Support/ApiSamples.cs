@@ -11,7 +11,7 @@ internal static class ApiSamples
         new("topics/secure.json", SecureTopic),
         new("topics/resilient.json", ResilientTopic),
         new("flashcards.json", Flashcards),
-        new("verification.json", "{\"status\":\"" + status + "\"}"),
+        new("verification.json", "{\"status\":\"" + status + "\",\"items\":[{\"kind\":\"question\",\"id\":\"q-mcq\",\"result\":\"pass\",\"caveat\":\"Page does not state the limit.\"}]}"),
     ];
 
     public static List<PackFile> PendingPack() =>

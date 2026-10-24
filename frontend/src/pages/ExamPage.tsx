@@ -23,6 +23,7 @@ export function ExamPage() {
               <Link to={`/exams/${encodeURIComponent(e.code)}/flashcards`}>Flashcards</Link>
               <Link to={`/exams/${encodeURIComponent(e.code)}/progress`}>Progress</Link>
               <Link to={`/exams/${encodeURIComponent(e.code)}/bank`}>Wrong-answer bank</Link>
+              <Link to={`/exams/${encodeURIComponent(e.code)}/needs-checking`}>Needs checking</Link>
             </nav>
             {e.domains.map((d) => (
               <article key={d.id}>

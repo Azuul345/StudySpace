@@ -69,6 +69,8 @@ public class QuestionEntity
     public string? DataJson { get; set; }
     public int PackId { get; set; }
     public VerificationStatus VerificationStatus { get; set; }
+    /// What the verifier could not fully confirm. Null means fully verified.
+    public string? VerificationCaveat { get; set; }
     public List<QuestionOptionEntity> Options { get; set; } = [];
 }
 

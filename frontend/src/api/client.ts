@@ -128,6 +128,7 @@ export interface AnswerResult {
   isCorrect: boolean
   needsConfirmation: boolean
   explanation: string
+  caveat?: string | null
   correct: unknown
 }
 
@@ -138,6 +139,7 @@ export interface QuestionOutcome {
   isCorrect: boolean | null
   given: unknown
   explanation: string
+  caveat?: string | null
   correct: unknown
 }
 
@@ -223,3 +225,25 @@ export interface Bank {
 
 export const getProgress = (examCode: string) => get<Progress>(`/progress?examCode=${encodeURIComponent(examCode)}`)
 export const getBank = (examCode: string) => get<Bank>(`/bank?examCode=${encodeURIComponent(examCode)}`)
+
+// ---- Needs checking ----
+export interface NeedsCheckingItem {
+  questionId: number
+  reference: string
+  type: string
+  prompt: string
+  topicId: number
+  topicName: string
+  domainName: string
+  caveat: string
+  answer: string
+  explanation: string
+  sources: string[]
+}
+
+export interface NeedsChecking {
+  total: number
+  items: NeedsCheckingItem[]
+}
+
+export const getNeedsChecking = (examCode: string) => get<NeedsChecking>(`/needs-checking?examCode=${encodeURIComponent(examCode)}`)

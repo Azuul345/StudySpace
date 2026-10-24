@@ -103,4 +103,30 @@ public class PackParserTests
     {
         Assert.Equal(expected, Parse(verification).Status);
     }
+
+    [Fact]
+    public void Parse_ReadsQuestionCaveats()
+    {
+        var pack = Parse("""
+            { "status": "verified", "items": [
+              { "kind": "question", "id": "s3sec-001", "result": "pass", "caveat": "  Limit not on the page.  " },
+              { "kind": "question", "id": "s3sec-002", "result": "pass" },
+              { "kind": "question", "id": "s3sec-003", "result": "pass", "caveat": "  " },
+              { "kind": "lesson", "id": "s3-security", "result": "pass", "caveat": "Lesson note." }
+            ] }
+            """);
+
+        var caveat = Assert.Single(pack.Caveats!);
+        Assert.Equal("s3sec-001", caveat.Key);
+        Assert.Equal("Limit not on the page.", caveat.Value);
+    }
+
+    [Theory]
+    [InlineData("not json")]
+    [InlineData("""{ "items": "nope" }""")]
+    [InlineData("""{ "items": [1, "x", null, { "kind": 5, "id": 6, "caveat": 7 }] }""")]
+    public void Parse_MalformedCaveatsAreIgnored(string verification)
+    {
+        Assert.Empty(Parse(verification).Caveats!);
+    }
 }

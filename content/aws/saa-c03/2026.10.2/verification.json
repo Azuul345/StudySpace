@@ -6,7 +6,8 @@
   "summary": {
     "checked": 186,
     "passed": 186,
-    "failed": 0
+    "failed": 0,
+    "withCaveats": 7
   },
   "items": [
     {
@@ -135,7 +136,8 @@
       "result": "pass",
       "reason": "Shield Advanced adds DDoS detection/response; WAF rate-based rules limit abusive request rates; a,b confirmed, no other option defensible. (CloudFront edge absorption not stated on cited pages, generally true.)",
       "urlChecked": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-rate-based.html",
-      "carried": true
+      "carried": true,
+      "caveat": "Shield Advanced DDoS detection and WAF rate-based rules are confirmed by the cited pages. The explanation's remark that CloudFront absorbs traffic at the edge is not stated on a cited page."
     },
     {
       "kind": "question",
@@ -311,7 +313,8 @@
       "result": "pass",
       "reason": "S3 event notifications can target Lambda; Lambda is serverless and scales automatically; answer a confirmed (explanation remark about CloudFront is not on cited pages but is not load-bearing).",
       "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/EventNotifications.html",
-      "carried": false
+      "carried": false,
+      "caveat": "The answer is confirmed (S3 event notifications can target Lambda). The explanation's remark about CloudFront is not on the cited pages."
     },
     {
       "kind": "question",
@@ -855,7 +858,8 @@
       "result": "pass",
       "reason": "Page says provisioned mode suits steady, predictable workloads; TTL deletes without consuming write throughput. Cheaper with auto scaling is implied, not stated.",
       "urlChecked": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html",
-      "carried": true
+      "carried": true,
+      "caveat": "The cited page says provisioned mode suits steady, predictable workloads and that TTL deletes without consuming write throughput. That provisioned mode with auto scaling is cheaper is implied, not stated."
     },
     {
       "kind": "question",
@@ -903,7 +907,8 @@
       "result": "pass",
       "reason": "CloudFront caches at edge; origin-to-CloudFront transfer from AWS origins is free. Advisory: Transfer Acceleration fee claim is not on the cited page.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html",
-      "carried": false
+      "carried": false,
+      "caveat": "CloudFront edge caching and free origin-to-CloudFront transfer are confirmed. The Transfer Acceleration fee claim is not on the cited page."
     },
     {
       "kind": "question",
@@ -911,7 +916,8 @@
       "result": "pass",
       "reason": "EC2 on-demand pricing page states cross-AZ transfer is charged 0.01 USD/GB each direction and public/Elastic IPv4 traffic 0.01 USD/GB each direction; answers a+c correct. Inter-Region and NAT claims in the explanation are not on that page (weak but not key). [carried; my fetch tool could not render the EC2 pricing data-transfer section, but nat-gateway-pricing.html corroborates cross-AZ charges]",
       "urlChecked": "https://aws.amazon.com/ec2/pricing/on-demand/",
-      "carried": true
+      "carried": true,
+      "caveat": "The verifier could not load the data-transfer section of the cited EC2 pricing page and confirmed cross-AZ charges through the NAT gateway pricing page instead. The Inter-Region and NAT claims in the explanation are not on the cited page."
     },
     {
       "kind": "question",
@@ -959,7 +965,8 @@
       "result": "pass",
       "reason": "a+c correct: lifecycle supports NoncurrentVersionExpiration and AbortIncompleteMultipartUpload; Requester Pays shifts request/download cost, owner still pays storage. Advisory: the 30-day-before-transition remark is true but not on a cited page.",
       "urlChecked": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/intro-lifecycle-rules.html",
-      "carried": false
+      "carried": false,
+      "caveat": "Lifecycle expiration of noncurrent versions, abort of incomplete multipart uploads and Requester Pays are confirmed. The remark about a 30-day minimum before a transition is true but is not on a cited page."
     },
     {
       "kind": "question",
@@ -1215,7 +1222,8 @@
       "result": "pass",
       "reason": "Site-to-Site VPN supports IPsec encrypted connections between VPC and on-premises; speed of setup is general knowledge, not on page (same as first pass).",
       "urlChecked": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html",
-      "carried": false
+      "carried": false,
+      "caveat": "IPsec encryption for Site-to-Site VPN is confirmed. That a VPN is quicker to set up than other options is general knowledge and is not on a cited page."
     },
     {
       "kind": "lesson",

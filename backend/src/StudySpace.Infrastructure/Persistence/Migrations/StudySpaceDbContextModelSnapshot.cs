@@ -357,6 +357,9 @@ namespace StudySpace.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("VerificationCaveat")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("VerificationStatus")
                         .IsRequired()
                         .HasColumnType("TEXT");

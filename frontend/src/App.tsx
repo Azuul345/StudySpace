@@ -6,6 +6,7 @@ import { FlashcardsPage } from './pages/FlashcardsPage'
 import { PracticePage } from './pages/PracticePage'
 import { ProgressPage } from './pages/ProgressPage'
 import { BankPage } from './pages/BankPage'
+import { NeedsCheckingPage } from './pages/NeedsCheckingPage'
 import './App.css'
 
 function NotFound() {
@@ -33,6 +34,7 @@ export function App() {
           <Route path="/exams/:code/flashcards" element={<FlashcardsPage />} />
           <Route path="/exams/:code/progress" element={<ProgressPage />} />
           <Route path="/exams/:code/bank" element={<BankPage />} />
+          <Route path="/exams/:code/needs-checking" element={<NeedsCheckingPage />} />
           <Route path="/practice" element={<PracticePage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

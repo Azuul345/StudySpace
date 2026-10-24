@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { ApiError, finishAttempt, overrideTyped, submitAnswer } from '../api/client'
 import type { Answer, AnswerResult, Attempt, AttemptSummary } from '../api/client'
+import { Caveat } from '../components/Caveat'
 import { Countdown } from './Countdown'
 import { formatCorrect } from './formatCorrect'
 import { QuestionView } from './QuestionView'
@@ -120,6 +121,7 @@ export function Session({ attempt }: { attempt: Attempt }) {
               </p>
               {!confirmedCorrect && !result.needsConfirmation && <p>Answer: {formatCorrect(question, result.correct)}</p>}
               <p>{result.explanation}</p>
+              <Caveat text={result.caveat} />
               {isLast ? (
                 <button type="button" disabled={busy} onClick={() => void finish()}>
                   Finish

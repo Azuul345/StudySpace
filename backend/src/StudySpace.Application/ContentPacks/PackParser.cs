@@ -30,10 +30,12 @@ public static class PackParser
                 .Select(c => new ParsedFlashcard(Str(c, "id"), Str(c, "term"), Str(c, "definition"))));
         }
 
+        var verification = files.FirstOrDefault(f => f.Name == "verification.json");
+
         return new ParsedPack(
             Str(manifest, "packId"), Str(manifest, "version"), Str(exam, "code"), Str(exam, "name"),
-            ReadStatus(files.FirstOrDefault(f => f.Name == "verification.json")),
-            domains, topics, flashcards);
+            ReadStatus(verification),
+            domains, topics, flashcards, ReadCaveats(verification));
     }
 
     private static ParsedTopic ParseTopic(string json, int sortOrder)
@@ -100,6 +102,46 @@ public static class PackParser
 
         return VerificationStatus.Pending;
     }
+
+    /// Question items that carry a non-empty caveat. Anything malformed is ignored, like the status.
+    private static Dictionary<string, string> ReadCaveats(PackFile? file)
+    {
+        var caveats = new Dictionary<string, string>();
+        if (file is null)
+        {
+            return caveats;
+        }
+
+        try
+        {
+            using var doc = JsonDocument.Parse(file.Content);
+            if (doc.RootElement.ValueKind != JsonValueKind.Object
+                || !doc.RootElement.TryGetProperty("items", out var items)
+                || items.ValueKind != JsonValueKind.Array)
+            {
+                return caveats;
+            }
+
+            foreach (var item in items.EnumerateArray())
+            {
+                if (item.ValueKind == JsonValueKind.Object
+                    && Text(item, "kind") == "question"
+                    && Text(item, "id") is { Length: > 0 } id
+                    && Text(item, "caveat")?.Trim() is { Length: > 0 } caveat)
+                {
+                    caveats[id] = caveat;
+                }
+            }
+        }
+        catch (JsonException)
+        {
+        }
+
+        return caveats;
+    }
+
+    private static string? Text(JsonElement e, string name) =>
+        e.TryGetProperty(name, out var v) && v.ValueKind == JsonValueKind.String ? v.GetString() : null;
 
     private static string Str(JsonElement e, string name) => e.GetProperty(name).GetString()!;
 
