@@ -3,6 +3,8 @@ import { Link, useParams } from 'react-router-dom'
 import { getTopic } from '../api/client'
 import { Async } from '../components/Async'
 import { Markdown } from '../components/Markdown'
+import { Diagram } from '../diagrams/Diagram'
+import { diagramRegistry } from '../diagrams/registry'
 import { useLoad } from '../components/useLoad'
 
 function httpsOnly(urls: string[]): string[] {
@@ -36,6 +38,9 @@ export function TopicPage() {
                     </li>
                   ))}
                 </ul>
+                {(t.lesson.diagrams ?? []).flatMap((id) => (diagramRegistry[id] ? [{ id, def: diagramRegistry[id] }] : [])).map(({ id, def }) => (
+                  <Diagram key={id} def={def} />
+                ))}
                 {httpsOnly(t.lesson.docLinks).length > 0 && (
                   <>
                     <h2>Documentation</h2>

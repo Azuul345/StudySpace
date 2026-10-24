@@ -78,6 +78,7 @@ public static class CatalogEndpoints
                 topic.Lesson.Summary,
                 KeyPoints = System.Text.Json.JsonSerializer.Deserialize<List<string>>(topic.Lesson.KeyPointsJson),
                 DocLinks = System.Text.Json.JsonSerializer.Deserialize<List<string>>(topic.Lesson.DocLinksJson),
+                Diagrams = System.Text.Json.JsonSerializer.Deserialize<List<string>>(topic.Lesson.DiagramsJson),
             },
             QuestionCount = count,
         });

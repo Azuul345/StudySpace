@@ -48,7 +48,8 @@ public static class PackParser
             Str(root, "topicId"), Str(root, "domainId"), Str(root, "name"), sortOrder,
             Str(lesson, "summary"), Strings(lesson, "keyPoints"), Strings(lesson, "docLinks"),
             root.GetProperty("scenarios").EnumerateArray().Select(s => new ParsedScenario(Str(s, "id"), Str(s, "text"))).ToList(),
-            root.GetProperty("questions").EnumerateArray().Select(ParseQuestion).ToList());
+            root.GetProperty("questions").EnumerateArray().Select(ParseQuestion).ToList(),
+            lesson.TryGetProperty("diagrams", out _) ? Strings(lesson, "diagrams") : []);
     }
 
     private static ParsedQuestion ParseQuestion(JsonElement q)

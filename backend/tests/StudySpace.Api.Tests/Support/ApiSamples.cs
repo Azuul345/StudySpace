@@ -5,11 +5,11 @@ namespace StudySpace.Api.Tests.Support;
 /// A small verified pack: two domains (30/70), two topics, one question of every type.
 internal static class ApiSamples
 {
-    public static List<PackFile> VerifiedPack(string version = "2026.10.1", string status = "verified") =>
+    public static List<PackFile> VerifiedPack(string version = "2026.10.1", string status = "verified", string? diagrams = null) =>
     [
         new("pack.json", Manifest("api-test", version, "API-1", "API exam")),
         new("topics/secure.json", SecureTopic),
-        new("topics/resilient.json", ResilientTopic),
+        new("topics/resilient.json", diagrams is null ? ResilientTopic : ResilientTopic.Replace("\"docLinks\":", $"\"diagrams\": {diagrams}, \"docLinks\":", StringComparison.Ordinal)),
         new("flashcards.json", Flashcards),
         new("verification.json", "{\"status\":\"" + status + "\",\"items\":[{\"kind\":\"question\",\"id\":\"q-mcq\",\"result\":\"pass\",\"caveat\":\"Page does not state the limit.\"}]}"),
     ];

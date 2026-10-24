@@ -89,6 +89,7 @@ public sealed class EfPackRepository(StudySpaceDbContext db) : IPackRepository
             topic.Lesson.Summary = parsed.Summary;
             topic.Lesson.KeyPointsJson = JsonSerializer.Serialize(parsed.KeyPoints);
             topic.Lesson.DocLinksJson = JsonSerializer.Serialize(parsed.DocLinks);
+            topic.Lesson.DiagramsJson = JsonSerializer.Serialize(parsed.Diagrams ?? []);
 
             foreach (var scenario in parsed.Scenarios)
             {

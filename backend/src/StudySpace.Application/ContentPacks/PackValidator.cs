@@ -183,7 +183,7 @@ public static class PackValidator
 
         c.Text(root, string.Empty, "name", 120);
 
-        if (c.Object(root, string.Empty, "lesson", ["summary", "keyPoints", "docLinks"]) is { } lesson)
+        if (c.Object(root, string.Empty, "lesson", ["summary", "keyPoints", "docLinks", "diagrams"]) is { } lesson)
         {
             c.Text(lesson, "lesson", "summary", 1000);
             if (c.Array(lesson, "lesson", "keyPoints", 1, 10) is { } points)
@@ -195,6 +195,20 @@ public static class PackValidator
             }
 
             UrlArray(c, lesson, "lesson", "docLinks", 1, 10);
+
+            // Optional: ids of diagrams the app draws itself. The pack never carries markup.
+            if (lesson.TryGetProperty("diagrams", out var diagramsElement)
+                && c.ArrayAt(diagramsElement, "lesson.diagrams", 0, 4) is { } diagrams)
+            {
+                var seen = new HashSet<string>(StringComparer.Ordinal);
+                for (var i = 0; i < diagrams.Length; i++)
+                {
+                    if (c.PatternAt(diagrams[i], $"lesson.diagrams[{i}]", SlugPattern, "a lowercase slug") is { } id && !seen.Add(id))
+                    {
+                        c.Error($"lesson.diagrams[{i}]", "Duplicate diagram id.");
+                    }
+                }
+            }
         }
 
         var scenarioIds = new HashSet<string>(StringComparer.Ordinal);
