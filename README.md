@@ -24,10 +24,16 @@ Study content ships as versioned packs in `content/`. The SAA-C03 pack was writt
 
 ### Windows
 
-From the repository folder:
+From the repository folder, in PowerShell or Command Prompt:
 
 ```powershell
 .\start.cmd
+```
+
+In Git Bash (including the VS Code terminal when it uses Git Bash) a backslash path does not work, so use a forward slash:
+
+```bash
+./start.cmd
 ```
 
 The first run installs the frontend packages. Each run imports the content packs into `studyspace.db` (a pack version that is already imported is skipped), starts the API on `127.0.0.1:5080` and the web app on <http://localhost:5173>, and opens your browser. Press Ctrl+C to stop both. You can start it from any folder by using the full path to `start.cmd`. Add `-NoBrowser` to skip opening the browser.
