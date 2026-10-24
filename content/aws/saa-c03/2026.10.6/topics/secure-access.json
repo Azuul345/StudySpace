@@ -13,7 +13,9 @@
       "Cognito user pools authenticate customers; identity pools issue AWS credentials",
       "IAM Identity Center provides workforce SSO across accounts"
     ],
-    "diagrams": ["iam-cross-account-role"],
+    "diagrams": [
+      "iam-cross-account-role"
+    ],
     "docLinks": [
       "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html",
       "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html",
@@ -26,6 +28,10 @@
     {
       "id": "secure-access-sc-1",
       "text": "A company is building a mobile photo app for millions of consumers. Users sign in with their Google or Facebook accounts and upload photos straight to an Amazon S3 bucket. The security team forbids embedding long-lived AWS credentials in the app."
+    },
+    {
+      "id": "secure-access-sc-2",
+      "text": "A company runs an on-premises Active Directory and has 40 AWS accounts in AWS Organizations. Employees must sign in once with their corporate credentials and reach only the AWS accounts and permission levels assigned to their job role. The security team wants no individual IAM users and as little ongoing administration as possible."
     }
   ],
   "questions": [
@@ -364,6 +370,402 @@
         "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html",
         "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html",
         "https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html"
+      ]
+    },
+    {
+      "id": "secure-access-011",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "Secrets Manager",
+        "RDS"
+      ],
+      "prompt": "A Lambda function needs a database password that must be rotated automatically every 30 days with the least operational effort. Where should the password be stored?",
+      "options": [
+        {
+          "id": "a",
+          "text": "An encrypted environment variable on the function",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "A plaintext file packaged with the function",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "An S3 object encrypted with SSE-S3",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "AWS Secrets Manager with managed rotation enabled",
+          "correct": true
+        }
+      ],
+      "explanation": "Secrets Manager stores secrets and can rotate supported database credentials on a schedule. Environment variables have no rotation. A packaged plaintext file exposes the secret in the deployment artifact. An S3 object has no rotation feature and needs custom code.",
+      "sources": [
+        "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html"
+      ]
+    },
+    {
+      "id": "secure-access-012",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "IAM",
+        "STS"
+      ],
+      "prompt": "An EC2 instance in account A must call an API in account B. Which approach avoids storing long-lived keys?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Create an IAM user in account B and store its key on the instance",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Attach an instance profile whose role is allowed to assume a role in account B",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Make the account B resources public",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Copy the root access keys of account B to the instance",
+          "correct": false
+        }
+      ],
+      "explanation": "The instance role gets temporary credentials and can assume a role in account B whose trust policy allows it. Stored IAM user keys are long-lived. Public resources remove access control. Root keys are the most dangerous credential and should not be used.",
+      "sources": [
+        "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html",
+        "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp.html"
+      ]
+    },
+    {
+      "id": "secure-access-013",
+      "type": "mcq",
+      "difficulty": 3,
+      "tags": [
+        "IAM",
+        "Organizations"
+      ],
+      "prompt": "An SCP attached to an OU denies all actions outside eu-west-1. A security team needs one break-glass administrator role in each account to be exempt. What is the simplest way?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Add a condition on the deny that excludes the role ARN using aws:PrincipalArn",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Remove the SCP from the OU permanently",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Attach an IAM policy to the role that allows all Regions, which overrides the SCP",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Move the role into the management account",
+          "correct": false
+        }
+      ],
+      "explanation": "SCP deny statements can use condition keys such as aws:PrincipalArn to exempt specific roles. Removing the SCP drops the guardrail for everyone. An IAM allow cannot override an SCP deny. Roles cannot be moved between accounts, and the management account is not affected by SCPs anyway.",
+      "sources": [
+        "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html"
+      ]
+    },
+    {
+      "id": "secure-access-014",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "IAM Access Analyzer"
+      ],
+      "prompt": "A company wants to be alerted when an S3 bucket policy or IAM role trust policy grants access to a principal outside the organization. Which service provides this?",
+      "options": [
+        {
+          "id": "a",
+          "text": "AWS Trusted Advisor cost checks",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Amazon Inspector",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "AWS Config managed rule for tagging",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "IAM Access Analyzer with the organization as the zone of trust",
+          "correct": true
+        }
+      ],
+      "explanation": "Access Analyzer produces findings for resources shared outside the chosen zone of trust. Trusted Advisor cost checks look at spending. Inspector scans for software vulnerabilities. A tagging rule checks tags, not sharing.",
+      "sources": [
+        "https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html"
+      ]
+    },
+    {
+      "id": "secure-access-015",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "AWS KMS",
+        "S3"
+      ],
+      "prompt": "A company needs to control who can use an encryption key, audit every use, and disable the key when needed, for data stored in S3. Which choice meets this?",
+      "options": [
+        {
+          "id": "a",
+          "text": "SSE-S3 with keys managed entirely by S3",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Client-side base64 encoding of objects",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "SSE-KMS with a customer managed key",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Making the bucket private only",
+          "correct": false
+        }
+      ],
+      "explanation": "A customer managed KMS key has its own key policy, logs each use in CloudTrail, and can be disabled. SSE-S3 keys are not controllable by the customer. Base64 is encoding, not encryption. A private bucket controls access but does not provide key control or auditing.",
+      "sources": [
+        "https://docs.aws.amazon.com/kms/latest/developerguide/overview.html"
+      ]
+    },
+    {
+      "id": "secure-access-016",
+      "type": "mcq",
+      "difficulty": 1,
+      "tags": [
+        "IAM"
+      ],
+      "prompt": "Which statement about IAM policy evaluation is correct?",
+      "options": [
+        {
+          "id": "a",
+          "text": "An explicit allow overrides an explicit deny",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Permissions are allowed by default until denied",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "The order of statements in the policy decides the result",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "An explicit deny overrides any allow",
+          "correct": true
+        }
+      ],
+      "explanation": "An explicit deny always wins over an allow. The default is an implicit deny, so an allow is required. Statement order has no effect on the result.",
+      "sources": [
+        "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html"
+      ]
+    },
+    {
+      "id": "secure-access-017",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "AWS RAM",
+        "VPC"
+      ],
+      "prompt": "A central networking account owns subnets that several other accounts in the organization must launch EC2 instances into, without duplicating the VPC. What should be used?",
+      "options": [
+        {
+          "id": "a",
+          "text": "VPC peering from every account to every other account",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Share the subnets with AWS Resource Access Manager",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Copy the VPC with a CloudFormation template to each account",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Create IAM users in the networking account for each team",
+          "correct": false
+        }
+      ],
+      "explanation": "RAM VPC sharing lets participant accounts launch resources into subnets owned by another account in the organization. Peering connects separate VPCs rather than sharing one. Copying duplicates the network. IAM users do not make subnets available to other accounts.",
+      "sources": [
+        "https://docs.aws.amazon.com/ram/latest/userguide/what-is.html"
+      ]
+    },
+    {
+      "id": "secure-access-018",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": [
+        "IAM",
+        "IAM Identity Center"
+      ],
+      "prompt": "Which TWO measures help ensure engineers use temporary credentials rather than long-lived access keys? (Choose two.)",
+      "options": [
+        {
+          "id": "a",
+          "text": "Federate workforce sign-in through IAM Identity Center",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Share one IAM user access key per team in a wiki",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Use IAM roles for workloads running on AWS compute",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Create access keys for the root user",
+          "correct": false
+        },
+        {
+          "id": "e",
+          "text": "Disable MFA to simplify sign-in",
+          "correct": false
+        }
+      ],
+      "explanation": "Identity Center provides temporary credentials for people, and roles provide them for workloads. A shared key is long-lived and untraceable. Root access keys are a high-risk long-lived credential. Disabling MFA weakens security without addressing credentials.",
+      "sources": [
+        "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html",
+        "https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html"
+      ]
+    },
+    {
+      "id": "secure-access-019",
+      "type": "multi",
+      "difficulty": 3,
+      "tags": [
+        "Organizations",
+        "CloudTrail"
+      ],
+      "prompt": "A company wants to stop member accounts from disabling CloudTrail and from leaving the organization. Which TWO statements describe a correct design? (Choose two.)",
+      "options": [
+        {
+          "id": "a",
+          "text": "Attach an SCP that denies cloudtrail:StopLogging and cloudtrail:DeleteTrail",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Add an IAM policy in each account that denies the same actions, since SCPs cannot deny",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Attach an SCP that denies organizations:LeaveOrganization",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Apply the SCP to the management account to protect the members",
+          "correct": false
+        },
+        {
+          "id": "e",
+          "text": "Rely on tags to block the actions",
+          "correct": false
+        }
+      ],
+      "explanation": "SCPs can explicitly deny those API actions for all principals in the member accounts. Per-account IAM policies can be changed by account administrators, so they are not a guardrail. SCPs do not restrict the management account and do not protect members through it. Tags do not block API calls on their own.",
+      "sources": [
+        "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html"
+      ]
+    },
+    {
+      "id": "secure-access-020",
+      "type": "scenario",
+      "difficulty": 2,
+      "tags": [
+        "IAM Identity Center",
+        "Organizations"
+      ],
+      "prompt": "Which solution meets the requirements with the least operational overhead?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Create IAM users in each of the 40 accounts and sync passwords with a script",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Enable IAM Identity Center, connect it to the Active Directory, and assign permission sets to groups for each account",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Build a custom SAML broker on EC2 and a role in each account",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Share one administrator role across all accounts with a single password",
+          "correct": false
+        }
+      ],
+      "scenarioId": "secure-access-sc-2",
+      "explanation": "Identity Center integrates with Active Directory and assigns permission sets to groups across accounts centrally with temporary credentials. Per-account IAM users violate the requirement and add work. A custom broker needs ongoing maintenance. A shared password gives no role-based least privilege.",
+      "sources": [
+        "https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html"
+      ]
+    },
+    {
+      "id": "secure-access-021",
+      "type": "ordering",
+      "difficulty": 2,
+      "tags": [
+        "Organizations"
+      ],
+      "prompt": "Put these steps in order to restrict a test OU so its accounts can use only approved services.",
+      "steps": [
+        "Verify access in a sandbox account in the OU",
+        "Create an SCP that allows only the approved services",
+        "Detach the default FullAWSAccess SCP from the OU",
+        "Attach the new SCP to the OU"
+      ],
+      "correctOrder": [
+        1,
+        3,
+        2,
+        0
+      ],
+      "explanation": "The SCP must exist before it can be attached. Attaching the allow-list SCP first and then detaching the default FullAWSAccess SCP avoids a window with no permissions, and verification comes last.",
+      "sources": [
+        "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html"
       ]
     }
   ]

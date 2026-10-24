@@ -1,0 +1,621 @@
+{
+    "schemaVersion": 1,
+    "topicId": "perf-storage",
+    "domainId": "performant",
+    "name": "Determine high-performing and/or scalable storage solutions",
+    "lesson": {
+        "summary": "Pick storage by access pattern: object (S3), block (EBS, instance store), shared file (EFS, FSx). Performance comes from choosing the right volume or file system type and then tuning throughput, IOPS and parallelism.",
+        "keyPoints": [
+            "EBS gp3 lets you provision IOPS and throughput independently of size; io2 is for sustained, latency-sensitive I/O",
+            "Instance store is very fast but ephemeral",
+            "EFS is a shared elastic NFS file system for Linux across many instances and AZs",
+            "FSx for Lustre is built for HPC and integrates with S3",
+            "S3 performance improves with parallel connections, byte-range fetches and Transfer Acceleration; spread very high request rates across prefixes"
+        ],
+        "diagrams": [
+            "storage-types"
+        ],
+        "docLinks": [
+            "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html",
+            "https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html",
+            "https://docs.aws.amazon.com/ebs/latest/userguide/provisioned-iops.html",
+            "https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html",
+            "https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance-guidelines.html",
+            "https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance-design-patterns.html",
+            "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html",
+            "https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html",
+            "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-store-lifetime.html"
+        ]
+    },
+    "scenarios": [
+        {
+            "id": "perf-storage-sc-1",
+            "text": "A genomics company runs a three-hour analysis on several hundred EC2 instances that all need parallel, sub-millisecond access to the same hundreds of terabytes of input data stored in an S3 bucket. Results must end up back in S3."
+        },
+        {
+            "id": "perf-storage-sc-2",
+            "text": "A video-sharing company stores user uploads in a single S3 bucket in us-east-1. Users in Asia and Europe upload video files of several gigabytes each and report slow, unreliable uploads over the public internet."
+        }
+    ],
+    "questions": [
+        {
+            "id": "perf-storage-001",
+            "type": "mcq",
+            "difficulty": 1,
+            "tags": [
+                "EBS"
+            ],
+            "prompt": "A relational database on a single EC2 instance needs consistent, sustained high IOPS with low latency from a block volume. Which EBS volume type is designed for this?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Cold HDD (sc1)",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "Throughput Optimized HDD (st1)",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Provisioned IOPS SSD (io2)",
+                    "correct": true
+                },
+                {
+                    "id": "d",
+                    "text": "Magnetic standard volumes on instance store",
+                    "correct": false
+                }
+            ],
+            "explanation": "Provisioned IOPS SSD (io1/io2) volumes are built for latency-sensitive workloads that need sustained IOPS. sc1 is for infrequently accessed data and st1 is for large sequential throughput, neither suits random database I/O. Instance store is ephemeral and not an EBS volume type.",
+            "sources": [
+                "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html"
+            ]
+        },
+        {
+            "id": "perf-storage-002",
+            "type": "multi",
+            "difficulty": 2,
+            "tags": [
+                "S3"
+            ],
+            "prompt": "Which TWO techniques improve upload and download throughput for very large objects in Amazon S3?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Use multiple parallel connections for transfers, such as sending the parts of a multipart upload concurrently",
+                    "correct": true
+                },
+                {
+                    "id": "b",
+                    "text": "Store every object under a single prefix",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Use byte-range fetches to download parts of an object in parallel",
+                    "correct": true
+                },
+                {
+                    "id": "d",
+                    "text": "Enable S3 Versioning on the bucket",
+                    "correct": false
+                },
+                {
+                    "id": "e",
+                    "text": "Switch the bucket to S3 Glacier Deep Archive",
+                    "correct": false
+                }
+            ],
+            "explanation": "The S3 performance guidance recommends parallel connections for high-throughput transfers and byte-range fetches that download different parts of an object concurrently for higher aggregate throughput. A single prefix does not add throughput and limits request-rate scaling, Versioning is for recovery and does not add speed, and Deep Archive is a slow archival tier.",
+            "sources": [
+                "https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance-guidelines.html",
+                "https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance-design-patterns.html"
+            ]
+        },
+        {
+            "id": "perf-storage-003",
+            "type": "truefalse",
+            "difficulty": 1,
+            "tags": [
+                "EC2"
+            ],
+            "statement": "Data stored on an EC2 instance store volume persists after the instance is stopped.",
+            "answer": false,
+            "explanation": "False. Instance store data is lost when the instance stops, hibernates or terminates, so it fits only temporary data such as buffers, caches or scratch data.",
+            "sources": [
+                "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-store-lifetime.html"
+            ]
+        },
+        {
+            "id": "perf-storage-004",
+            "type": "matching",
+            "difficulty": 2,
+            "tags": [
+                "EFS",
+                "FSx",
+                "EBS"
+            ],
+            "prompt": "Match each workload to the best-fitting storage service.",
+            "pairs": [
+                {
+                    "left": "Shared POSIX file system for many Linux EC2 instances across AZs",
+                    "right": "Amazon EFS"
+                },
+                {
+                    "left": "HPC scratch space with fast access to S3 datasets",
+                    "right": "Amazon FSx for Lustre"
+                },
+                {
+                    "left": "Windows file shares using SMB",
+                    "right": "Amazon FSx for Windows File Server"
+                },
+                {
+                    "left": "Low-latency, IOPS-intensive block storage for a database",
+                    "right": "Amazon EBS io2"
+                }
+            ],
+            "explanation": "Each service matches its native protocol and performance profile: EFS is a shared NFS file system for Linux, FSx for Lustre is built for HPC with S3 integration, FSx for Windows File Server provides SMB file shares, and EBS io2 is Provisioned IOPS block storage for IOPS-intensive, latency-sensitive workloads such as databases.",
+            "sources": [
+                "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html",
+                "https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html",
+                "https://docs.aws.amazon.com/fsx/latest/WindowsGuide/what-is.html",
+                "https://docs.aws.amazon.com/ebs/latest/userguide/provisioned-iops.html"
+            ]
+        },
+        {
+            "id": "perf-storage-005",
+            "type": "scenario",
+            "difficulty": 3,
+            "tags": [
+                "FSx",
+                "S3"
+            ],
+            "prompt": "Which storage solution best meets the cluster's requirements?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Amazon EFS in General Purpose mode mounted on all instances",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "Amazon FSx for Lustre linked to the S3 bucket and mounted on all instances",
+                    "correct": true
+                },
+                {
+                    "id": "c",
+                    "text": "An EBS io2 Multi-Attach volume shared by all instances",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "Instance store volumes on each node, copying data from S3 at start",
+                    "correct": false
+                }
+            ],
+            "explanation": "FSx for Lustre provides a shared high-throughput, sub-millisecond file system that can be linked to S3 for loading input data and writing results back. EFS is not tuned for HPC-scale throughput, Multi-Attach attaches a volume to at most 16 Nitro instances, all in one AZ, and per-node instance store would duplicate the dataset on every node.",
+            "sources": [
+                "https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html",
+                "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volumes-multi.html"
+            ],
+            "scenarioId": "perf-storage-sc-1"
+        },
+        {
+            "id": "perf-storage-006",
+            "type": "scenario",
+            "difficulty": 3,
+            "tags": [
+                "FSx"
+            ],
+            "prompt": "The results are exported to S3 after each run, and the team wants to minimize cost for the file system, which is only needed during runs. What should they do?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Keep a persistent file system running 24 hours a day for the next run",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "Use a scratch deployment type, export results to S3, and delete the file system after the run",
+                    "correct": true
+                },
+                {
+                    "id": "c",
+                    "text": "Move the data to EBS gp3 volumes on every node",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "Replace the file system with S3 Glacier Flexible Retrieval",
+                    "correct": false
+                }
+            ],
+            "explanation": "Scratch file systems are for temporary, short-term processing, and since results are persisted in S3 the file system can be deleted between runs. A persistent file system keeps costing money when idle, gp3 per node loses the shared namespace, and Glacier cannot serve a running compute cluster.",
+            "sources": [
+                "https://docs.aws.amazon.com/fsx/latest/LustreGuide/using-fsx-lustre.html",
+                "https://docs.aws.amazon.com/fsx/latest/LustreGuide/performance.html"
+            ],
+            "scenarioId": "perf-storage-sc-1"
+        },
+        {
+            "id": "perf-storage-07",
+            "type": "mcq",
+            "difficulty": 2,
+            "tags": [
+                "EBS"
+            ],
+            "prompt": "A company runs a 200 GiB database volume that needs a steady 10,000 IOPS. The team wants the lowest-cost EBS option that delivers this without oversizing the volume. Which volume type should they choose?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "gp2, enlarged to roughly 3,400 GiB so its baseline reaches 10,000 IOPS",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "st1, because HDD volumes are the cheapest per GiB",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "gp3, with the IOPS provisioned to 10,000 independently of volume size",
+                    "correct": true
+                },
+                {
+                    "id": "d",
+                    "text": "sc1, with burst credits covering the peaks",
+                    "correct": false
+                }
+            ],
+            "explanation": "gp3 lets you provision IOPS (well above 10,000, up to 80,000 on current gp3) and throughput independently of size, so a small volume can reach 10,000 IOPS at low cost. gp2 ties IOPS to size at 3 IOPS per GiB, so oversizing wastes money. st1 and sc1 are HDD types that are not designed for random, IOPS-heavy database I/O.",
+            "sources": [
+                "https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html"
+            ]
+        },
+        {
+            "id": "perf-storage-08",
+            "type": "mcq",
+            "difficulty": 1,
+            "tags": [
+                "EFS"
+            ],
+            "prompt": "A fleet of Linux web servers in an Auto Scaling group spans three Availability Zones and must read and write the same set of files at the same time. Which storage option fits with the least management effort?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Amazon EFS file system with mount targets in each AZ",
+                    "correct": true
+                },
+                {
+                    "id": "b",
+                    "text": "An EBS gp3 volume attached to each instance and synchronized with rsync",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "An instance store volume on each server",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "A single EBS io2 volume attached to one instance and exported over NFS",
+                    "correct": false
+                }
+            ],
+            "explanation": "EFS is a managed, elastic NFS file system that many Linux instances across AZs can mount at once. Per-instance EBS and instance store volumes are separate copies that would need custom syncing, and an NFS server on one instance is a single point of failure that you must operate yourself.",
+            "sources": [
+                "https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html"
+            ]
+        },
+        {
+            "id": "perf-storage-09",
+            "type": "mcq",
+            "difficulty": 2,
+            "tags": [
+                "S3"
+            ],
+            "prompt": "An application must sustain about 20,000 GET requests per second against a single S3 bucket. Objects currently all share one prefix and requests are being throttled. What should the team do?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Enable S3 Versioning so reads are spread across versions",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "Move the bucket to the S3 Glacier Instant Retrieval storage class",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Enable S3 Transfer Acceleration on the bucket",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "Distribute the objects across multiple prefixes and read from them in parallel",
+                    "correct": true
+                }
+            ],
+            "explanation": "S3 scales request rates per prefix (at least 5,500 GET requests per second per prefix), so spreading objects over several prefixes and reading in parallel raises the total. Versioning does not add read capacity, Glacier Instant Retrieval is a storage class chosen for access frequency and cost, and Transfer Acceleration helps long-distance transfers rather than per-prefix request limits.",
+            "sources": [
+                "https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html",
+                "https://docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance-design-patterns.html"
+            ]
+        },
+        {
+            "id": "perf-storage-010",
+            "type": "mcq",
+            "difficulty": 2,
+            "tags": [
+                "FSx"
+            ],
+            "prompt": "A company is moving a Windows-based application to AWS. It needs highly available SMB file shares with native Active Directory integration and NTFS permissions. Which service should it use?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Amazon EFS",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "Amazon FSx for Windows File Server",
+                    "correct": true
+                },
+                {
+                    "id": "c",
+                    "text": "Amazon S3 with a bucket policy",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "Amazon FSx for Lustre",
+                    "correct": false
+                }
+            ],
+            "explanation": "FSx for Windows File Server provides fully managed SMB shares with Active Directory integration and Windows ACLs. EFS is NFS for Linux, S3 is object storage and not an SMB file system, and FSx for Lustre targets HPC workloads on Linux.",
+            "sources": [
+                "https://docs.aws.amazon.com/fsx/latest/WindowsGuide/what-is.html"
+            ]
+        },
+        {
+            "id": "perf-storage-011",
+            "type": "mcq",
+            "difficulty": 3,
+            "tags": [
+                "EFS"
+            ],
+            "prompt": "A Linux analytics application uses EFS and has highly unpredictable throughput needs: it is idle for hours and then needs very high read and write throughput for short periods. The team does not want to estimate or provision throughput. Which EFS throughput mode fits best?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Provisioned Throughput, set to the expected peak",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "Bursting Throughput, because credits cover any spike",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Elastic Throughput, which scales automatically with the workload",
+                    "correct": true
+                },
+                {
+                    "id": "d",
+                    "text": "Max I/O performance mode, which removes throughput limits",
+                    "correct": false
+                }
+            ],
+            "explanation": "Elastic Throughput automatically scales throughput up and down with the workload and is intended for spiky or unpredictable access patterns. Provisioned Throughput requires you to guess the peak and pay for it all the time, Bursting is tied to file system size and credits, and the performance mode setting is about latency and parallelism rather than choosing how throughput is billed.",
+            "sources": [
+                "https://docs.aws.amazon.com/efs/latest/ug/performance.html"
+            ]
+        },
+        {
+            "id": "perf-storage-012",
+            "type": "mcq",
+            "difficulty": 3,
+            "tags": [
+                "S3"
+            ],
+            "prompt": "A trading analytics application running in a single Availability Zone makes a very high rate of small requests to frequently accessed data in S3 and needs consistent single-digit millisecond latency. Which choice meets this best?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Store the data in an S3 directory bucket using the S3 Express One Zone storage class in the same AZ",
+                    "correct": true
+                },
+                {
+                    "id": "b",
+                    "text": "Store the data in S3 Standard-IA",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Store the data in S3 Glacier Flexible Retrieval and use expedited retrievals",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "Store the data in S3 Intelligent-Tiering archive tiers",
+                    "correct": false
+                }
+            ],
+            "explanation": "S3 Express One Zone is designed for latency-sensitive applications and lets you place data in the same AZ as the compute for single-digit millisecond access. Standard-IA targets infrequently accessed data, and the Glacier and archive tiers add retrieval delays that do not meet a low-latency requirement.",
+            "sources": [
+                "https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-one-zone.html"
+            ]
+        },
+        {
+            "id": "perf-storage-013",
+            "type": "mcq",
+            "difficulty": 2,
+            "tags": [
+                "EBS"
+            ],
+            "prompt": "A big data job streams through multi-terabyte log files in large sequential reads and writes on an EC2 instance. The team wants the lowest cost per GiB for this frequently accessed data. Which EBS volume type is the best fit?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "io2 Block Express",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "gp3",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "sc1",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "st1",
+                    "correct": true
+                }
+            ],
+            "explanation": "Throughput Optimized HDD (st1) is a low-cost HDD type meant for frequently accessed, throughput-intensive sequential workloads such as log processing. io2 and gp3 are SSD types that cost more per GiB than needed here, and sc1 is for infrequently accessed cold data with lower throughput.",
+            "sources": [
+                "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html"
+            ]
+        },
+        {
+            "id": "perf-storage-014",
+            "type": "multi",
+            "difficulty": 2,
+            "tags": [
+                "EBS"
+            ],
+            "prompt": "Which TWO statements describe advantages of EBS gp3 volumes over gp2 volumes?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "IOPS and throughput can be provisioned independently of the volume size",
+                    "correct": true
+                },
+                {
+                    "id": "b",
+                    "text": "gp3 volumes support Multi-Attach to several instances",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "gp3 has a lower price per GiB-month than gp2",
+                    "correct": true
+                },
+                {
+                    "id": "d",
+                    "text": "Baseline IOPS grows automatically at 3 IOPS for every GiB provisioned",
+                    "correct": false
+                }
+            ],
+            "explanation": "gp3 decouples IOPS and throughput from size and is priced lower per GiB than gp2. Multi-Attach is a feature of Provisioned IOPS io1 and io2 volumes, not gp3, and baseline IOPS that scale with size is how gp2 works, which is the limitation gp3 removes.",
+            "sources": [
+                "https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html",
+                "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html"
+            ]
+        },
+        {
+            "id": "perf-storage-015",
+            "type": "multi",
+            "difficulty": 2,
+            "tags": [
+                "EC2"
+            ],
+            "prompt": "A team plans to use EC2 instance store volumes as a local cache for a high-traffic application. Which TWO statements about instance store are correct?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "It provides very low-latency, high-IOPS storage on disks physically attached to the host computer",
+                    "correct": true
+                },
+                {
+                    "id": "b",
+                    "text": "Its data is preserved when the instance is stopped",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "The storage is included in the instance price with no separate volume charge",
+                    "correct": true
+                },
+                {
+                    "id": "d",
+                    "text": "It can be backed up with EBS snapshots",
+                    "correct": false
+                }
+            ],
+            "explanation": "Instance store is local storage on the host with high IOPS and low latency, and its cost is part of the instance price. Data does not survive a stop or termination, and EBS snapshots apply only to EBS volumes, so important data must be copied elsewhere.",
+            "sources": [
+                "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html",
+                "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-store-lifetime.html"
+            ]
+        },
+        {
+            "id": "perf-storage-016",
+            "type": "scenario",
+            "difficulty": 2,
+            "tags": [
+                "S3"
+            ],
+            "prompt": "Which solution improves upload speed for the overseas users with the least change to the application?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Create a separate bucket in every Region and have the application pick one at random",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "Enable S3 Transfer Acceleration on the bucket and have the app use the accelerate endpoint with multipart upload",
+                    "correct": true
+                },
+                {
+                    "id": "c",
+                    "text": "Switch the bucket to S3 One Zone-IA",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "Put an Application Load Balancer in front of the bucket and upload through it",
+                    "correct": false
+                }
+            ],
+            "scenarioId": "perf-storage-sc-2",
+            "explanation": "Transfer Acceleration routes uploads to the nearest AWS edge location and then over the AWS backbone to the bucket, and multipart upload adds parallelism for large files. Random buckets add complexity and do not target distance, a storage class change does not affect transfer speed, and S3 cannot be fronted by an ALB for uploads.",
+            "sources": [
+                "https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html",
+                "https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpuoverview.html"
+            ]
+        },
+        {
+            "id": "perf-storage-017",
+            "type": "ordering",
+            "difficulty": 1,
+            "tags": [
+                "S3"
+            ],
+            "prompt": "Put the steps of an S3 multipart upload in the correct order.",
+            "steps": [
+                "Upload each part with its part number",
+                "Complete the multipart upload by sending the list of parts",
+                "Initiate the multipart upload and receive an upload ID"
+            ],
+            "correctOrder": [
+                2,
+                0,
+                1
+            ],
+            "explanation": "A multipart upload starts by initiating the upload to get an upload ID, then uploads the parts (which can run in parallel), and finishes by completing the upload so S3 assembles the object.",
+            "sources": [
+                "https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpuoverview.html"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,597 @@
+{
+    "schemaVersion": 1,
+    "topicId": "perf-compute",
+    "domainId": "performant",
+    "name": "Design high-performing and elastic compute solutions",
+    "lesson": {
+        "summary": "High-performing compute means matching instance family, placement and purchasing to the workload, and scaling elastically. Use Auto Scaling for EC2, Lambda for event-driven code, and Fargate or ECS/EKS for containers.",
+        "keyPoints": [
+            "Target tracking scaling keeps a metric near a target value",
+            "Cluster placement groups give low-latency node-to-node networking",
+            "Lambda scales automatically; provisioned concurrency reduces cold starts",
+            "Fargate runs containers without managing servers",
+            "Choose instance families (compute, memory, accelerated, Graviton) to match the workload"
+        ],
+        "diagrams": [
+            "auto-scaling-target-tracking"
+        ],
+        "docLinks": [
+            "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html",
+            "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html",
+            "https://docs.aws.amazon.com/lambda/latest/dg/lambda-concurrency.html",
+            "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html"
+        ]
+    },
+    "scenarios": [
+        {
+            "id": "perf-compute-sc-1",
+            "text": "A media company lets users upload videos to Amazon S3 at unpredictable times, with long idle gaps. Each upload must be transcoded by a containerized tool that runs for about 40 minutes. The company wants no idle compute cost and the least operational overhead, with no servers to patch."
+        }
+    ],
+    "questions": [
+        {
+            "id": "perf-compute-001",
+            "type": "mcq",
+            "difficulty": 1,
+            "tags": [
+                "EC2 Auto Scaling"
+            ],
+            "prompt": "A web fleet behind an ALB sees unpredictable traffic. The team wants the fleet to keep average CPU utilization at about 50% with the least configuration effort. Which scaling approach should they use?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Scheduled scaling actions every hour",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "A target tracking scaling policy on average CPU utilization",
+                    "correct": true
+                },
+                {
+                    "id": "c",
+                    "text": "Manual scaling by an operator watching CloudWatch",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "A step scaling policy with eight hand-tuned alarms",
+                    "correct": false
+                }
+            ],
+            "explanation": "Target tracking adds and removes instances automatically to hold a metric near the target and creates the needed alarms for you. Scheduled scaling suits predictable patterns, manual scaling is not elastic, and step scaling works but requires far more tuning for the same result.",
+            "sources": [
+                "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html"
+            ]
+        },
+        {
+            "id": "perf-compute-002",
+            "type": "mcq",
+            "difficulty": 2,
+            "tags": [
+                "EC2"
+            ],
+            "prompt": "A tightly coupled HPC job needs the lowest possible network latency and highest packet rate between its EC2 instances. What should the architect configure?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A spread placement group across Regions",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "A partition placement group across three AZs",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "A cluster placement group in a single Availability Zone",
+                    "correct": true
+                },
+                {
+                    "id": "d",
+                    "text": "Instances in separate VPCs connected by peering",
+                    "correct": false
+                }
+            ],
+            "explanation": "A cluster placement group packs instances close together in one AZ for low-latency, high-throughput networking. Spread and partition groups prioritize isolation over latency, and VPC peering adds no latency benefit.",
+            "sources": [
+                "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html"
+            ]
+        },
+        {
+            "id": "perf-compute-003",
+            "type": "multi",
+            "difficulty": 2,
+            "tags": [
+                "Fargate",
+                "EKS",
+                "ECS"
+            ],
+            "prompt": "A team wants to run containers that scale without provisioning or patching EC2 instances. Which TWO options meet this requirement?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Amazon ECS with the Fargate launch type",
+                    "correct": true
+                },
+                {
+                    "id": "b",
+                    "text": "Amazon EKS with self-managed EC2 node groups",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Amazon EKS with Fargate profiles",
+                    "correct": true
+                },
+                {
+                    "id": "d",
+                    "text": "Amazon ECS with the EC2 launch type",
+                    "correct": false
+                },
+                {
+                    "id": "e",
+                    "text": "Docker installed on EC2 instances in an Auto Scaling group",
+                    "correct": false
+                }
+            ],
+            "explanation": "Fargate removes the need to manage the underlying servers for both ECS and EKS. The EC2 launch type, self-managed node groups and Docker on EC2 all leave instance provisioning and patching to the customer.",
+            "sources": [
+                "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html",
+                "https://docs.aws.amazon.com/eks/latest/userguide/fargate.html"
+            ]
+        },
+        {
+            "id": "perf-compute-004",
+            "type": "ordering",
+            "difficulty": 2,
+            "tags": [
+                "EC2 Auto Scaling"
+            ],
+            "prompt": "Put the steps in the order you would perform them to set up an elastic EC2 fleet.",
+            "steps": [
+                "Add a target tracking scaling policy to the group",
+                "Create a launch template describing the instances",
+                "Create an Auto Scaling group that uses the launch template"
+            ],
+            "correctOrder": [
+                1,
+                2,
+                0
+            ],
+            "explanation": "The launch template defines what to launch, the Auto Scaling group uses the template to launch instances across subnets, and the scaling policy is attached to the existing group.",
+            "sources": [
+                "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html",
+                "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html"
+            ]
+        },
+        {
+            "id": "perf-compute-005",
+            "type": "typed",
+            "difficulty": 2,
+            "tags": [
+                "EC2 Auto Scaling"
+            ],
+            "prompt": "Name the type of EC2 Auto Scaling policy that keeps a chosen metric, such as average CPU utilization, near a target value.",
+            "rubric": [
+                {
+                    "any": [
+                        "target tracking",
+                        "target-tracking"
+                    ]
+                }
+            ],
+            "explanation": "A target tracking scaling policy adjusts capacity automatically to keep the metric close to the configured target.",
+            "sources": [
+                "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html"
+            ]
+        },
+        {
+            "id": "perf-compute-006",
+            "type": "truefalse",
+            "difficulty": 2,
+            "tags": [
+                "Lambda"
+            ],
+            "statement": "Provisioned concurrency keeps Lambda execution environments initialized so that invocations avoid cold-start latency.",
+            "answer": true,
+            "explanation": "True. Provisioned concurrency pre-initializes the requested number of execution environments, so they respond with consistently low latency.",
+            "sources": [
+                "https://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html"
+            ]
+        },
+        {
+            "id": "perf-compute-007",
+            "type": "mcq",
+            "difficulty": 1,
+            "tags": [
+                "EC2 Auto Scaling"
+            ],
+            "prompt": "An internal application sees a sharp, predictable surge of users every weekday at 08:00 and is idle overnight. Which approach lets the Auto Scaling group have capacity ready before the surge starts?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A step scaling policy that reacts to a CPU alarm",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "Manually launching instances each morning",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Increasing the health check grace period",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "A scheduled scaling action that raises desired capacity shortly before 08:00",
+                    "correct": true
+                }
+            ],
+            "explanation": "Scheduled scaling changes capacity at set times, which fits a known pattern. Step scaling only reacts after load has already arrived, manual launches are not automated, and the grace period only delays health checks on new instances.",
+            "sources": [
+                "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-scheduled-scaling.html"
+            ]
+        },
+        {
+            "id": "perf-compute-008",
+            "type": "mcq",
+            "difficulty": 2,
+            "tags": [
+                "EC2 Auto Scaling"
+            ],
+            "prompt": "An application runs a lengthy initialization after launch, so new instances take several minutes to serve traffic during scale-out. The team wants faster scale-out without keeping extra instances serving traffic. What should they use?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A warm pool of pre-initialized instances for the Auto Scaling group",
+                    "correct": true
+                },
+                {
+                    "id": "b",
+                    "text": "A larger default cooldown period",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "A cluster placement group",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "Scheduled scaling with a very high minimum size",
+                    "correct": false
+                }
+            ],
+            "explanation": "A warm pool holds pre-initialized instances (stopped or running) ready to join the group quickly. A longer cooldown slows scaling, a placement group does not shorten initialization, and a high minimum keeps costly instances serving all the time.",
+            "sources": [
+                "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-warm-pools.html"
+            ]
+        },
+        {
+            "id": "perf-compute-009",
+            "type": "mcq",
+            "difficulty": 2,
+            "tags": [
+                "EC2"
+            ],
+            "prompt": "A company runs a large in-memory analytics engine that needs a very high amount of RAM per vCPU. Which EC2 instance category fits best?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Compute optimized instances",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "Storage optimized instances",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Memory optimized instances",
+                    "correct": true
+                },
+                {
+                    "id": "d",
+                    "text": "Burstable general purpose instances",
+                    "correct": false
+                }
+            ],
+            "explanation": "Memory optimized instances provide a high memory-to-vCPU ratio for in-memory workloads. Compute optimized favors CPU, storage optimized favors local disk throughput, and burstable instances suit low baseline CPU use.",
+            "sources": [
+                "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html"
+            ]
+        },
+        {
+            "id": "perf-compute-010",
+            "type": "mcq",
+            "difficulty": 2,
+            "tags": [
+                "Lambda",
+                "SQS"
+            ],
+            "prompt": "A Lambda function reads from an SQS queue and writes to a database that can only handle a limited number of connections. Which setting caps how many function instances can run at once so the database is not overwhelmed?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Provisioned concurrency set to a high value",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "Reserved concurrency set to a limit that matches the database capacity",
+                    "correct": true
+                },
+                {
+                    "id": "c",
+                    "text": "A larger memory setting",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "A longer function timeout",
+                    "correct": false
+                }
+            ],
+            "explanation": "Reserved concurrency sets the maximum concurrent executions for the function and also reserves that share of the account limit. Provisioned concurrency pre-warms environments and does not cap, memory changes speed, and timeout does not limit parallelism.",
+            "sources": [
+                "https://docs.aws.amazon.com/lambda/latest/dg/configuration-concurrency.html",
+                "https://docs.aws.amazon.com/lambda/latest/dg/lambda-concurrency.html"
+            ]
+        },
+        {
+            "id": "perf-compute-011",
+            "type": "mcq",
+            "difficulty": 2,
+            "tags": [
+                "AWS Batch"
+            ],
+            "prompt": "A research team must run tens of thousands of independent containerized batch jobs and wants job queuing, scheduling and compute provisioning handled for them. Which service is the best fit?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Amazon EC2 Auto Scaling with a cron script",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "AWS Elastic Beanstalk",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Amazon Lightsail",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "AWS Batch",
+                    "correct": true
+                }
+            ],
+            "explanation": "AWS Batch queues jobs and provisions the right amount of compute to run them. A cron script on Auto Scaling needs custom scheduling, Elastic Beanstalk targets web applications, and Lightsail is for simple small workloads.",
+            "sources": [
+                "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html"
+            ]
+        },
+        {
+            "id": "perf-compute-012",
+            "type": "mcq",
+            "difficulty": 1,
+            "tags": [
+                "EC2"
+            ],
+            "prompt": "A team will train deep learning models and needs GPU acceleration. Which EC2 instance category should they choose?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Accelerated computing instances",
+                    "correct": true
+                },
+                {
+                    "id": "b",
+                    "text": "Memory optimized instances",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Compute optimized instances",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "General purpose instances",
+                    "correct": false
+                }
+            ],
+            "explanation": "Accelerated computing instances include GPUs and purpose-built ML accelerators for training and inference. The other categories have no GPUs and are tuned for memory, CPU or balanced use.",
+            "sources": [
+                "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html"
+            ]
+        },
+        {
+            "id": "perf-compute-013",
+            "type": "mcq",
+            "difficulty": 2,
+            "tags": [
+                "EC2",
+                "Graviton"
+            ],
+            "prompt": "A Linux web service is open source and can be rebuilt for the Arm architecture. The team wants better price performance on EC2. What should they do?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Switch to instances in a spread placement group",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "Move to the largest x86 instance size available",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Run on AWS Graviton based instances after rebuilding for arm64",
+                    "correct": true
+                },
+                {
+                    "id": "d",
+                    "text": "Enable EC2 hibernation on the current instances",
+                    "correct": false
+                }
+            ],
+            "explanation": "Graviton processors are designed by AWS to deliver better price performance for many Linux workloads once the software is built for arm64. A spread placement group, a larger x86 size, and hibernation do not improve price performance.",
+            "sources": [
+                "https://aws.amazon.com/ec2/graviton/"
+            ]
+        },
+        {
+            "id": "perf-compute-014",
+            "type": "multi",
+            "difficulty": 3,
+            "tags": [
+                "EC2 Auto Scaling",
+                "Spot"
+            ],
+            "prompt": "A stateless batch fleet should stay elastic and cheap by mixing On-Demand and Spot capacity while limiting the effect of Spot interruptions. Which TWO configurations help?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Use a mixed instances policy with several instance types and sizes",
+                    "correct": true
+                },
+                {
+                    "id": "b",
+                    "text": "Use a single instance type for the whole group",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Choose an allocation strategy that favors the deepest Spot capacity pools, such as price-capacity-optimized",
+                    "correct": true
+                },
+                {
+                    "id": "d",
+                    "text": "Create one fixed-size group per instance type and resize them by hand",
+                    "correct": false
+                },
+                {
+                    "id": "e",
+                    "text": "Buy a Reserved Instance for every instance in the group",
+                    "correct": false
+                }
+            ],
+            "explanation": "Diversifying instance types and using a capacity-aware allocation strategy lowers interruption risk while the group still scales. A single type concentrates risk, hand-resized groups are not elastic, and reserving every instance gives up the Spot savings.",
+            "sources": [
+                "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-mixed-instances-groups.html"
+            ]
+        },
+        {
+            "id": "perf-compute-015",
+            "type": "multi",
+            "difficulty": 2,
+            "tags": [
+                "Lambda"
+            ],
+            "prompt": "A CPU-bound Lambda function runs slowly and its cost per invocation is high. Which TWO changes can improve its performance or price performance?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Increase the function timeout to the maximum",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "Run the function on the arm64 (Graviton2) architecture",
+                    "correct": true
+                },
+                {
+                    "id": "c",
+                    "text": "Add provisioned concurrency to speed up the code itself",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "Allocate more memory, which also increases the available CPU",
+                    "correct": true
+                },
+                {
+                    "id": "e",
+                    "text": "Reduce the reserved concurrency",
+                    "correct": false
+                }
+            ],
+            "explanation": "Lambda allocates CPU in proportion to memory, and arm64 functions are priced lower per millisecond with good performance. A longer timeout does not speed anything up, provisioned concurrency only removes cold starts, and lowering reserved concurrency limits throughput.",
+            "sources": [
+                "https://docs.aws.amazon.com/lambda/latest/dg/configuration-memory.html",
+                "https://docs.aws.amazon.com/lambda/latest/dg/foundation-arch.html"
+            ]
+        },
+        {
+            "id": "perf-compute-016",
+            "type": "scenario",
+            "difficulty": 3,
+            "scenarioId": "perf-compute-sc-1",
+            "tags": [
+                "Fargate",
+                "EventBridge",
+                "S3"
+            ],
+            "prompt": "Which solution meets the requirements with the least operational overhead?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Run a Lambda function triggered by S3 that runs the transcoder",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "Send S3 events through Amazon EventBridge to launch an Amazon ECS task on Fargate for each upload",
+                    "correct": true
+                },
+                {
+                    "id": "c",
+                    "text": "Keep an Auto Scaling group of EC2 instances polling an SQS queue, with a minimum of two instances",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "Run one large EC2 instance continuously with a cron job that scans the bucket",
+                    "correct": false
+                }
+            ],
+            "explanation": "Fargate tasks start per event, run as long as needed and cost nothing when idle, with no instances to patch. Lambda cannot run longer than 15 minutes, the Auto Scaling group keeps idle instances and needs patching, and a single always-on instance is neither elastic nor server-free.",
+            "sources": [
+                "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html",
+                "https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html"
+            ]
+        },
+        {
+            "id": "perf-compute-017",
+            "type": "ordering",
+            "difficulty": 2,
+            "tags": [
+                "Lambda"
+            ],
+            "prompt": "Put the steps in order to keep a Lambda function warm with provisioned concurrency on a stable alias.",
+            "steps": [
+                "Create an alias that points to the version",
+                "Configure provisioned concurrency on the alias",
+                "Publish a function version"
+            ],
+            "correctOrder": [
+                2,
+                0,
+                1
+            ],
+            "explanation": "Provisioned concurrency cannot be set on the unpublished $LATEST version, so you publish a version first, point an alias at it, then configure provisioned concurrency on that alias.",
+            "sources": [
+                "https://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html"
+            ]
+        }
+    ]
+}
