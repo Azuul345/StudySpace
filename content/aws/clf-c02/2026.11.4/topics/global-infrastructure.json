@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "topicId": "global-infrastructure",
+  "domainId": "technology",
+  "name": "AWS Global Infrastructure: Regions and Availability Zones",
+  "lesson": {
+    "summary": "AWS runs its services in Regions around the world. A Region is a separate geographic area, and each Region has at least three Availability Zones. An Availability Zone is one or more data centers with their own power, networking and connectivity, in a separate facility. Spreading resources across Availability Zones keeps an application running when one location fails, and choosing Regions near your users reduces latency.",
+    "keyPoints": [
+      "A Region is a separate geographic area, and Regions are designed to be isolated from each other",
+      "Each Region has at least three Availability Zones",
+      "An Availability Zone is one or more discrete data centers with redundant power, networking and connectivity, in a separate facility",
+      "Deploy across multiple Availability Zones so the application keeps running if one Availability Zone fails",
+      "Most resources are regional or zonal: you choose the Region when you create them, and some are tied to one Availability Zone",
+      "Choose Regions near your users to reduce latency; Local Zones and Wavelength Zones place resources even closer",
+      "AWS does not automatically copy most resources to other Regions, so cross-Region copies are your decision"
+    ],
+    "docLinks": [
+      "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html",
+      "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-availability-zones.html"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "global-infrastructure-sc-1",
+      "text": "A sports apparel company runs a website that customers use in Europe and Asia. The company wants the site to stay online if one data center fails, and it wants pages to load quickly for both groups of customers."
+    }
+  ],
+  "questions": [
+    {
+      "id": "global-infrastructure-001",
+      "type": "mcq",
+      "difficulty": 1,
+      "tags": ["Regions", "Availability Zones"],
+      "prompt": "Which statement best describes the difference between an AWS Region and an Availability Zone?",
+      "options": [
+        { "id": "a", "text": "A Region is a single data center, and an Availability Zone is made of several data centers", "correct": false },
+        { "id": "b", "text": "An Availability Zone spans several Regions", "correct": false },
+        { "id": "c", "text": "A Region is a geographic area that contains Availability Zones, and an Availability Zone is one or more discrete data centers inside a Region", "correct": true },
+        { "id": "d", "text": "An Availability Zone is a geographic area that contains Regions", "correct": false }
+      ],
+      "explanation": "A Region is a geographic area, and it contains Availability Zones. Each Availability Zone is one or more discrete data centers with redundant power, networking and connectivity. The option that reverses the two levels is wrong, and so is the option that describes a Region as a single data center.",
+      "sources": ["https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html"]
+    },
+    {
+      "id": "global-infrastructure-002",
+      "type": "mcq",
+      "difficulty": 1,
+      "tags": ["Availability Zones"],
+      "prompt": "What is the minimum number of Availability Zones in each AWS Region?",
+      "options": [
+        { "id": "a", "text": "One", "correct": false },
+        { "id": "b", "text": "Two", "correct": false },
+        { "id": "c", "text": "Three", "correct": true },
+        { "id": "d", "text": "Five", "correct": false }
+      ],
+      "explanation": "Each Region has at least three Availability Zones, which helps you design highly available applications. One or two would not give the same protection, and five is not a minimum.",
+      "sources": ["https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-availability-zones.html"]
+    },
+    {
+      "id": "global-infrastructure-003",
+      "type": "scenario",
+      "difficulty": 2,
+      "tags": ["high availability"],
+      "scenarioId": "global-infrastructure-sc-1",
+      "prompt": "Which design best keeps the website online if one data center fails?",
+      "options": [
+        { "id": "a", "text": "Run every server in one Availability Zone and buy a bigger server", "correct": false },
+        { "id": "b", "text": "Spread the web servers across multiple Availability Zones in the same Region", "correct": true },
+        { "id": "c", "text": "Keep one server in a single data center and copy its disk once a night", "correct": false },
+        { "id": "d", "text": "Keep everything in one Availability Zone and rely on the vendor to repair failures", "correct": false }
+      ],
+      "explanation": "Multiple Availability Zones keep the application running when one data center or zone fails. A bigger server in one zone still fails with that zone. A nightly disk copy helps recovery after a loss but leaves the site down in the meantime. Relying on repairs after a failure gives no protection.",
+      "sources": ["https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html"]
+    },
+    {
+      "id": "global-infrastructure-004",
+      "type": "truefalse",
+      "difficulty": 1,
+      "tags": ["Regions"],
+      "statement": "Each AWS Region is designed to be isolated from the other Regions.",
+      "answer": true,
+      "explanation": "True. Regions are designed to be isolated from each other, which gives the greatest possible fault tolerance and stability.",
+      "sources": ["https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html"]
+    },
+    {
+      "id": "global-infrastructure-005",
+      "type": "ordering",
+      "difficulty": 2,
+      "tags": ["Regions", "Availability Zones"],
+      "prompt": "Put these AWS infrastructure units in order from largest to smallest.",
+      "steps": ["Data center", "Region", "Availability Zone"],
+      "correctOrder": [1, 2, 0],
+      "explanation": "A Region is the largest unit and contains Availability Zones. An Availability Zone is one or more data centers, so the data center comes last.",
+      "sources": ["https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html"]
+    },
+    {
+      "id": "global-infrastructure-006",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": ["high availability"],
+      "prompt": "Which TWO statements about deploying an application across multiple Availability Zones are correct? (Choose two.)",
+      "options": [
+        { "id": "a", "text": "It keeps the application running if one Availability Zone fails", "correct": true },
+        { "id": "b", "text": "It guarantees the application never has any downtime", "correct": false },
+        { "id": "c", "text": "It removes the need to choose a Region", "correct": false },
+        { "id": "d", "text": "AWS recommends it as a best practice for highly available applications", "correct": true }
+      ],
+      "explanation": "Spreading resources across Availability Zones keeps an application available if one zone fails, and AWS recommends this as a best practice. No design guarantees zero downtime. Choosing a Region is still required because zones sit inside Regions.",
+      "sources": ["https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html"]
+    }
+  ]
+}

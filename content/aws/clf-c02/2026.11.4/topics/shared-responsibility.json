@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "topicId": "shared-responsibility",
+  "domainId": "security",
+  "name": "The AWS shared responsibility model",
+  "lesson": {
+    "summary": "Security on AWS is shared. AWS is responsible for security of the cloud, which covers the hardware, software, networking and facilities that run its services. The customer is responsible for security in the cloud, which covers their own data, who can access it, and how they configure the services they use. The split moves with the service: on EC2 you patch the operating system yourself, while more managed services shift that work to AWS.",
+    "keyPoints": [
+      "AWS handles security of the cloud: hardware, software, networking and the physical facilities of its data centers",
+      "Customers handle security in the cloud: their data, who can access it, and how their services are configured",
+      "Customers choose and manage encryption of their own data, including client-side encryption before upload",
+      "On Amazon EC2 the customer patches the guest operating system and any applications installed on the instance",
+      "AWS patches the underlying infrastructure that runs the services",
+      "The responsibility split changes with the service; managed and abstracted services move more of the work to AWS"
+    ],
+    "docLinks": [
+      "https://aws.amazon.com/compliance/shared-responsibility-model/"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "shared-responsibility-sc-1",
+      "text": "A startup runs its web application on Amazon EC2 instances. The team wants to know who is responsible for installing security updates to the operating system on those instances."
+    }
+  ],
+  "questions": [
+    {
+      "id": "shared-responsibility-001",
+      "type": "mcq",
+      "difficulty": 1,
+      "tags": ["shared responsibility", "AWS responsibility"],
+      "prompt": "Which task is AWS responsible for under the shared responsibility model?",
+      "options": [
+        { "id": "a", "text": "Patching the guest operating system on an EC2 instance", "correct": false },
+        { "id": "b", "text": "Physical security of the data centers that host AWS services", "correct": true },
+        { "id": "c", "text": "Deciding which employees can access the company's data", "correct": false },
+        { "id": "d", "text": "Encrypting customer data on the customer's side before upload", "correct": false }
+      ],
+      "explanation": "AWS is responsible for security of the cloud, which includes the physical facilities of its data centers. Patching the guest operating system, deciding who can access data, and client-side encryption are customer tasks.",
+      "sources": ["https://aws.amazon.com/compliance/shared-responsibility-model/"]
+    },
+    {
+      "id": "shared-responsibility-002",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": ["shared responsibility", "customer responsibility"],
+      "prompt": "Which TWO tasks are the customer's responsibility? (Choose two.)",
+      "options": [
+        { "id": "a", "text": "Physical security of the data centers", "correct": false },
+        { "id": "b", "text": "Managing who can access the data they store", "correct": true },
+        { "id": "c", "text": "Encrypting data on the client side before it is uploaded", "correct": true },
+        { "id": "d", "text": "Replacing failed hardware inside AWS data centers", "correct": false },
+        { "id": "e", "text": "Keeping the underlying infrastructure hypervisor patched", "correct": false }
+      ],
+      "explanation": "Access management and client-side encryption are configured by the customer, which makes them security in the cloud. Data center hardware, physical security and the infrastructure that runs the services are AWS's responsibility.",
+      "sources": ["https://aws.amazon.com/compliance/shared-responsibility-model/"]
+    },
+    {
+      "id": "shared-responsibility-003",
+      "type": "scenario",
+      "difficulty": 2,
+      "tags": ["EC2", "patching"],
+      "scenarioId": "shared-responsibility-sc-1",
+      "prompt": "Who is responsible for installing security updates to the operating system on the EC2 instances in this scenario?",
+      "options": [
+        { "id": "a", "text": "AWS, because it owns the hardware", "correct": false },
+        { "id": "b", "text": "The customer, because the customer manages the guest operating system", "correct": true },
+        { "id": "c", "text": "The operating system vendor, with neither AWS nor the customer involved", "correct": false },
+        { "id": "d", "text": "AWS and the customer must each install the same update", "correct": false }
+      ],
+      "explanation": "On EC2 the customer patches the guest operating system and the software installed on it. AWS patches the infrastructure under the services. Owning the hardware does not make AWS responsible for the guest OS.",
+      "sources": ["https://aws.amazon.com/compliance/shared-responsibility-model/"]
+    },
+    {
+      "id": "shared-responsibility-004",
+      "type": "truefalse",
+      "difficulty": 1,
+      "tags": ["EC2", "patching"],
+      "statement": "On Amazon EC2, AWS patches the guest operating system on your instance for you.",
+      "answer": false,
+      "explanation": "False. On EC2 you patch the guest operating system and the applications you install. AWS patches the underlying infrastructure.",
+      "sources": ["https://aws.amazon.com/compliance/shared-responsibility-model/"]
+    },
+    {
+      "id": "shared-responsibility-005",
+      "type": "matching",
+      "difficulty": 2,
+      "tags": ["shared responsibility"],
+      "prompt": "Match each task with the side of the shared responsibility model that owns it.",
+      "pairs": [
+        { "left": "Physical security of the data center", "right": "Security of the cloud (AWS)" },
+        { "left": "Patching the guest operating system on EC2", "right": "Security in the cloud (customer)" },
+        { "left": "Deciding who can access stored data", "right": "Security in the cloud (customer)" },
+        { "left": "Hardware and global infrastructure", "right": "Security of the cloud (AWS)" }
+      ],
+      "explanation": "Facilities, hardware and global infrastructure belong to security of the cloud, which AWS owns. Guest OS patching and access decisions are configured by the customer, so they are security in the cloud.",
+      "sources": ["https://aws.amazon.com/compliance/shared-responsibility-model/"]
+    },
+    {
+      "id": "shared-responsibility-006",
+      "type": "typed",
+      "difficulty": 2,
+      "tags": ["shared responsibility"],
+      "prompt": "Type the phrase for the part of security that AWS owns, in the form security ... the cloud.",
+      "rubric": [
+        { "any": ["security of the cloud"] }
+      ],
+      "explanation": "Security of the cloud is the part AWS owns: the hardware, software, networking and facilities that run its services. Security in the cloud is the customer's part.",
+      "sources": ["https://aws.amazon.com/compliance/shared-responsibility-model/"]
+    }
+  ]
+}

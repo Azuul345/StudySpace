@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "topicId": "cloud-use-case-expansion",
+  "domainId": "technology",
+  "name": "Applying cloud concepts: global expansion",
+  "lesson": {
+    "summary": "A global ecommerce company based in Seattle expands to Ireland and Asia to be closer to its customers. It deploys in several Regions for speed, uses multiple Availability Zones for resilience, and encrypts its own data. Security is shared: AWS secures the physical data centers, and the company secures its data and cloud resources.",
+    "keyPoints": [
+      "Deploying in Regions near customers reduces latency",
+      "Multiple Availability Zones keep an application running when one zone fails",
+      "Using more than one Region adds resilience for the whole application",
+      "AWS secures the physical infrastructure, so the company does not secure the data center itself",
+      "The company secures and encrypts its own data and cloud resources"
+    ],
+    "docLinks": [
+      "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html",
+      "https://aws.amazon.com/compliance/shared-responsibility-model/"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "cloud-use-case-sc-1",
+      "text": "A company based in Seattle wants to serve customers in Ireland and Australia with fast page loads, and it wants the store to stay online if one location fails."
+    }
+  ],
+  "questions": [
+    {
+      "id": "cloud-use-case-001",
+      "type": "mcq",
+      "difficulty": 1,
+      "tags": ["Regions", "latency"],
+      "prompt": "A company in Seattle wants its customers in Ireland to get faster page loads. What is the best first step?",
+      "options": [
+        { "id": "a", "text": "Buy servers and ship them to Ireland", "correct": false },
+        { "id": "b", "text": "Deploy the application in an AWS Region in Europe, such as eu-west-1 in Ireland", "correct": true },
+        { "id": "c", "text": "Serve all customers from a single data center in Seattle", "correct": false },
+        { "id": "d", "text": "Store the data on a laptop in the Seattle office", "correct": false }
+      ],
+      "explanation": "Placing resources in a Region near the customers reduces latency. eu-west-1 is the Ireland Region, which has three Availability Zones. Shipping servers and serving from Seattle add distance, and a laptop is not a reliable data store.",
+      "sources": ["https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-availability-zones.html"]
+    },
+    {
+      "id": "cloud-use-case-002",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": ["high availability", "Regions"],
+      "prompt": "Which TWO actions improve availability for this company? (Choose two.)",
+      "options": [
+        { "id": "a", "text": "Deploy across more than one Availability Zone", "correct": true },
+        { "id": "b", "text": "Keep every resource in one Availability Zone to save money", "correct": false },
+        { "id": "c", "text": "Use a second Region as well as the first", "correct": true },
+        { "id": "d", "text": "Turn off backups to reduce costs", "correct": false }
+      ],
+      "explanation": "Multiple Availability Zones and a second Region both protect the application from localized failures. A single zone is a single point of failure, and turning off backups removes recovery options.",
+      "sources": ["https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html"]
+    },
+    {
+      "id": "cloud-use-case-003",
+      "type": "truefalse",
+      "difficulty": 1,
+      "tags": ["shared responsibility"],
+      "statement": "AWS secures the physical data center in Ireland, and the company is responsible for securing and encrypting its own data.",
+      "answer": true,
+      "explanation": "True. Physical security of the facilities is AWS's responsibility, and protecting customer data, including encryption, is the customer's responsibility.",
+      "sources": ["https://aws.amazon.com/compliance/shared-responsibility-model/"]
+    }
+  ]
+}
