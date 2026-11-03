@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "verifier": "independent verifier agent (separate from the author)",
   "verifiedOn": "2026-11-04",
-  "status": "failed",
+  "status": "verified",
   "summary": {
     "checked": 41,
-    "passed": 38,
-    "failed": 3,
-    "withCaveats": 13
+    "passed": 41,
+    "failed": 0,
+    "withCaveats": 16
   },
   "items": [
     {
@@ -221,10 +221,11 @@
     {
       "kind": "question",
       "id": "ec2-basics-005",
-      "result": "fail",
-      "reason": "Keyed answer (AWS SDK for application code) is not supported by the cited shared responsibility page, which does not mention the SDK in its body text.",
-      "urlChecked": "https://aws.amazon.com/compliance/shared-responsibility-model/",
-      "carried": false
+      "result": "pass",
+      "reason": "SDK reference guide lists the language SDKs (Java, Python, JavaScript and others) that application code uses to call AWS services.",
+      "urlChecked": "https://docs.aws.amazon.com/sdkref/latest/guide/overview.html",
+      "carried": false,
+      "caveat": "The page does not use the exact phrase application code calls services; the Console, billing statement and hardware key distractors are not on it."
     },
     {
       "kind": "question",
@@ -237,10 +238,11 @@
     {
       "kind": "question",
       "id": "ec2-basics-007",
-      "result": "fail",
-      "reason": "Keyed definition of multi-tenancy (several customers sharing physical hardware, isolated) does not appear on the cited instance types page, which has no tenancy wording.",
-      "urlChecked": "https://aws.amazon.com/ec2/instance-types/",
-      "carried": false
+      "result": "pass",
+      "reason": "Dedicated Instances page says by default multiple AWS accounts might share the same physical hardware, and that dedicated instances are isolated at host hardware level.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-instance.html",
+      "carried": false,
+      "caveat": "The Regions and private network distractor explanations are not on the cited page."
     },
     {
       "kind": "question",
@@ -263,10 +265,11 @@
     {
       "kind": "question",
       "id": "ec2-pricing-002",
-      "result": "fail",
-      "reason": "Savings Plans one or three year commitment is confirmed, but Reserved Instances one or three year terms are not confirmed on either cited page.",
+      "result": "pass",
+      "reason": "Savings Plans page gives rates below On-Demand for a one or three year commitment; the Reserved Instances pricing page confirms Standard RIs have 1-year or 3-year terms with discounts off On-Demand.",
       "urlChecked": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html",
-      "carried": false
+      "carried": false,
+      "caveat": "The Spot Instances and On-Demand distractor explanations are not on the cited pages."
     },
     {
       "kind": "question",

@@ -34,115 +34,252 @@
       "id": "ec2-basics-001",
       "type": "mcq",
       "difficulty": 1,
-      "tags": ["EC2", "instance types", "AMI"],
+      "tags": [
+        "EC2",
+        "instance types",
+        "AMI"
+      ],
       "prompt": "What must you choose when you launch an Amazon EC2 instance?",
       "options": [
-        { "id": "a", "text": "The number of users who will log in", "correct": false },
-        { "id": "b", "text": "The instance type and the Amazon Machine Image (AMI)", "correct": true },
-        { "id": "c", "text": "The data transfer limit and the backup schedule", "correct": false },
-        { "id": "d", "text": "A physical server that you buy before launch", "correct": false }
+        {
+          "id": "a",
+          "text": "The number of users who will log in",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "The instance type and the Amazon Machine Image (AMI)",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "The data transfer limit and the backup schedule",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "A physical server that you buy before launch",
+          "correct": false
+        }
       ],
       "explanation": "An EC2 instance is launched from an AMI and runs on an instance type. The number of users, data transfer limits and physical servers are not required launch choices.",
-      "sources": ["https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html", "https://aws.amazon.com/ec2/instance-types/"]
+      "sources": [
+        "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html",
+        "https://aws.amazon.com/ec2/instance-types/"
+      ]
     },
     {
       "id": "ec2-basics-002",
       "type": "matching",
       "difficulty": 2,
-      "tags": ["EC2", "instance types"],
+      "tags": [
+        "EC2",
+        "instance types"
+      ],
       "prompt": "Match each instance family with the workload it is designed for.",
       "pairs": [
-        { "left": "General purpose", "right": "Balanced web services and code repositories" },
-        { "left": "Compute optimized", "right": "High performance computing and scientific modeling" },
-        { "left": "Memory optimized", "right": "Large in-memory datasets and analytics" },
-        { "left": "Accelerated computing", "right": "GPU graphics processing and machine learning" },
-        { "left": "Storage optimized", "right": "High-throughput local storage for data warehousing" }
+        {
+          "left": "General purpose",
+          "right": "Balanced web services and code repositories"
+        },
+        {
+          "left": "Compute optimized",
+          "right": "High performance computing and scientific modeling"
+        },
+        {
+          "left": "Memory optimized",
+          "right": "Large in-memory datasets and analytics"
+        },
+        {
+          "left": "Accelerated computing",
+          "right": "GPU graphics processing and machine learning"
+        },
+        {
+          "left": "Storage optimized",
+          "right": "High-throughput local storage for data warehousing"
+        }
       ],
       "explanation": "Each family is tuned for one kind of resource: balanced for general use, CPU for compute-intensive work, memory for in-memory data, hardware accelerators for GPU workloads, and local storage throughput for storage-heavy work.",
-      "sources": ["https://aws.amazon.com/ec2/instance-types/"]
+      "sources": [
+        "https://aws.amazon.com/ec2/instance-types/"
+      ]
     },
     {
       "id": "ec2-basics-003",
       "type": "scenario",
       "difficulty": 2,
-      "tags": ["EC2", "compute optimized"],
+      "tags": [
+        "EC2",
+        "compute optimized"
+      ],
       "scenarioId": "ec2-basics-sc-1",
       "prompt": "Which instance family is the best fit for the research team in this scenario?",
       "options": [
-        { "id": "a", "text": "Compute optimized", "correct": true },
-        { "id": "b", "text": "Memory optimized", "correct": false },
-        { "id": "c", "text": "Accelerated computing", "correct": false },
-        { "id": "d", "text": "Storage optimized", "correct": false }
+        {
+          "id": "a",
+          "text": "Compute optimized",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Memory optimized",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Accelerated computing",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Storage optimized",
+          "correct": false
+        }
       ],
       "explanation": "Compute optimized instances give high CPU performance for compute-intensive tasks. The scenario does not mention large memory needs, GPUs, or heavy storage throughput, so the other families fit less well.",
-      "sources": ["https://aws.amazon.com/ec2/instance-types/"]
+      "sources": [
+        "https://aws.amazon.com/ec2/instance-types/"
+      ]
     },
     {
       "id": "ec2-basics-004",
       "type": "truefalse",
       "difficulty": 1,
-      "tags": ["AMI"],
+      "tags": [
+        "AMI"
+      ],
       "statement": "An AMI can include the operating system and pre-installed software, and one AMI can launch several identical instances.",
       "answer": true,
       "explanation": "True. An AMI holds the operating system, storage setup, architecture, launch permissions and any extra software, so one AMI can start many instances with the same setup.",
-      "sources": ["https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html"
+      ]
     },
     {
       "id": "ec2-basics-005",
       "type": "mcq",
       "difficulty": 1,
-      "tags": ["provisioning"],
+      "tags": [
+        "provisioning"
+      ],
       "prompt": "Which AWS tool lets a developer call AWS services from application code written in a programming language?",
       "options": [
-        { "id": "a", "text": "The AWS Management Console", "correct": false },
-        { "id": "b", "text": "The AWS SDK", "correct": true },
-        { "id": "c", "text": "A paper billing statement", "correct": false },
-        { "id": "d", "text": "A hardware security key", "correct": false }
+        {
+          "id": "a",
+          "text": "The AWS Management Console",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "The AWS SDK",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "A paper billing statement",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "A hardware security key",
+          "correct": false
+        }
       ],
       "explanation": "The AWS SDK provides language libraries so application code can call AWS services. The Console is a web interface for people, and billing statements and hardware keys are not provisioning tools.",
-      "sources": ["https://aws.amazon.com/compliance/shared-responsibility-model/"]
+      "sources": [
+        "https://docs.aws.amazon.com/sdkref/latest/guide/overview.html"
+      ]
     },
     {
       "id": "ec2-basics-006",
       "type": "multi",
       "difficulty": 2,
-      "tags": ["shared responsibility", "EC2"],
+      "tags": [
+        "shared responsibility",
+        "EC2"
+      ],
       "prompt": "On an Amazon EC2 instance, which TWO tasks belong to the customer? (Choose two.)",
       "options": [
-        { "id": "a", "text": "Patching the guest operating system", "correct": true },
-        { "id": "b", "text": "Physical security of the data center", "correct": false },
-        { "id": "c", "text": "Configuring security groups (firewall rules)", "correct": true },
-        { "id": "d", "text": "Replacing failed physical hardware", "correct": false }
+        {
+          "id": "a",
+          "text": "Patching the guest operating system",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Physical security of the data center",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Configuring security groups (firewall rules)",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Replacing failed physical hardware",
+          "correct": false
+        }
       ],
       "explanation": "On an unmanaged service like EC2 the customer patches the guest OS and configures firewall rules such as security groups. AWS handles the data center's physical security and the underlying hardware.",
-      "sources": ["https://aws.amazon.com/compliance/shared-responsibility-model/"]
+      "sources": [
+        "https://aws.amazon.com/compliance/shared-responsibility-model/"
+      ]
     },
     {
       "id": "ec2-basics-007",
       "type": "mcq",
       "difficulty": 2,
-      "tags": ["multi-tenancy"],
+      "tags": [
+        "multi-tenancy"
+      ],
       "prompt": "What does multi-tenancy mean in the context of Amazon EC2?",
       "options": [
-        { "id": "a", "text": "Each instance runs on its own dedicated physical server forever", "correct": false },
-        { "id": "b", "text": "Several customers share the same physical hardware while their workloads stay isolated", "correct": true },
-        { "id": "c", "text": "Instances can only be used in one Region", "correct": false },
-        { "id": "d", "text": "Each instance has its own private network with no internet access", "correct": false }
+        {
+          "id": "a",
+          "text": "Each instance runs on its own dedicated physical server forever",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Several customers share the same physical hardware while their workloads stay isolated",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Instances can only be used in one Region",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Each instance has its own private network with no internet access",
+          "correct": false
+        }
       ],
       "explanation": "Multi-tenancy means several customers share physical hardware, with each customer's workloads kept isolated. Dedicated hosts are the option for exclusive physical servers, and Regions and private networks are separate topics.",
-      "sources": ["https://aws.amazon.com/ec2/instance-types/"]
+      "sources": [
+        "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-instance.html"
+      ]
     },
     {
       "id": "ec2-basics-008",
       "type": "typed",
       "difficulty": 2,
-      "tags": ["accelerated computing"],
+      "tags": [
+        "accelerated computing"
+      ],
       "prompt": "Type the EC2 instance family that uses hardware accelerators such as GPUs.",
       "rubric": [
-        { "any": ["accelerated computing"] }
+        {
+          "any": [
+            "accelerated computing"
+          ]
+        }
       ],
       "explanation": "Accelerated computing instances use hardware accelerators such as GPUs to handle graphics processing and machine learning efficiently.",
-      "sources": ["https://aws.amazon.com/ec2/instance-types/"]
+      "sources": [
+        "https://aws.amazon.com/ec2/instance-types/"
+      ]
     }
   ]
 }

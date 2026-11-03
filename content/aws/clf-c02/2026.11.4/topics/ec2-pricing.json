@@ -32,72 +32,158 @@
       "id": "ec2-pricing-001",
       "type": "mcq",
       "difficulty": 1,
-      "tags": ["On-Demand"],
+      "tags": [
+        "On-Demand"
+      ],
       "prompt": "Which pricing option has no long-term commitment and charges for the time an instance runs?",
       "options": [
-        { "id": "a", "text": "On-Demand Instances", "correct": true },
-        { "id": "b", "text": "Dedicated Hosts", "correct": false },
-        { "id": "c", "text": "Three-year Reserved Instances", "correct": false },
-        { "id": "d", "text": "Capacity Reservations", "correct": false }
+        {
+          "id": "a",
+          "text": "On-Demand Instances",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Dedicated Hosts",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Three-year Reserved Instances",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Capacity Reservations",
+          "correct": false
+        }
       ],
       "explanation": "On-Demand Instances have no commitment and bill for the time they run. Dedicated Hosts are a physical server option, Reserved Instances need a long commitment, and Capacity Reservations hold capacity without giving a discount on their own.",
-      "sources": ["https://aws.amazon.com/ec2/pricing/"]
+      "sources": [
+        "https://aws.amazon.com/ec2/pricing/"
+      ]
     },
     {
       "id": "ec2-pricing-002",
       "type": "multi",
       "difficulty": 2,
-      "tags": ["Savings Plans", "Reserved Instances"],
+      "tags": [
+        "Savings Plans",
+        "Reserved Instances"
+      ],
       "prompt": "Which TWO options lower the rate for a steady workload in exchange for a one or three year commitment? (Choose two.)",
       "options": [
-        { "id": "a", "text": "Savings Plans", "correct": true },
-        { "id": "b", "text": "Spot Instances", "correct": false },
-        { "id": "c", "text": "Reserved Instances", "correct": true },
-        { "id": "d", "text": "On-Demand Instances", "correct": false }
+        {
+          "id": "a",
+          "text": "Savings Plans",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Spot Instances",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Reserved Instances",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "On-Demand Instances",
+          "correct": false
+        }
       ],
       "explanation": "Savings Plans and Reserved Instances both trade a one or three year commitment for a lower rate. Spot Instances carry no commitment and can be interrupted, and On-Demand has no discount for commitment.",
-      "sources": ["https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html", "https://aws.amazon.com/ec2/pricing/"]
+      "sources": [
+        "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html",
+        "https://aws.amazon.com/ec2/pricing/reserved-instances/"
+      ]
     },
     {
       "id": "ec2-pricing-003",
       "type": "scenario",
       "difficulty": 2,
-      "tags": ["cost optimization"],
+      "tags": [
+        "cost optimization"
+      ],
       "scenarioId": "ec2-pricing-sc-1",
       "prompt": "Which pricing choice best fits the nightly batch job in this scenario?",
       "options": [
-        { "id": "a", "text": "Spot Instances, because the job can restart after an interruption", "correct": true },
-        { "id": "b", "text": "Dedicated Hosts, because the job must never be interrupted", "correct": false },
-        { "id": "c", "text": "Three-year Reserved Instances for the batch job only", "correct": false },
-        { "id": "d", "text": "On-Demand Instances, because Spot Instances cannot run batch work", "correct": false }
+        {
+          "id": "a",
+          "text": "Spot Instances, because the job can restart after an interruption",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Dedicated Hosts, because the job must never be interrupted",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Three-year Reserved Instances for the batch job only",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "On-Demand Instances, because Spot Instances cannot run batch work",
+          "correct": false
+        }
       ],
       "explanation": "Spot Instances use spare capacity at a large discount and suit fault-tolerant work that can restart. Dedicated Hosts are not needed for a restartable job, and Spot Instances can run batch work.",
-      "sources": ["https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html"
+      ]
     },
     {
       "id": "ec2-pricing-004",
       "type": "truefalse",
       "difficulty": 2,
-      "tags": ["Spot Instances"],
+      "tags": [
+        "Spot Instances"
+      ],
       "statement": "Spot Instances are a good choice for a critical workload that cannot be interrupted.",
       "answer": false,
       "explanation": "False. Spot Instances can be reclaimed by AWS when the capacity is needed, so they suit fault-tolerant or flexible work rather than critical workloads that cannot be interrupted.",
-      "sources": ["https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html"
+      ]
     },
     {
       "id": "ec2-pricing-005",
       "type": "mcq",
       "difficulty": 2,
-      "tags": ["Dedicated Hosts"],
+      "tags": [
+        "Dedicated Hosts"
+      ],
       "prompt": "A financial company must run workloads on a physical server it controls, including where instances are placed, for compliance reasons. Which option fits best?",
       "options": [
-        { "id": "a", "text": "Spot Instances", "correct": false },
-        { "id": "b", "text": "Dedicated Hosts", "correct": true },
-        { "id": "c", "text": "On-Demand Instances", "correct": false },
-        { "id": "d", "text": "Savings Plans", "correct": false }
+        {
+          "id": "a",
+          "text": "Spot Instances",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Dedicated Hosts",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "On-Demand Instances",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Savings Plans",
+          "correct": false
+        }
       ],
       "explanation": "Dedicated Hosts give exclusive use of a physical server and control over instance placement, which fits compliance needs. Spot, On-Demand and Savings Plans are pricing models on shared infrastructure, not control over the physical server.",
-      "sources": ["https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html"
+      ]
     }
   ]
 }
