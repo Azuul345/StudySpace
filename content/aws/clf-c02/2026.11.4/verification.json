@@ -2,29 +2,354 @@
   "schemaVersion": 1,
   "verifier": "independent verifier agent (separate from the author)",
   "verifiedOn": "2026-11-04",
-  "status": "verified",
-  "summary": {"checked": 21, "passed": 21, "failed": 0, "withCaveats": 7},
+  "status": "failed",
+  "summary": {
+    "checked": 41,
+    "passed": 38,
+    "failed": 3,
+    "withCaveats": 13
+  },
   "items": [
-    {"kind":"question","id":"cloud-concepts-001","result":"pass","reason":"Page defines cloud computing as on-demand IT resources over the internet with pay-as-you-go pricing and contrasts it with owning and maintaining data centers.","urlChecked":"https://aws.amazon.com/what-is-cloud-computing/","carried":false},
-    {"kind":"question","id":"cloud-concepts-002","result":"pass","reason":"Page says you pay only when you consume resources and need not invest heavily before use, so the statement is false as keyed.","urlChecked":"https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html","carried":false},
-    {"kind":"question","id":"cloud-concepts-003","result":"pass","reason":"Stop guessing capacity (scale up and down, no idle resources) is the benefit the page gives for the seasonal spike scenario.","urlChecked":"https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html","carried":false,"caveat":"Physical security of data centers as an AWS responsibility is not on the cited page; it is confirmed on the shared responsibility page."},
-    {"kind":"question","id":"cloud-concepts-004","result":"pass","reason":"Page confirms paying only for resources consumed, with costs tracking usage under variable expense.","urlChecked":"https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html","carried":false},
-    {"kind":"question","id":"cloud-concepts-005","result":"pass","reason":"All four matched pairs (stop guessing capacity, speed and agility, go global in minutes, economies of scale) are described on the page.","urlChecked":"https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html","carried":false},
-    {"kind":"question","id":"cloud-concepts-006","result":"pass","reason":"Pay-as-you-go pricing is named on the page as the model where you pay for what you consume; typed rubric matches.","urlChecked":"https://aws.amazon.com/what-is-cloud-computing/","carried":false},
-    {"kind":"question","id":"global-infrastructure-001","result":"pass","reason":"Page says a Region is a separate geographic area with multiple Availability Zones, and an AZ is one or more discrete data centers with redundant power, networking and connectivity.","urlChecked":"https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html","carried":false},
-    {"kind":"question","id":"global-infrastructure-002","result":"pass","reason":"Page states each Region has at least three Availability Zones.","urlChecked":"https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-availability-zones.html","carried":false},
-    {"kind":"question","id":"global-infrastructure-003","result":"pass","reason":"Page says deploying across multiple AZs keeps the application available if one fails, and a single-zone deployment loses everything with that zone.","urlChecked":"https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html","carried":false,"caveat":"The nightly disk copy and vendor-repair distractor explanations are not on the cited page."},
-    {"kind":"question","id":"global-infrastructure-004","result":"pass","reason":"Page says each Region is designed to be isolated from the other Regions.","urlChecked":"https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html","carried":false},
-    {"kind":"question","id":"global-infrastructure-005","result":"pass","reason":"Page hierarchy is Region containing AZs, and AZ is one or more data centers; correctOrder [1,2,0] gives Region, Availability Zone, Data center.","urlChecked":"https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html","carried":false},
-    {"kind":"question","id":"global-infrastructure-006","result":"pass","reason":"Page says deploying in multiple AZs keeps the application available if one fails and is a best practice; the two keyed options are supported.","urlChecked":"https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html","carried":false,"caveat":"The claim that no design guarantees zero downtime is not stated on the cited page; the page only says failures can occur though rarely."},
-    {"kind":"question","id":"shared-responsibility-001","result":"pass","reason":"AWS owns security of the cloud including data center facilities; guest OS patching and access decisions are customer tasks.","urlChecked":"https://aws.amazon.com/compliance/shared-responsibility-model/","carried":false},
-    {"kind":"question","id":"shared-responsibility-002","result":"pass","reason":"Page says customers manage their data, access permissions (IAM) and encryption options; AWS operates the infrastructure.","urlChecked":"https://aws.amazon.com/compliance/shared-responsibility-model/","carried":false,"caveat":"Client-side encryption before upload is not named on the page; the page only refers to customer encryption options for their data."},
-    {"kind":"question","id":"shared-responsibility-003","result":"pass","reason":"Page says on EC2 the customer patches the guest OS and applications, so the customer is responsible.","urlChecked":"https://aws.amazon.com/compliance/shared-responsibility-model/","carried":false},
-    {"kind":"question","id":"shared-responsibility-004","result":"pass","reason":"Page says on EC2 the customer patches the guest OS and installed applications while AWS patches the underlying infrastructure; the statement is false as keyed.","urlChecked":"https://aws.amazon.com/compliance/shared-responsibility-model/","carried":false},
-    {"kind":"question","id":"shared-responsibility-005","result":"pass","reason":"Each matched pair (facilities and hardware to AWS, guest OS patching and data access to customer) is consistent with the page split.","urlChecked":"https://aws.amazon.com/compliance/shared-responsibility-model/","carried":false},
-    {"kind":"question","id":"shared-responsibility-006","result":"pass","reason":"Page defines the AWS part as security of the infrastructure running its services, which matches the typed phrase security of the cloud.","urlChecked":"https://aws.amazon.com/compliance/shared-responsibility-model/","carried":false},
-    {"kind":"question","id":"cloud-use-case-001","result":"pass","reason":"Page lists eu-west-1 as the Ireland Region with three Availability Zones; deploying in a Region near customers is the first step.","urlChecked":"https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-availability-zones.html","carried":false,"caveat":"The latency benefit of a nearby Region is not stated on the cited AZ page; it appears on the six-advantages whitepaper."},
-    {"kind":"question","id":"cloud-use-case-002","result":"pass","reason":"Page supports multiple AZs for availability and states Regions are isolated and not automatically replicated, consistent with a second Region.","urlChecked":"https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html","carried":false,"caveat":"That a second Region improves availability is inferred from Region isolation rather than stated on the cited page."},
-    {"kind":"question","id":"cloud-use-case-003","result":"pass","reason":"Page says AWS secures the physical facilities and the customer manages its own data, including encryption options.","urlChecked":"https://aws.amazon.com/compliance/shared-responsibility-model/","carried":false,"caveat":"The page refers to customer encryption options rather than stating encryption as a duty in those exact words."}
+    {
+      "kind": "question",
+      "id": "cloud-concepts-001",
+      "result": "pass",
+      "reason": "Page defines cloud computing as on-demand IT resources over the internet with pay-as-you-go pricing and contrasts it with owning and maintaining data centers.",
+      "urlChecked": "https://aws.amazon.com/what-is-cloud-computing/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "cloud-concepts-002",
+      "result": "pass",
+      "reason": "Page says you pay only when you consume resources and need not invest heavily before use, so the statement is false as keyed.",
+      "urlChecked": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "cloud-concepts-003",
+      "result": "pass",
+      "reason": "Stop guessing capacity (scale up and down, no idle resources) is the benefit the page gives for the seasonal spike scenario.",
+      "urlChecked": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html",
+      "carried": false,
+      "caveat": "Physical security of data centers as an AWS responsibility is not on the cited page; it is confirmed on the shared responsibility page."
+    },
+    {
+      "kind": "question",
+      "id": "cloud-concepts-004",
+      "result": "pass",
+      "reason": "Page confirms paying only for resources consumed, with costs tracking usage under variable expense.",
+      "urlChecked": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "cloud-concepts-005",
+      "result": "pass",
+      "reason": "All four matched pairs (stop guessing capacity, speed and agility, go global in minutes, economies of scale) are described on the page.",
+      "urlChecked": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "cloud-concepts-006",
+      "result": "pass",
+      "reason": "Pay-as-you-go pricing is named on the page as the model where you pay for what you consume; typed rubric matches.",
+      "urlChecked": "https://aws.amazon.com/what-is-cloud-computing/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "global-infrastructure-001",
+      "result": "pass",
+      "reason": "Page says a Region is a separate geographic area with multiple Availability Zones, and an AZ is one or more discrete data centers with redundant power, networking and connectivity.",
+      "urlChecked": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "global-infrastructure-002",
+      "result": "pass",
+      "reason": "Page states each Region has at least three Availability Zones.",
+      "urlChecked": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-availability-zones.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "global-infrastructure-003",
+      "result": "pass",
+      "reason": "Page says deploying across multiple AZs keeps the application available if one fails, and a single-zone deployment loses everything with that zone.",
+      "urlChecked": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html",
+      "carried": false,
+      "caveat": "The nightly disk copy and vendor-repair distractor explanations are not on the cited page."
+    },
+    {
+      "kind": "question",
+      "id": "global-infrastructure-004",
+      "result": "pass",
+      "reason": "Page says each Region is designed to be isolated from the other Regions.",
+      "urlChecked": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "global-infrastructure-005",
+      "result": "pass",
+      "reason": "Page hierarchy is Region containing AZs, and AZ is one or more data centers; correctOrder [1,2,0] gives Region, Availability Zone, Data center.",
+      "urlChecked": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "global-infrastructure-006",
+      "result": "pass",
+      "reason": "Page says deploying in multiple AZs keeps the application available if one fails and is a best practice; the two keyed options are supported.",
+      "urlChecked": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html",
+      "carried": false,
+      "caveat": "The claim that no design guarantees zero downtime is not stated on the cited page; the page only says failures can occur though rarely."
+    },
+    {
+      "kind": "question",
+      "id": "shared-responsibility-001",
+      "result": "pass",
+      "reason": "AWS owns security of the cloud including data center facilities; guest OS patching and access decisions are customer tasks.",
+      "urlChecked": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "shared-responsibility-002",
+      "result": "pass",
+      "reason": "Page says customers manage their data, access permissions (IAM) and encryption options; AWS operates the infrastructure.",
+      "urlChecked": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+      "carried": false,
+      "caveat": "Client-side encryption before upload is not named on the page; the page only refers to customer encryption options for their data."
+    },
+    {
+      "kind": "question",
+      "id": "shared-responsibility-003",
+      "result": "pass",
+      "reason": "Page says on EC2 the customer patches the guest OS and applications, so the customer is responsible.",
+      "urlChecked": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "shared-responsibility-004",
+      "result": "pass",
+      "reason": "Page says on EC2 the customer patches the guest OS and installed applications while AWS patches the underlying infrastructure; the statement is false as keyed.",
+      "urlChecked": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "shared-responsibility-005",
+      "result": "pass",
+      "reason": "Each matched pair (facilities and hardware to AWS, guest OS patching and data access to customer) is consistent with the page split.",
+      "urlChecked": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "shared-responsibility-006",
+      "result": "pass",
+      "reason": "Page defines the AWS part as security of the infrastructure running its services, which matches the typed phrase security of the cloud.",
+      "urlChecked": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "cloud-use-case-001",
+      "result": "pass",
+      "reason": "Page lists eu-west-1 as the Ireland Region with three Availability Zones; deploying in a Region near customers is the first step.",
+      "urlChecked": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-availability-zones.html",
+      "carried": false,
+      "caveat": "The latency benefit of a nearby Region is not stated on the cited AZ page; it appears on the six-advantages whitepaper."
+    },
+    {
+      "kind": "question",
+      "id": "cloud-use-case-002",
+      "result": "pass",
+      "reason": "Page supports multiple AZs for availability and states Regions are isolated and not automatically replicated, consistent with a second Region.",
+      "urlChecked": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html",
+      "carried": false,
+      "caveat": "That a second Region improves availability is inferred from Region isolation rather than stated on the cited page."
+    },
+    {
+      "kind": "question",
+      "id": "cloud-use-case-003",
+      "result": "pass",
+      "reason": "Page says AWS secures the physical facilities and the customer manages its own data, including encryption options.",
+      "urlChecked": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+      "carried": false,
+      "caveat": "The page refers to customer encryption options rather than stating encryption as a duty in those exact words."
+    },
+    {
+      "kind": "question",
+      "id": "ec2-basics-001",
+      "result": "pass",
+      "reason": "AMI page says an AMI must be specified at launch; the instance-type choice is covered by the instance types page.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "ec2-basics-002",
+      "result": "pass",
+      "reason": "Family purposes (balanced, HPC/compute-bound, in-memory, graphics/accelerators, high-throughput local storage) match the instance types page.",
+      "urlChecked": "https://aws.amazon.com/ec2/instance-types/",
+      "carried": false,
+      "caveat": "Scientific modeling, machine learning and data warehousing are not named for these families on the cited page; it names HPC and deep learning simulations, and high-throughput databases."
+    },
+    {
+      "kind": "question",
+      "id": "ec2-basics-003",
+      "result": "pass",
+      "reason": "Instance types page describes compute optimized instances for compute-bound applications needing high-performance processors.",
+      "urlChecked": "https://aws.amazon.com/ec2/instance-types/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "ec2-basics-004",
+      "result": "pass",
+      "reason": "AMI page says an AMI provides the software to boot an instance, includes a block device mapping, and multiple instances can be launched from one AMI.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "ec2-basics-005",
+      "result": "fail",
+      "reason": "Keyed answer (AWS SDK for application code) is not supported by the cited shared responsibility page, which does not mention the SDK in its body text.",
+      "urlChecked": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "ec2-basics-006",
+      "result": "pass",
+      "reason": "Shared responsibility page says EC2 customers manage the guest OS including patches, and configure the security group firewall; AWS handles data center physical security.",
+      "urlChecked": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "ec2-basics-007",
+      "result": "fail",
+      "reason": "Keyed definition of multi-tenancy (several customers sharing physical hardware, isolated) does not appear on the cited instance types page, which has no tenancy wording.",
+      "urlChecked": "https://aws.amazon.com/ec2/instance-types/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "ec2-basics-008",
+      "result": "pass",
+      "reason": "Instance types page names the accelerated computing category and says it uses hardware accelerators or co-processors for graphics processing.",
+      "urlChecked": "https://aws.amazon.com/ec2/instance-types/",
+      "carried": false,
+      "caveat": "The cited page does not name GPUs or machine learning for this category; the explanation GPU and machine learning wording is not on it."
+    },
+    {
+      "kind": "question",
+      "id": "ec2-pricing-001",
+      "result": "pass",
+      "reason": "EC2 pricing page says On-Demand requires no upfront payment or long-term commitment and bills by the hour or second.",
+      "urlChecked": "https://aws.amazon.com/ec2/pricing/",
+      "carried": false,
+      "caveat": "The claim that Capacity Reservations give no discount on their own is not on the cited pages; the page only says capacity can be reserved in an Availability Zone."
+    },
+    {
+      "kind": "question",
+      "id": "ec2-pricing-002",
+      "result": "fail",
+      "reason": "Savings Plans one or three year commitment is confirmed, but Reserved Instances one or three year terms are not confirmed on either cited page.",
+      "urlChecked": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "ec2-pricing-003",
+      "result": "pass",
+      "reason": "Spot page says Spot Instances are well suited to batch jobs and background processing, and that applications must tolerate interruption.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "ec2-pricing-004",
+      "result": "pass",
+      "reason": "Spot page says Spot Instances can be interrupted and suit flexible applications, so the statement that they suit critical uninterruptible work is false.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "ec2-pricing-005",
+      "result": "pass",
+      "reason": "Dedicated Hosts page says a Dedicated Host is a physical server fully dedicated to your use, with visibility and control over instance placement.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "scaling-messaging-001",
+      "result": "pass",
+      "reason": "Auto Scaling page says groups add or remove instances as demand on the application increases or decreases.",
+      "urlChecked": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html",
+      "carried": false,
+      "caveat": "The cited page does not define the word elasticity; the explanation definition is not stated there."
+    },
+    {
+      "kind": "question",
+      "id": "scaling-messaging-002",
+      "result": "pass",
+      "reason": "Auto Scaling page says the group never goes below the minimum number of instances.",
+      "urlChecked": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html",
+      "carried": false,
+      "caveat": "The claim that a group works within a single Region is not on the cited page."
+    },
+    {
+      "kind": "question",
+      "id": "scaling-messaging-003",
+      "result": "pass",
+      "reason": "Elastic Load Balancing page says it automatically distributes incoming traffic across multiple targets such as EC2 instances.",
+      "urlChecked": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "scaling-messaging-004",
+      "result": "pass",
+      "reason": "SQS page says messages are held until a consumer processes and deletes them; SNS and EventBridge pages confirm one-to-many publish-subscribe and event routing.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "scaling-messaging-005",
+      "result": "pass",
+      "reason": "SQS page says queues decouple distributed components so each consumer works from its own messages, supporting independent processing of the other steps.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html",
+      "carried": false,
+      "caveat": "The claims that tight coupling spreads failures and that stopping orders or local storage are poor designs are reasoning not stated on the cited pages."
+    },
+    {
+      "kind": "question",
+      "id": "scaling-messaging-006",
+      "result": "pass",
+      "reason": "Auto Scaling page says it adjusts the number of instances with demand, and the ELB page says it distributes traffic across them; the load balancer creating Regions is not supported.",
+      "urlChecked": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "scaling-messaging-007",
+      "result": "pass",
+      "reason": "Auto Scaling page says there are no additional fees and you only pay for the AWS resources you use, so charging for stopped group members is false.",
+      "urlChecked": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html",
+      "carried": false
+    }
   ]
 }
