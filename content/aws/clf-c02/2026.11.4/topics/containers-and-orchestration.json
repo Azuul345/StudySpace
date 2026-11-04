@@ -128,7 +128,7 @@
           "correct": false
         }
       ],
-      "explanation": "Virtual machine images contain their own operating system and are much larger, while containers package only what one application needs. Containers cannot be run on AWS is false: AWS runs containers in several services.",
+      "explanation": "Virtual machine images contain their own operating system and are much larger, while containers package only what one application needs. The page names Amazon ECS as the service that runs Docker containers on AWS.",
       "sources": [
         "https://aws.amazon.com/compare/the-difference-between-containers-and-virtual-machines/"
       ]

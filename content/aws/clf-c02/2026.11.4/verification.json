@@ -7,7 +7,7 @@
     "checked": 88,
     "passed": 88,
     "failed": 0,
-    "withCaveats": 48
+    "withCaveats": 44
   },
   "items": [
     {
@@ -426,10 +426,9 @@
       "kind": "question",
       "id": "containers-and-orchestration-003",
       "result": "pass",
-      "reason": "Page says VM images contain their own operating system and are several GB, while containers virtualize the OS and package only what one application needs; (a) and (c) are supported.",
+      "reason": "Page says VM images contain their own OS and are GB-sized, containers package only what one application needs and are MB-sized, and names Amazon ECS as the service running Docker containers on AWS; keyed A and C supported, B and D false.",
       "urlChecked": "https://aws.amazon.com/compare/the-difference-between-containers-and-virtual-machines/",
-      "carried": false,
-      "caveat": "The page names Amazon ECS for running containers on AWS; the 'several services' wording in the explanation is not stated on it."
+      "carried": false
     },
     {
       "kind": "question",
@@ -469,28 +468,26 @@
       "kind": "question",
       "id": "additional-compute-services-003",
       "result": "pass",
-      "reason": "Lightsail page says it offers a cost-effective monthly price and that you can build a blog or personal website in a few clicks.",
+      "reason": "Page says Lightsail offers a low monthly price, VPS instances and storage, and supports building a blog or personal website; keyed answer supported.",
       "urlChecked": "https://aws.amazon.com/lightsail/",
       "carried": false,
-      "caveat": "The cited Lightsail page says cost-effective, not predictable, monthly price; the word predictable is on the EC2 concepts page instead."
+      "caveat": "Networking as a standalone Lightsail offering and Fargate as serverless compute for containers are not on the cited Lightsail page."
     },
     {
       "kind": "question",
       "id": "additional-compute-services-004",
       "result": "pass",
-      "reason": "Outposts page says it extends AWS infrastructure to customer premises for lower latency and local data processing.",
+      "reason": "Outposts page says it extends AWS infrastructure and services to customer premises for lower latency and local data processing needs; keyed answer supported.",
       "urlChecked": "https://docs.aws.amazon.com/outposts/latest/userguide/what-is-outposts.html",
-      "carried": false,
-      "caveat": "The cited page does not mention data residency; that need is an inference from on-premises placement."
+      "carried": false
     },
     {
       "kind": "question",
       "id": "additional-compute-services-005",
       "result": "pass",
-      "reason": "Each pair is supported: Elastic Beanstalk page for deployment and scaling, Batch page for scheduling, Lightsail page for simple sites, Outposts page for on-premises AWS.",
+      "reason": "All four pairs are supported: Elastic Beanstalk deploys and scales applications, Batch schedules and scales batch jobs, Lightsail is a low-cost monthly simple server, Outposts is AWS infrastructure on premises.",
       "urlChecked": "https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html",
-      "carried": false,
-      "caveat": "The predictable monthly price wording for Lightsail is not on the cited Lightsail page (see additional-compute-services-003)."
+      "carried": false
     },
     {
       "kind": "question",
@@ -713,10 +710,9 @@
       "kind": "question",
       "id": "network-security-005",
       "result": "pass",
-      "reason": "Page says customers configure the security group firewall on EC2 instances and manage their network and data protection within the cloud; the security group part is supported.",
+      "reason": "Page says AWS protects the infrastructure running its services, and customers configure the security group firewall on their EC2 instances, so customer network traffic protection holds.",
       "urlChecked": "https://aws.amazon.com/compliance/shared-responsibility-model/",
-      "carried": false,
-      "caveat": "The cited page does not mention network ACLs, so the network ACL part of the statement is not supported by it."
+      "carried": false
     },
     {
       "kind": "question",

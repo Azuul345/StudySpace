@@ -4,12 +4,12 @@
   "domainId": "technology",
   "name": "Additional AWS compute services",
   "lesson": {
-    "summary": "AWS offers purpose-built compute services for specific needs. AWS Elastic Beanstalk deploys and scales web applications while AWS handles the provisioning, load balancing and health monitoring. AWS Batch runs large sets of batch jobs and scales resources to match. Amazon Lightsail gives simple virtual servers at a predictable monthly price. AWS Outposts runs AWS infrastructure and services inside your own data center for hybrid setups.",
+    "summary": "AWS offers purpose-built compute services for specific needs. AWS Elastic Beanstalk deploys and scales web applications while AWS handles the provisioning, load balancing and health monitoring. AWS Batch runs large sets of batch jobs and scales resources to match. Amazon Lightsail gives simple virtual servers at a cost-effective monthly price. AWS Outposts runs AWS infrastructure and services inside your own data center for hybrid setups.",
     "keyPoints": [
       "AWS Elastic Beanstalk is a managed service: you upload your code and it handles provisioning, scaling, load balancing and health monitoring",
       "AWS Batch schedules and scales compute resources for batch jobs, which suits large parallel workloads such as simulations or media transcoding",
-      "Amazon Lightsail provides virtual private servers, storage, databases and networking at a predictable monthly price for simple workloads",
-      "AWS Outposts extends AWS infrastructure and services to your on-premises data center for low-latency or data residency needs",
+      "Amazon Lightsail provides virtual private servers, storage, databases and networking at a cost-effective monthly price for simple workloads",
+      "AWS Outposts extends AWS infrastructure and services to your on-premises data center for low-latency or local data processing needs",
       "Choose the service that matches the workload: web application, batch processing, simple website or on-premises hybrid"
     ],
     "docLinks": [
@@ -30,77 +30,176 @@
       "id": "additional-compute-services-001",
       "type": "scenario",
       "difficulty": 2,
-      "tags": ["AWS Batch"],
+      "tags": [
+        "AWS Batch"
+      ],
       "scenarioId": "additional-compute-sc-1",
       "prompt": "Which AWS service best fits this workload?",
       "options": [
-        { "id": "a", "text": "AWS Batch", "correct": true },
-        { "id": "b", "text": "Amazon Lightsail", "correct": false },
-        { "id": "c", "text": "AWS Elastic Beanstalk", "correct": false },
-        { "id": "d", "text": "AWS Outposts", "correct": false }
+        {
+          "id": "a",
+          "text": "AWS Batch",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Amazon Lightsail",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "AWS Elastic Beanstalk",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "AWS Outposts",
+          "correct": false
+        }
       ],
       "explanation": "AWS Batch schedules and scales compute for batch jobs that run in parallel. Lightsail suits simple websites, Elastic Beanstalk deploys web applications, and Outposts runs AWS in your own data center.",
-      "sources": ["https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html"
+      ]
     },
     {
       "id": "additional-compute-services-002",
       "type": "mcq",
       "difficulty": 1,
-      "tags": ["Elastic Beanstalk"],
+      "tags": [
+        "Elastic Beanstalk"
+      ],
       "prompt": "A developer wants to deploy a web application without managing the provisioning, load balancing and health monitoring. Which service fits best?",
       "options": [
-        { "id": "a", "text": "AWS Elastic Beanstalk", "correct": true },
-        { "id": "b", "text": "AWS Batch", "correct": false },
-        { "id": "c", "text": "AWS Outposts", "correct": false },
-        { "id": "d", "text": "Amazon Lightsail", "correct": false }
+        {
+          "id": "a",
+          "text": "AWS Elastic Beanstalk",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "AWS Batch",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "AWS Outposts",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Amazon Lightsail",
+          "correct": false
+        }
       ],
       "explanation": "Elastic Beanstalk takes your code and handles provisioning, scaling, load balancing and health monitoring. Batch is for batch jobs, Outposts is hybrid infrastructure, and Lightsail is for simple servers.",
-      "sources": ["https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html"
+      ]
     },
     {
       "id": "additional-compute-services-003",
       "type": "mcq",
       "difficulty": 2,
-      "tags": ["Lightsail"],
-      "prompt": "A freelancer wants a simple blog with storage and compute in one package at a predictable monthly price. Which service fits best?",
-      "options": [
-        { "id": "a", "text": "Amazon Lightsail", "correct": true },
-        { "id": "b", "text": "AWS Outposts", "correct": false },
-        { "id": "c", "text": "AWS Batch", "correct": false },
-        { "id": "d", "text": "AWS Fargate", "correct": false }
+      "tags": [
+        "Lightsail"
       ],
-      "explanation": "Lightsail provides virtual private servers, storage and networking at a predictable monthly price, which suits simple sites. Outposts is for hybrid data centers, Batch is for batch jobs, and Fargate is serverless compute for containers.",
-      "sources": ["https://aws.amazon.com/lightsail/"]
+      "prompt": "A freelancer wants a simple blog with storage and compute in one package at a cost-effective monthly price. Which service fits best?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Amazon Lightsail",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "AWS Outposts",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "AWS Batch",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "AWS Fargate",
+          "correct": false
+        }
+      ],
+      "explanation": "Lightsail provides virtual private servers, storage and networking at a cost-effective monthly price, which suits simple sites. Outposts is for hybrid data centers, Batch is for batch jobs, and Fargate is serverless compute for containers.",
+      "sources": [
+        "https://aws.amazon.com/lightsail/"
+      ]
     },
     {
       "id": "additional-compute-services-004",
       "type": "mcq",
       "difficulty": 2,
-      "tags": ["Outposts"],
-      "prompt": "A company needs AWS services running in its own data center because of low latency and data residency rules. Which service fits best?",
-      "options": [
-        { "id": "a", "text": "AWS Outposts", "correct": true },
-        { "id": "b", "text": "AWS Batch", "correct": false },
-        { "id": "c", "text": "Amazon Lightsail", "correct": false },
-        { "id": "d", "text": "AWS Elastic Beanstalk", "correct": false }
+      "tags": [
+        "Outposts"
       ],
-      "explanation": "Outposts extends AWS infrastructure and services into your on-premises data center, which suits low-latency and data residency needs.",
-      "sources": ["https://docs.aws.amazon.com/outposts/latest/userguide/what-is-outposts.html"]
+      "prompt": "A company needs AWS services running in its own data center because of low latency and local data processing rules. Which service fits best?",
+      "options": [
+        {
+          "id": "a",
+          "text": "AWS Outposts",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "AWS Batch",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Amazon Lightsail",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "AWS Elastic Beanstalk",
+          "correct": false
+        }
+      ],
+      "explanation": "Outposts extends AWS infrastructure and services into your on-premises data center, which suits low-latency and local data processing needs.",
+      "sources": [
+        "https://docs.aws.amazon.com/outposts/latest/userguide/what-is-outposts.html"
+      ]
     },
     {
       "id": "additional-compute-services-005",
       "type": "matching",
       "difficulty": 2,
-      "tags": ["compute services"],
+      "tags": [
+        "compute services"
+      ],
       "prompt": "Match each service with its main purpose.",
       "pairs": [
-        { "left": "AWS Elastic Beanstalk", "right": "Deploys and scales web applications from uploaded code" },
-        { "left": "AWS Batch", "right": "Schedules and scales large batch jobs" },
-        { "left": "Amazon Lightsail", "right": "Simple virtual servers at a predictable monthly price" },
-        { "left": "AWS Outposts", "right": "AWS infrastructure inside your on-premises data center" }
+        {
+          "left": "AWS Elastic Beanstalk",
+          "right": "Deploys and scales web applications from uploaded code"
+        },
+        {
+          "left": "AWS Batch",
+          "right": "Schedules and scales large batch jobs"
+        },
+        {
+          "left": "Amazon Lightsail",
+          "right": "Simple virtual servers at a cost-effective monthly price"
+        },
+        {
+          "left": "AWS Outposts",
+          "right": "AWS infrastructure inside your on-premises data center"
+        }
       ],
-      "explanation": "Each service targets a different need: web application deployment, batch processing, simple predictable hosting, and hybrid on-premises infrastructure.",
-      "sources": ["https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html", "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html", "https://aws.amazon.com/lightsail/", "https://docs.aws.amazon.com/outposts/latest/userguide/what-is-outposts.html"]
+      "explanation": "Each service targets a different need: web application deployment, batch processing, simple cost-effective hosting, and hybrid on-premises infrastructure.",
+      "sources": [
+        "https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html",
+        "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html",
+        "https://aws.amazon.com/lightsail/",
+        "https://docs.aws.amazon.com/outposts/latest/userguide/what-is-outposts.html"
+      ]
     }
   ]
 }
