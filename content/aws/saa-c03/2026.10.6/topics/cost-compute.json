@@ -1,0 +1,631 @@
+{
+  "schemaVersion": 1,
+  "topicId": "cost-compute",
+  "domainId": "cost",
+  "name": "Design cost-optimized compute solutions",
+  "lesson": {
+    "summary": "Compute cost falls when you match the purchasing option to the workload, size resources to real utilization, and scale with demand. Use commitments for steady baseline, Spot for interruptible work, and serverless or autoscaling for variable load.",
+    "keyPoints": [
+      "On-Demand has no commitment; Savings Plans and Reserved Instances trade a 1 or 3 year commitment for a lower rate",
+      "Compute Savings Plans apply across EC2 instance families, Regions, Fargate and Lambda; EC2 Instance Savings Plans give a deeper discount for one family in one Region",
+      "Spot Instances use spare capacity at a large discount but can be reclaimed with a two-minute warning, so use them for fault-tolerant, flexible work",
+      "AWS Compute Optimizer recommends right-sized instance types, Auto Scaling group settings and Lambda memory based on utilization metrics",
+      "EC2 Auto Scaling adds and removes instances with demand so you do not pay for idle capacity",
+      "Lambda and Fargate charge for what you use, which suits spiky or infrequent workloads; Graviton processors lower price per unit of work"
+    ],
+    "diagrams": [
+      "ec2-purchase-options"
+    ],
+    "docLinks": [
+      "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html",
+      "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html",
+      "https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is-compute-optimizer.html",
+      "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "cost-compute-sc-1",
+      "text": "A company runs a web application on 10 EC2 instances that must run 24 hours a day for at least the next three years. Traffic spikes during campaigns, when the Auto Scaling group adds up to 20 more instances for a few hours. The company also runs a nightly video transcoding job that reads from and writes to S3, can be split into small independent tasks, and can safely retry a task that fails. The engineering team expects to move some of the web tier to different instance families and possibly to AWS Fargate during the next year."
+    },
+    {
+      "id": "cost-compute-sc-2",
+      "text": "A photo-sharing company runs four always-on EC2 instances that resize each uploaded image after the file lands in an S3 bucket. Each resize takes about 300 milliseconds and finishes well under a minute. Uploads arrive in unpredictable bursts during the day and almost stop overnight. The company wants to lower cost and stop managing servers."
+    }
+  ],
+  "questions": [
+    {
+      "id": "cost-compute-001",
+      "type": "mcq",
+      "difficulty": 1,
+      "tags": [
+        "EC2",
+        "Spot Instances"
+      ],
+      "prompt": "A research team runs thousands of short, independent simulation tasks that can be restarted from scratch if interrupted. Which EC2 purchasing option gives the lowest cost?",
+      "options": [
+        {
+          "id": "a",
+          "text": "On-Demand Instances",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Spot Instances",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Three-year Standard Reserved Instances",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Dedicated Hosts",
+          "correct": false
+        }
+      ],
+      "explanation": "Spot Instances use spare capacity at a steep discount and fit work that tolerates interruption, which these restartable tasks do. On-Demand costs more and gives no benefit when the work is interruptible. Reserved Instances require a long commitment and make sense for steady usage, not bursty batch jobs. Dedicated Hosts are the most expensive option and exist for licensing or compliance needs.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html"
+      ]
+    },
+    {
+      "id": "cost-compute-002",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": [
+        "EC2",
+        "Compute Optimizer",
+        "Auto Scaling"
+      ],
+      "prompt": "A company finds that many EC2 instances average under 10 percent CPU utilization. Which TWO actions reduce cost while keeping the workload running? (Choose two.)",
+      "options": [
+        {
+          "id": "a",
+          "text": "Move every instance to a larger instance type for more headroom",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Use AWS Compute Optimizer recommendations to move to smaller or better-matched instance types",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Place the instances in an Auto Scaling group with a target tracking policy so capacity follows demand",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Disable CloudWatch metrics so that monitoring charges stop",
+          "correct": false
+        },
+        {
+          "id": "e",
+          "text": "Buy a three-year Reserved Instance for the current oversized fleet before changing anything",
+          "correct": false
+        }
+      ],
+      "explanation": "Compute Optimizer analyzes utilization metrics and recommends right-sized instance types, and an Auto Scaling group removes idle capacity when demand falls. A larger instance type raises cost without need. Disabling metrics removes the data needed to right-size and saves little. Committing to a three-year Reserved Instance for an oversized fleet locks in the waste, so right-size first and commit second.",
+      "sources": [
+        "https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is-compute-optimizer.html",
+        "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html"
+      ]
+    },
+    {
+      "id": "cost-compute-003",
+      "type": "scenario",
+      "scenarioId": "cost-compute-sc-1",
+      "difficulty": 3,
+      "tags": [
+        "EC2",
+        "Savings Plans",
+        "Fargate"
+      ],
+      "prompt": "Which purchasing approach for the always-on web tier gives the lowest cost while keeping the flexibility the team expects to need?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Buy a three-year Compute Savings Plan sized to the 10 baseline instances and let the extra instances run On-Demand",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Buy three-year Standard Reserved Instances for the 10 baseline instances in their current instance family",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Run all 10 baseline instances as Spot Instances",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Run all instances On-Demand so that nothing is committed",
+          "correct": false
+        }
+      ],
+      "explanation": "A Compute Savings Plan discounts the steady baseline and automatically applies if the team changes instance family, Region or moves work to Fargate, while burst capacity stays On-Demand. Standard Reserved Instances are tied to an instance family and would stop matching after a change. Spot Instances can be reclaimed, which is risky for a baseline that must run continuously. Running everything On-Demand pays full price for capacity that is certain to be used for three years.",
+      "sources": [
+        "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html"
+      ]
+    },
+    {
+      "id": "cost-compute-004",
+      "type": "scenario",
+      "scenarioId": "cost-compute-sc-1",
+      "difficulty": 2,
+      "tags": [
+        "Spot Instances",
+        "AWS Batch",
+        "S3"
+      ],
+      "prompt": "Which design runs the nightly transcoding job at the lowest cost?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Run the tasks on a fixed fleet of On-Demand instances that stays up all day",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Run the tasks on a fixed fleet of three-year Reserved Instances that are idle most of the day",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Run the tasks on Spot Instances launched only for the nightly run, with failed tasks retried",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Run the tasks on a Dedicated Host to avoid interruptions",
+          "correct": false
+        }
+      ],
+      "explanation": "The job is split into independent, retryable tasks and runs only at night, so short-lived Spot capacity gives the largest discount and no idle spend. An always-on On-Demand fleet pays for idle hours and a higher rate. Reserved Instances commit to 24 hours a day capacity that the job uses only a few hours. A Dedicated Host is costlier still and interruption is not a concern for retryable tasks.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html"
+      ]
+    },
+    {
+      "id": "cost-compute-005",
+      "type": "truefalse",
+      "difficulty": 1,
+      "tags": [
+        "Lambda"
+      ],
+      "statement": "For a function that runs only a few times per hour, AWS Lambda usually costs less than keeping an EC2 instance running all day to host the same code.",
+      "answer": true,
+      "explanation": "Lambda bills for requests and for execution duration, so you pay nothing while the function is idle. An EC2 instance bills for every running hour whether or not it serves requests.",
+      "sources": [
+        "https://aws.amazon.com/lambda/pricing/"
+      ]
+    },
+    {
+      "id": "cost-compute-006",
+      "type": "typed",
+      "difficulty": 2,
+      "tags": [
+        "Compute Optimizer"
+      ],
+      "prompt": "Name the AWS service that analyzes historical utilization metrics and recommends optimal EC2 instance types, Auto Scaling group configurations and Lambda memory sizes.",
+      "rubric": [
+        {
+          "any": [
+            "compute optimizer",
+            "aws compute optimizer"
+          ]
+        }
+      ],
+      "explanation": "AWS Compute Optimizer uses machine learning on CloudWatch utilization metrics to recommend right-sized resources including EC2 instances, Auto Scaling groups, EBS volumes and Lambda functions.",
+      "sources": [
+        "https://docs.aws.amazon.com/compute-optimizer/latest/ug/what-is-compute-optimizer.html"
+      ]
+    },
+    {
+      "id": "cost-compute-007",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "EC2",
+        "Graviton"
+      ],
+      "prompt": "A team runs a stateless Linux web service written in a language with full Arm support. They want better price performance on EC2 without changing the architecture. What should they do?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Move to larger x86 instances so fewer instances are needed",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Buy an On-Demand Capacity Reservation for the current x86 fleet",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Rebuild and test the service for Arm and run it on Graviton-based instances",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Switch the instances to a dedicated host tenancy",
+          "correct": false
+        }
+      ],
+      "explanation": "Graviton-based instances typically cost less per unit of work than comparable x86 instances, so moving a compatible Linux workload to them lowers cost. Larger x86 instances do not improve price per unit of work. A Capacity Reservation guarantees capacity at the On-Demand rate and gives no discount. Dedicated hosts add cost and are meant for licensing or compliance needs.",
+      "sources": [
+        "https://aws.amazon.com/ec2/graviton/"
+      ]
+    },
+    {
+      "id": "cost-compute-008",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "EC2 Auto Scaling",
+        "Spot"
+      ],
+      "prompt": "A stateless web tier must always keep a small number of instances running, but traffic above that baseline can be served by any instance that is available. The company wants the lowest cost and good resilience to Spot capacity changes. Which Auto Scaling group configuration fits?",
+      "options": [
+        {
+          "id": "a",
+          "text": "A single instance type on Spot only, with a high maximum size",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "A single instance type On-Demand only, sized for peak",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "A launch template with Reserved Instances for every instance in the group",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "A mixed instances policy with an On-Demand base capacity, Spot for capacity above it, and several instance types",
+          "correct": true
+        }
+      ],
+      "explanation": "A mixed instances policy keeps a guaranteed On-Demand base and fills extra capacity with Spot across multiple instance types, which lowers cost and reduces the chance that one Spot pool runs dry. Spot only with one type risks losing the whole group, since the baseline must always run. On-Demand sized for peak pays for idle capacity. Reserved Instances are a billing discount that does not scale down with the group and would overcommit for the variable part.",
+      "sources": [
+        "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-mixed-instances-groups.html"
+      ]
+    },
+    {
+      "id": "cost-compute-009",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "EC2"
+      ],
+      "prompt": "An in-memory analytics application uses about 2 vCPUs but needs 60 GiB of memory. It currently runs on a large general purpose instance chosen only to get enough memory. Which change most directly lowers cost?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Move to a memory optimized instance family sized to the memory requirement",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Add a second general purpose instance and split the data",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Keep the instance and add a Compute Savings Plan on top of unused CPU",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Move to a compute optimized instance family",
+          "correct": false
+        }
+      ],
+      "explanation": "Memory optimized instances offer a higher memory-to-vCPU ratio, so you stop paying for vCPUs you do not use. Adding another general purpose instance still pays for unused CPU and complicates the app. A Savings Plan lowers the rate but not the wasted capacity. Compute optimized instances have less memory per vCPU and would not fit the workload.",
+      "sources": [
+        "https://aws.amazon.com/ec2/instance-types/"
+      ]
+    },
+    {
+      "id": "cost-compute-010",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "ECS",
+        "Fargate"
+      ],
+      "prompt": "A company runs containerized batch tasks on Amazon ECS. The tasks are stateless, can be retried, and the team does not want to manage EC2 instances. Which choice gives the lowest cost?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Fargate On-Demand tasks with a Compute Savings Plan only for the idle hours",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Fargate Spot capacity for the interruptible tasks",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "An always-on EC2 cluster sized for the largest batch",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Fargate tasks left running between batches so they start faster",
+          "correct": false
+        }
+      ],
+      "explanation": "Fargate Spot runs interruptible ECS tasks on spare capacity at a discount and needs no instance management, which suits retryable batch work. On-Demand Fargate costs more and a Savings Plan does not apply only to idle hours. An always-on EC2 cluster pays for idle time and adds management. Leaving tasks running between batches bills for idle compute.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-capacity-providers.html"
+      ]
+    },
+    {
+      "id": "cost-compute-011",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "EC2",
+        "Savings Plans"
+      ],
+      "prompt": "A company will run a fixed fleet of m6i instances in one Region for the next three years and will not change the instance family or Region. They want the largest discount with a commitment. Which option fits?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Compute Savings Plan",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "On-Demand Capacity Reservation",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Spot Instances",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "EC2 Instance Savings Plan",
+          "correct": true
+        }
+      ],
+      "explanation": "An EC2 Instance Savings Plan commits to one instance family in one Region and gives a deeper discount than a Compute Savings Plan, which fits a fleet that will not change. A Compute Savings Plan is more flexible but has a lower discount. A Capacity Reservation reserves capacity and gives no price discount by itself. Spot can be interrupted and is not suitable for an always-on fleet.",
+      "sources": [
+        "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html"
+      ]
+    },
+    {
+      "id": "cost-compute-012",
+      "type": "mcq",
+      "difficulty": 3,
+      "tags": [
+        "SQS",
+        "Spot"
+      ],
+      "prompt": "Workers on Spot Instances pull image jobs from a queue. The company wants no job to be lost when a Spot Instance is reclaimed mid-job, without building custom tracking. Which design achieves this?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Use an Amazon SQS queue and delete each message only after the worker finishes the job",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Use an in-memory queue on each worker and replicate it to a peer",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Increase the Spot maximum price so instances are never reclaimed",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Run the workers on a single On-Demand instance with a larger size",
+          "correct": false
+        }
+      ],
+      "explanation": "With SQS, a received message stays in the queue and becomes visible again after the visibility timeout if the worker never deletes it, so another worker retries the job after an interruption. In-memory queues are lost with the instance. Raising the maximum price does not prevent capacity-based reclaims. A single larger On-Demand instance gives up the Spot savings and is a single point of failure.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html"
+      ]
+    },
+    {
+      "id": "cost-compute-013",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "AWS Batch",
+        "Spot"
+      ],
+      "prompt": "A company runs thousands of containerized batch jobs with queues and dependencies. It wants a managed scheduler and the lowest compute cost, and can tolerate retries. Which solution fits?",
+      "options": [
+        {
+          "id": "a",
+          "text": "AWS Batch on On-Demand compute with large instances",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "A cron job on a single large EC2 instance",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "AWS Batch with a managed compute environment that uses Spot Instances",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Lambda functions invoked in a chain for every job",
+          "correct": false
+        }
+      ],
+      "explanation": "AWS Batch provides the job queues, dependencies and scheduling, and a Spot compute environment cuts compute cost for jobs that can retry. On-Demand compute works but costs more. A cron job on one instance gives no scheduling features and a single point of failure. Chained Lambda functions are limited by the 15-minute timeout and do not suit long containerized jobs.",
+      "sources": [
+        "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html"
+      ]
+    },
+    {
+      "id": "cost-compute-014",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": [
+        "EC2 Auto Scaling"
+      ],
+      "prompt": "A web application has steady daytime traffic that ramps up every weekday at 8:00 and unpredictable bursts on top of it. Which TWO Auto Scaling features together reduce cost while keeping performance? (Choose two.)",
+      "options": [
+        {
+          "id": "a",
+          "text": "Scheduled scaling to raise capacity before the known 8:00 ramp",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Fixing the group at its maximum size at all times",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "A target tracking scaling policy on average CPU utilization",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Disabling scale-in so instances are never terminated",
+          "correct": false
+        },
+        {
+          "id": "e",
+          "text": "Replacing the group with one very large instance",
+          "correct": false
+        }
+      ],
+      "explanation": "Scheduled scaling prepares capacity for the predictable ramp and target tracking adjusts for unpredictable bursts, so capacity follows demand. A fixed maximum size and disabled scale-in keep paying for idle instances. One very large instance cannot scale with demand and is a single point of failure.",
+      "sources": [
+        "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-scheduled-scaling.html",
+        "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html"
+      ]
+    },
+    {
+      "id": "cost-compute-015",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": [
+        "Spot"
+      ],
+      "prompt": "Which TWO workloads are the best fit for EC2 Spot Instances? (Choose two.)",
+      "options": [
+        {
+          "id": "a",
+          "text": "A single primary database serving production traffic with no replica",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Stateless CI build workers that pick up jobs from a queue",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "A big data processing job that checkpoints progress to S3",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "A license-bound application that must keep one fixed server for months",
+          "correct": false
+        },
+        {
+          "id": "e",
+          "text": "A customer-facing payment API with no redundancy",
+          "correct": false
+        }
+      ],
+      "explanation": "Stateless queue-driven workers and checkpointing data jobs tolerate an interruption because work can resume or retry elsewhere. A single production database, a fixed license-bound server and a non-redundant payment API cannot tolerate losing the instance on short notice.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html"
+      ]
+    },
+    {
+      "id": "cost-compute-016",
+      "type": "scenario",
+      "difficulty": 2,
+      "tags": [
+        "Lambda",
+        "S3"
+      ],
+      "scenarioId": "cost-compute-sc-2",
+      "prompt": "Which solution meets the requirement at the lowest cost with the least operational overhead?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Configure S3 event notifications to invoke an AWS Lambda function that resizes each image.",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Keep the four EC2 instances and buy a Compute Savings Plan for them.",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Run the instances in an Auto Scaling group on Spot that polls the bucket every minute.",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Run two always-on Fargate tasks that poll the bucket for new images.",
+          "correct": false
+        }
+      ],
+      "explanation": "Lambda runs only when an upload happens and bills for the short execution time, so cost falls close to zero overnight and there are no servers to manage. A Savings Plan lowers the rate but still pays for idle instances and leaves patching and scaling to the team. A Spot Auto Scaling group still pays for polling instances and adds management and interruption handling. Always-on Fargate tasks avoid instance management but bill continuously while idle.",
+      "sources": [
+        "https://docs.aws.amazon.com/lambda/latest/dg/with-s3.html"
+      ]
+    },
+    {
+      "id": "cost-compute-017",
+      "type": "matching",
+      "difficulty": 2,
+      "tags": [
+        "EC2",
+        "Spot",
+        "Savings Plans"
+      ],
+      "prompt": "Match each workload to the most cost-effective purchasing approach.",
+      "pairs": [
+        {
+          "left": "Always-on production fleet that may move between instance families and to Fargate",
+          "right": "Compute Savings Plan"
+        },
+        {
+          "left": "Fault-tolerant, restartable rendering tasks",
+          "right": "Spot Instances"
+        },
+        {
+          "left": "Short-lived test environment used for a few days with no commitment",
+          "right": "On-Demand Instances"
+        },
+        {
+          "left": "Event-driven code that runs a few times an hour",
+          "right": "AWS Lambda"
+        }
+      ],
+      "explanation": "A Compute Savings Plan keeps the discount when usage shifts across families, Regions, Fargate or Lambda. Spot suits work that can be interrupted and restarted. On-Demand suits short or unpredictable use with no commitment. Lambda bills only for execution, which beats idle servers for infrequent code.",
+      "sources": [
+        "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html",
+        "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-purchasing-options.html"
+      ]
+    }
+  ]
+}

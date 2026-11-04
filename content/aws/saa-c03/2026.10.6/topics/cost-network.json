@@ -1,0 +1,639 @@
+{
+  "schemaVersion": 1,
+  "topicId": "cost-network",
+  "domainId": "cost",
+  "name": "Design cost-optimized network architectures",
+  "lesson": {
+    "summary": "Network cost comes mostly from data transfer and from managed network components that bill per hour and per GB. Keep traffic inside AWS and inside one AZ where you can, use VPC endpoints instead of NAT gateways for AWS services, and cache content at the edge.",
+    "keyPoints": [
+      "Data transfer into AWS is free; data transfer out to the internet and between Regions is charged, and traffic between AZs is charged",
+      "NAT gateways bill for each hour they are available and each GB they process; gateway VPC endpoints for S3 and DynamoDB have no hourly or data processing charge",
+      "Interface VPC endpoints bill per hour and per GB but can still be cheaper than NAT for heavy AWS service traffic",
+      "CloudFront caches content close to users, cutting origin load, and data transfer from AWS origins to CloudFront is free",
+      "Direct Connect is billed as port-hour charges plus per-GB data transfer out at a published rate (for example 0.02 USD per GB from a US Region to a US Direct Connect location), with no charge for data transfer in",
+      "Transit Gateway and a shared load balancer with path or host rules can replace many peering links and many load balancers"
+    ],
+    "diagrams": [
+      "gateway-endpoint-vs-nat"
+    ],
+    "docLinks": [
+      "https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html",
+      "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-pricing.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html",
+      "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html",
+      "https://aws.amazon.com/directconnect/pricing/"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "cost-network-sc-1",
+      "text": "A company runs batch workers in private subnets of three VPCs in one Region. The workers read and write hundreds of gigabytes per day to Amazon S3 and Amazon DynamoDB in the same Region. All outbound traffic currently goes through one NAT gateway per VPC, and the NAT data processing charge is the largest line on the network bill. The workers do not need any other internet access for these tasks."
+    }
+  ],
+  "questions": [
+    {
+      "id": "cost-network-001",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "VPC",
+        "S3",
+        "NAT Gateway"
+      ],
+      "prompt": "Instances in private subnets upload several terabytes per month to Amazon S3 in the same Region through a NAT gateway. Which change reduces the data processing cost the most?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Add a second NAT gateway in another Availability Zone",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Replace the NAT gateway with a larger EC2 NAT instance",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Move the instances to public subnets with Elastic IP addresses",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Create a gateway VPC endpoint for S3 and route S3 traffic through it",
+          "correct": true
+        }
+      ],
+      "explanation": "A gateway VPC endpoint for S3 keeps the traffic on the AWS network and has no hourly or per-GB charge, so the NAT data processing fee for S3 traffic disappears. A second NAT gateway adds an hourly charge and does not remove the per-GB processing. A larger NAT instance still moves the traffic over the internet path and adds management work. Public subnets with Elastic IPs expose the instances and still charge for public IPv4 addresses.",
+      "sources": [
+        "https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html",
+        "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html"
+      ]
+    },
+    {
+      "id": "cost-network-002",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "CloudFront",
+        "S3"
+      ],
+      "prompt": "A website serves large static images from an S3 bucket to users worldwide, and data transfer out of S3 is a large part of the bill. Which solution lowers cost and improves latency?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Put an Amazon CloudFront distribution in front of the bucket",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Enable S3 Transfer Acceleration for all downloads",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Replicate the bucket to every Region with cross-Region replication",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Move the images to S3 Glacier Instant Retrieval",
+          "correct": false
+        }
+      ],
+      "explanation": "CloudFront caches objects at edge locations, serves repeat requests from cache, and data transfer from S3 to CloudFront is free, so fewer bytes leave S3 at the higher rate. Transfer Acceleration adds a per-GB fee and targets uploads over long distances. Replicating to every Region multiplies storage and transfer cost. Glacier Instant Retrieval has higher retrieval charges and suits rarely read data, not frequently served images.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html"
+      ]
+    },
+    {
+      "id": "cost-network-003",
+      "type": "multi",
+      "difficulty": 3,
+      "tags": [
+        "VPC",
+        "EC2",
+        "ELB"
+      ],
+      "prompt": "A team wants to reduce data transfer cost for a chatty application where web instances in one AZ call database and cache nodes in other AZs. Which TWO actions reduce cost? (Choose two.)",
+      "options": [
+        {
+          "id": "a",
+          "text": "Place cache nodes or read replicas in the same AZ as the instances that read from them",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Route all internal traffic out through the internet gateway using public IP addresses",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Use private IP addresses for communication inside the VPC",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Move each tier into a different AWS Region for isolation",
+          "correct": false
+        },
+        {
+          "id": "e",
+          "text": "Add a NAT gateway so internal calls are translated before leaving the VPC",
+          "correct": false
+        }
+      ],
+      "explanation": "Keeping chatty traffic within one AZ avoids cross-AZ data transfer charges, and traffic over private IPs inside the VPC avoids the higher cost of public-address traffic. Sending internal traffic through the internet gateway on public IPs is charged and is less secure. Putting tiers in different Regions adds inter-Region transfer charges. A NAT gateway adds hourly and per-GB charges to traffic that never needed to leave the VPC.",
+      "sources": [
+        "https://aws.amazon.com/ec2/pricing/on-demand/"
+      ]
+    },
+    {
+      "id": "cost-network-004",
+      "type": "truefalse",
+      "difficulty": 1,
+      "tags": [
+        "VPC",
+        "S3",
+        "DynamoDB"
+      ],
+      "statement": "Gateway VPC endpoints are available for Amazon S3 and Amazon DynamoDB and have no additional charge.",
+      "answer": true,
+      "explanation": "Gateway endpoints are the only endpoint type for S3 and DynamoDB that is free of hourly and data processing charges. Interface endpoints, which use AWS PrivateLink, do incur hourly and per-GB charges.",
+      "sources": [
+        "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html"
+      ]
+    },
+    {
+      "id": "cost-network-005",
+      "type": "typed",
+      "difficulty": 2,
+      "tags": [
+        "VPC",
+        "S3"
+      ],
+      "prompt": "Which type of VPC endpoint lets private subnets reach Amazon S3 without a NAT gateway and without hourly or per-GB endpoint charges? Answer with the endpoint type.",
+      "rubric": [
+        {
+          "any": [
+            "gateway"
+          ]
+        }
+      ],
+      "explanation": "A gateway VPC endpoint is a route table target for S3 and DynamoDB and carries no charge, unlike interface endpoints and NAT gateways.",
+      "sources": [
+        "https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html"
+      ]
+    },
+    {
+      "id": "cost-network-006",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "Direct Connect"
+      ],
+      "prompt": "A company will move tens of terabytes per month from AWS to its data center, steadily and for years, over a dedicated private connection. Which statement correctly describes how AWS Direct Connect is billed?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Only per-GB data transfer is charged; the port itself is free",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Nothing is charged once the connection has been provisioned",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Port-hour charges apply even when idle, plus a per-GB data transfer out charge, while data transfer in is not charged",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Data transfer out is billed at the Site-to-Site VPN rate and a flat monthly port fee",
+          "correct": false
+        }
+      ],
+      "explanation": "The Direct Connect pricing page describes a bill with two parts: port-hour charges, which apply even when no data is passing through the port, and data transfer out at a per-GB rate (listed as 0.02 USD per GB from a US Region to a US Direct Connect location), with data transfer in at 0.00 USD per GB. Saying only per-GB is charged ignores the port hours, saying nothing is charged after provisioning is wrong, and the pricing page does not tie Direct Connect data transfer to a Site-to-Site VPN rate. For internet comparison, the pricing page points to the EC2 pricing page for internet data transfer out rates.",
+      "sources": [
+        "https://aws.amazon.com/directconnect/pricing/",
+        "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html"
+      ]
+    },
+    {
+      "id": "cost-network-007",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "VPC",
+        "VPC Peering",
+        "Transit Gateway"
+      ],
+      "prompt": "Two VPCs in the same Region exchange tens of terabytes per month, and no other VPCs need to connect. Which connectivity option has the lowest ongoing cost?",
+      "options": [
+        {
+          "id": "a",
+          "text": "AWS Transit Gateway with a VPC attachment from each VPC",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "AWS Site-to-Site VPN between the two VPCs",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "VPC peering connection between the two VPCs",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "An internet gateway in each VPC with public IP addresses on the instances",
+          "correct": false
+        }
+      ],
+      "explanation": "VPC peering has no hourly charge and no per-GB processing fee beyond standard data transfer, so it is cheapest for a simple two-VPC link. Transit Gateway adds hourly attachment charges and per-GB data processing. A VPN between VPCs adds hourly connection charges, limits throughput, and is unnecessary inside AWS. Routing over the internet exposes traffic, adds public IPv4 charges, and does not avoid transfer cost.",
+      "sources": [
+        "https://docs.aws.amazon.com/vpc/latest/peering/what-is-vpc-peering.html",
+        "https://aws.amazon.com/transit-gateway/pricing/"
+      ]
+    },
+    {
+      "id": "cost-network-008",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "VPC",
+        "IPv6"
+      ],
+      "prompt": "An IPv6-enabled application in private subnets only needs outbound internet access, and the team wants to avoid NAT gateway hourly and data processing charges. What should they use?",
+      "options": [
+        {
+          "id": "a",
+          "text": "An egress-only internet gateway",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "A NAT gateway in each Availability Zone",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "An interface VPC endpoint for each internet destination",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "A virtual private gateway",
+          "correct": false
+        }
+      ],
+      "explanation": "An egress-only internet gateway allows outbound-only IPv6 traffic and has no charge. A NAT gateway is exactly the hourly and per-GB cost the team wants to avoid. Interface endpoints reach AWS services, not arbitrary internet destinations, and they bill hourly. A virtual private gateway is for VPN connections to an on-premises network, not internet access.",
+      "sources": [
+        "https://docs.aws.amazon.com/vpc/latest/userguide/egress-only-internet-gateway.html",
+        "https://aws.amazon.com/vpc/pricing/"
+      ]
+    },
+    {
+      "id": "cost-network-009",
+      "type": "mcq",
+      "difficulty": 1,
+      "tags": [
+        "VPC",
+        "NAT Gateway"
+      ],
+      "prompt": "A team runs a NAT gateway in a VPC that is used only a few hours each week for patch downloads. Which statement correctly describes how the NAT gateway is billed?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Only per-GB data processing is charged; there is no hourly charge",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Only an hourly charge applies; data processing is free",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "It is billed for each hour it is available and for each GB of data it processes",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "It is free as long as it is in the same Region as the instances",
+          "correct": false
+        }
+      ],
+      "explanation": "A NAT gateway is billed for each hour that it is available and for each gigabyte of data that it processes, so an idle gateway still accrues hourly charges. The other statements describe only one component of the charge or claim it is free, which is incorrect.",
+      "sources": [
+        "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-pricing.html"
+      ]
+    },
+    {
+      "id": "cost-network-010",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "EC2",
+        "VPC",
+        "Elastic Load Balancing"
+      ],
+      "prompt": "A fleet of web servers behind an Application Load Balancer each has a public IPv4 address, although users reach them only through the load balancer. Which change removes the avoidable network cost?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Attach an Elastic IP address to each server instead",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Place the servers in private subnets without public IPv4 addresses",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Replace the Application Load Balancer with a larger instance type",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Move the servers to a different Region",
+          "correct": false
+        }
+      ],
+      "explanation": "Public IPv4 addresses are billed hourly, and servers that are reachable only through the load balancer do not need them, so private subnets remove that charge and improve security. Elastic IPs are also billed as public IPv4 addresses. Changing instance type does not affect address charges. Moving Regions does not remove the addresses and may add transfer cost.",
+      "sources": [
+        "https://aws.amazon.com/vpc/pricing/",
+        "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html"
+      ]
+    },
+    {
+      "id": "cost-network-011",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "Direct Connect",
+        "Site-to-Site VPN"
+      ],
+      "prompt": "A company needs hybrid connectivity to AWS for a six-week migration project. The traffic is about 100 Mbps and must be encrypted, and the lowest cost is the priority. Which option fits best?",
+      "options": [
+        {
+          "id": "a",
+          "text": "AWS Direct Connect dedicated 10 Gbps connection",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "AWS Snowball Edge device shipped repeatedly",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "AWS Site-to-Site VPN over the internet",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Three AWS Transit Gateway peering attachments",
+          "correct": false
+        }
+      ],
+      "explanation": "Site-to-Site VPN is quick to set up, encrypted, and low cost for modest short-term throughput. A dedicated Direct Connect port has long lead time, port charges, and far more capacity than needed. Snowball Edge is for offline bulk transfer, not an ongoing encrypted link. Transit Gateway peering connects gateways to each other, not an on-premises network.",
+      "sources": [
+        "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html",
+        "https://aws.amazon.com/directconnect/pricing/"
+      ]
+    },
+    {
+      "id": "cost-network-012",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "CloudFront",
+        "S3"
+      ],
+      "prompt": "A company serves downloads from an S3 bucket through Amazon CloudFront. Which statement about data transfer cost is correct?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Data transfer from S3 to CloudFront edge locations is charged at the internet rate",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Data transfer from an AWS origin such as S3 to CloudFront is not charged, and only CloudFront delivery to viewers is billed",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "CloudFront removes all charges for data delivered to viewers",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Data transfer out is billed only on requests that miss the cache",
+          "correct": false
+        }
+      ],
+      "explanation": "Transfer from AWS origins to CloudFront is free, so the cost appears as CloudFront delivery to viewers, which is often lower than S3 internet transfer. The first option is wrong because origin fetches are not billed at the internet rate. CloudFront still charges for viewer delivery and requests. Cached responses delivered to viewers are billed as well, not just cache misses.",
+      "sources": [
+        "https://aws.amazon.com/cloudfront/pricing/"
+      ]
+    },
+    {
+      "id": "cost-network-013",
+      "type": "mcq",
+      "difficulty": 1,
+      "tags": [
+        "Route 53"
+      ],
+      "prompt": "A team hosts a public site on an Application Load Balancer and wants to minimize DNS query charges for the domain name. Which record type should point at the load balancer?",
+      "options": [
+        {
+          "id": "a",
+          "text": "CNAME record",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "A record with the load balancer IP addresses",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Alias record",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "NS record",
+          "correct": false
+        }
+      ],
+      "explanation": "Route 53 does not charge for alias queries to AWS resources such as load balancers, and the alias tracks the load balancer automatically. A CNAME query is billed and cannot be used at the zone apex. Hard-coded IP addresses break when the load balancer addresses change and are billed as standard queries. NS records delegate zones and do not point to the load balancer.",
+      "sources": [
+        "https://aws.amazon.com/route53/pricing/",
+        "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html"
+      ]
+    },
+    {
+      "id": "cost-network-014",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": [
+        "VPC",
+        "NAT Gateway"
+      ],
+      "prompt": "A development VPC has a NAT gateway in every Availability Zone, and most of its traffic goes to Amazon S3. The team accepts reduced availability in this non-production environment. Which TWO actions reduce cost the most? (Choose two.)",
+      "options": [
+        {
+          "id": "a",
+          "text": "Add a gateway VPC endpoint for Amazon S3",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Keep a single NAT gateway for the VPC instead of one per Availability Zone",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Add a second NAT gateway to spread the load",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Assign Elastic IP addresses to all instances and remove private subnets",
+          "correct": false
+        },
+        {
+          "id": "e",
+          "text": "Enable VPC Flow Logs to publish to CloudWatch Logs",
+          "correct": false
+        }
+      ],
+      "explanation": "A gateway endpoint takes S3 traffic off the NAT gateway and has no charge, and a single NAT gateway removes the extra hourly charges. A second NAT gateway adds cost. Elastic IPs on every instance add public IPv4 charges and exposure. Flow Logs add log ingestion cost and do not reduce traffic charges.",
+      "sources": [
+        "https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html",
+        "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html"
+      ]
+    },
+    {
+      "id": "cost-network-015",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": [
+        "EC2",
+        "Data Transfer"
+      ],
+      "prompt": "Which TWO kinds of AWS data transfer are not charged? (Choose two.)",
+      "options": [
+        {
+          "id": "a",
+          "text": "Data transferred in to AWS from the internet",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Data transferred between EC2 instances in different Regions",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Data transferred out of EC2 to the internet beyond the free tier",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Data transferred between instances in the same Availability Zone using private IP addresses",
+          "correct": true
+        },
+        {
+          "id": "e",
+          "text": "Data transferred between Availability Zones using public IP addresses",
+          "correct": false
+        }
+      ],
+      "explanation": "Inbound internet transfer is free, and same-AZ traffic over private IP addresses is free. Cross-Region transfer is billed, internet egress beyond the free allowance is billed, and traffic between Availability Zones through public IP addresses is billed.",
+      "sources": [
+        "https://aws.amazon.com/ec2/pricing/on-demand/",
+        "https://aws.amazon.com/blogs/architecture/overview-of-data-transfer-costs-for-common-architectures/"
+      ]
+    },
+    {
+      "id": "cost-network-016",
+      "type": "scenario",
+      "difficulty": 2,
+      "tags": [
+        "VPC",
+        "S3",
+        "DynamoDB"
+      ],
+      "prompt": "Which solution meets the requirement at the lowest cost with the least operational overhead?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Replace each NAT gateway with a NAT instance on a large EC2 type",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Create interface VPC endpoints for S3 and DynamoDB in every Availability Zone of each VPC",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Create gateway VPC endpoints for S3 and DynamoDB in each VPC and update the private route tables",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Connect the three VPCs through a Transit Gateway and centralize one NAT gateway",
+          "correct": false
+        }
+      ],
+      "scenarioId": "cost-network-sc-1",
+      "explanation": "Gateway endpoints for S3 and DynamoDB are free and keep the traffic off the NAT gateways, which removes the data processing charge. A NAT instance still handles the traffic and adds patching and scaling work. Interface endpoints bill hourly per AZ plus per GB, and S3 and DynamoDB are better served by free gateway endpoints. A Transit Gateway adds attachment and processing charges and still routes this traffic through a NAT gateway.",
+      "sources": [
+        "https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html",
+        "https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-ddb.html"
+      ]
+    },
+    {
+      "id": "cost-network-017",
+      "type": "matching",
+      "difficulty": 2,
+      "tags": [
+        "VPC",
+        "NAT Gateway",
+        "PrivateLink"
+      ],
+      "prompt": "Match each network component to its cost characteristic.",
+      "pairs": [
+        {
+          "left": "Gateway VPC endpoint",
+          "right": "No hourly or per-GB charge"
+        },
+        {
+          "left": "NAT gateway",
+          "right": "Hourly charge plus per-GB data processing"
+        },
+        {
+          "left": "Interface VPC endpoint",
+          "right": "Hourly charge per Availability Zone plus per-GB data processing"
+        },
+        {
+          "left": "Egress-only internet gateway",
+          "right": "No charge for outbound-only IPv6 traffic"
+        }
+      ],
+      "explanation": "A gateway endpoint has no charge. A NAT gateway bills hourly and per GB processed. An interface endpoint bills hourly per Availability Zone and per GB processed. An egress-only internet gateway has no charge for outbound IPv6 traffic.",
+      "sources": [
+        "https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-s3.html",
+        "https://aws.amazon.com/vpc/pricing/"
+      ]
+    }
+  ]
+}

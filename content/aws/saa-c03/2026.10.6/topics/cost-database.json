@@ -1,0 +1,628 @@
+{
+  "schemaVersion": 1,
+  "topicId": "cost-database",
+  "domainId": "cost",
+  "name": "Design cost-optimized database solutions",
+  "lesson": {
+    "summary": "Database cost is driven by instance or capacity size, storage, I/O and how long the database runs. Pick the capacity model that matches the traffic pattern, commit for steady usage, and avoid paying for idle or duplicate capacity.",
+    "keyPoints": [
+      "Aurora Serverless v2 scales capacity up and down in small increments, which suits variable or unpredictable workloads",
+      "Reserved DB instances give a lower hourly rate for steady, long-running RDS databases in exchange for a 1 or 3 year term",
+      "DynamoDB on-demand mode suits unpredictable traffic; provisioned mode with auto scaling is cheaper for steady, predictable traffic",
+      "DynamoDB Standard-IA table class lowers storage cost for tables where storage dominates the bill; TTL deletes expired items at no extra charge",
+      "Stopping a non-production RDS instance pauses instance charges (storage is still billed) but RDS restarts it automatically after 7 days",
+      "Read replicas and caching offload reads so a smaller primary can be used"
+    ],
+    "diagrams": [
+      "dynamodb-capacity-modes"
+    ],
+    "docLinks": [
+      "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html",
+      "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithReservedDBInstances.html",
+      "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/capacity-mode.html",
+      "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.TableClasses.html"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "cost-database-sc-1",
+      "text": "A logistics company runs a licensed commercial database on Amazon EC2 instances that the team patches and backs up itself. License fees are the largest database cost. The application uses only standard SQL and no vendor-specific features. The company wants the lowest total cost and the least operational overhead, and it can accept a one-time migration effort."
+    }
+  ],
+  "questions": [
+    {
+      "id": "cost-database-001",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "Aurora",
+        "RDS"
+      ],
+      "prompt": "A startup runs a MySQL-compatible database whose load swings unpredictably from near idle to heavy bursts several times a day. The team wants to avoid paying for peak capacity all day and avoid manual resizing. Which solution is the most cost-effective?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Amazon RDS for MySQL on a large instance sized for the peak",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Amazon Aurora Serverless v2",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "MySQL on a three-year Reserved EC2 instance",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Amazon Aurora provisioned with several large Aurora Replicas",
+          "correct": false
+        }
+      ],
+      "explanation": "Aurora Serverless v2 adjusts capacity in fine-grained increments as load changes, so you pay for what the database uses without manual resizing. An RDS instance sized for peak pays for idle capacity all day. A self-managed database on a reserved EC2 instance commits for three years to a fixed size and adds administration work. Several large Aurora replicas add more always-on capacity and cost.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html"
+      ]
+    },
+    {
+      "id": "cost-database-002",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "DynamoDB"
+      ],
+      "prompt": "A DynamoDB table stores several terabytes of order history that is read only occasionally. Storage is by far the largest part of the monthly bill. What change reduces cost the most with the least effort?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Switch the table to the DynamoDB Standard-IA table class",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Switch the table to on-demand capacity mode",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Add a DynamoDB Accelerator (DAX) cluster in front of the table",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Enable global tables to a second Region",
+          "correct": false
+        }
+      ],
+      "explanation": "The Standard-IA table class gives lower storage cost for tables where storage is the dominant cost, at a higher per-request price that does not matter for rarely read data. Changing capacity mode affects throughput charges, not storage. DAX adds an always-on cluster cost. Global tables replicate data to another Region and increase both storage and write cost.",
+      "sources": [
+        "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.TableClasses.html"
+      ]
+    },
+    {
+      "id": "cost-database-003",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": [
+        "DynamoDB"
+      ],
+      "prompt": "A DynamoDB table receives steady, predictable traffic with a daily cycle, and old session items must be removed after 24 hours. Which TWO choices lower cost? (Choose two.)",
+      "options": [
+        {
+          "id": "a",
+          "text": "Use on-demand capacity mode so every request is billed at the on-demand rate",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Use provisioned capacity with auto scaling to follow the daily cycle",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Enable Time to Live (TTL) on an expiry attribute so expired items are deleted automatically",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Run a nightly Scan that deletes old items with a Lambda function",
+          "correct": false
+        },
+        {
+          "id": "e",
+          "text": "Over-provision write capacity to avoid throttling at all times",
+          "correct": false
+        }
+      ],
+      "explanation": "Provisioned capacity with auto scaling is usually cheaper than on-demand for predictable traffic, and TTL removes expired items without consuming write capacity. On-demand mode costs more per request when traffic is steady and predictable. A nightly Scan consumes read capacity and Lambda time to do what TTL does for free. Over-provisioning pays for capacity that is not used.",
+      "sources": [
+        "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/capacity-mode.html",
+        "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html"
+      ]
+    },
+    {
+      "id": "cost-database-004",
+      "type": "truefalse",
+      "difficulty": 2,
+      "tags": [
+        "RDS"
+      ],
+      "statement": "You can stop an Amazon RDS DB instance in a development environment to stop paying instance-hour charges, and it stays stopped indefinitely until you start it.",
+      "answer": false,
+      "explanation": "Stopping an RDS instance pauses instance-hour charges, though storage and backups still bill. However, RDS automatically starts a stopped instance after seven days to apply required maintenance, so a schedule is needed to keep it stopped longer.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_StopInstance.html"
+      ]
+    },
+    {
+      "id": "cost-database-005",
+      "type": "mcq",
+      "difficulty": 1,
+      "tags": [
+        "RDS"
+      ],
+      "prompt": "A company runs a production Amazon RDS for PostgreSQL instance that will stay the same size and run continuously for at least three years. How can it reduce the instance cost?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Purchase Reserved DB Instances for a 3 year term",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Convert the database to Amazon Redshift",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Move the instance to a Spot Instance",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Take hourly manual snapshots and stop the instance at night",
+          "correct": false
+        }
+      ],
+      "explanation": "Reserved DB Instances give a discount on the hourly rate for a database that runs steadily for a long term. Redshift is a data warehouse, not a drop-in transactional replacement. RDS does not run on Spot Instances. Stopping a production database at night breaks availability and RDS restarts stopped instances after seven days anyway.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithReservedDBInstances.html"
+      ]
+    },
+    {
+      "id": "cost-database-006",
+      "type": "matching",
+      "difficulty": 2,
+      "tags": [
+        "RDS",
+        "DynamoDB",
+        "Aurora"
+      ],
+      "prompt": "Match each cost problem to the most suitable cost-saving feature.",
+      "pairs": [
+        {
+          "left": "Steady production RDS instance running around the clock for years",
+          "right": "Reserved DB instance"
+        },
+        {
+          "left": "Aurora database with spiky and unpredictable load",
+          "right": "Aurora Serverless v2"
+        },
+        {
+          "left": "DynamoDB table with unpredictable traffic and long idle periods",
+          "right": "On-demand capacity mode"
+        },
+        {
+          "left": "Expired DynamoDB items that keep accumulating storage cost",
+          "right": "Time to Live (TTL)"
+        }
+      ],
+      "explanation": "Reserved DB instances reward steady, long-running usage. Aurora Serverless v2 follows variable load. DynamoDB on-demand mode bills per request so idle periods cost little. TTL deletes expired items automatically so you stop paying to store them.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithReservedDBInstances.html",
+        "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html",
+        "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/capacity-mode.html",
+        "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html"
+      ]
+    },
+    {
+      "id": "cost-database-007",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "Aurora"
+      ],
+      "prompt": "An Aurora MySQL cluster handles a very write-heavy workload, and I/O charges make up well over a third of the monthly Aurora bill. Which change is most likely to lower total cost?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Add more Aurora Replicas to spread the I/O",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Move the cluster to the Aurora I/O-Optimized configuration",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Switch the cluster to Aurora Serverless v1",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Enable Multi-AZ on every replica",
+          "correct": false
+        }
+      ],
+      "explanation": "Aurora I/O-Optimized removes per-request I/O charges in exchange for higher instance and storage prices, which saves money when I/O is a large share of spend. More replicas add instance cost and do not reduce write I/O. Serverless v1 does not change how I/O is billed. Aurora storage is already replicated across Availability Zones, so extra Multi-AZ settings add cost without removing I/O charges.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Overview.StorageReliability.html",
+        "https://aws.amazon.com/rds/aurora/pricing/"
+      ]
+    },
+    {
+      "id": "cost-database-008",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "DynamoDB",
+        "DAX"
+      ],
+      "prompt": "A product catalog table in DynamoDB is read millions of times per day, mostly for the same few thousand hot items, and provisioned read capacity is the main cost. The application can tolerate eventually consistent reads. What is the most cost-effective way to cut read cost?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Put a DynamoDB Accelerator (DAX) cluster in front of the table to serve repeated reads from cache",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Double the provisioned read capacity to avoid throttling",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Create a global table in a second Region and split reads",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Export the table to Amazon S3 and read the files directly",
+          "correct": false
+        }
+      ],
+      "explanation": "DAX is an in-memory cache for DynamoDB that serves repeated eventually consistent reads without consuming table read capacity, so the table can be provisioned lower. Doubling read capacity raises cost. A global table duplicates storage and write cost and does not reduce reads per item. Reading S3 exports gives stale data and requires rewriting the application.",
+      "sources": [
+        "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.html"
+      ]
+    },
+    {
+      "id": "cost-database-009",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "Aurora"
+      ],
+      "prompt": "A team runs many Aurora PostgreSQL development clusters that are used only during working hours and sit idle at night and on weekends. They want to pay as little as possible for compute while idle, with no custom scheduling code. Which option fits best?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Provisioned Aurora clusters with a Lambda function that deletes and restores them daily",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Aurora Serverless v2 with the minimum capacity set to 0 ACUs so the cluster pauses when idle",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Provisioned Aurora clusters on three-year Reserved Instances",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Aurora Global Database with a secondary Region",
+          "correct": false
+        }
+      ],
+      "explanation": "Aurora Serverless v2 can scale down to 0 ACUs and pause automatically after a period of inactivity, so idle compute is not billed. Deleting and restoring clusters needs custom code and risks data loss. A three-year reservation commits to always-on capacity that these clusters do not need. Global Database adds a second Region and more cost.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless-v2.html"
+      ]
+    },
+    {
+      "id": "cost-database-010",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "RDS",
+        "EBS"
+      ],
+      "prompt": "An RDS for PostgreSQL instance uses Provisioned IOPS (io1) storage only because it needs 12,000 IOPS, while its data is just 500 GiB. Which change most likely lowers storage cost while meeting the IOPS need?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Move to magnetic storage",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Add a second DB instance as a Multi-AZ standby",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Increase allocated storage to 2 TiB on io1",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Move to General Purpose SSD (gp3) storage, whose baseline performance at this size already provides 12,000 IOPS",
+          "correct": true
+        }
+      ],
+      "explanation": "gp3 storage of 400 GiB or more on RDS for PostgreSQL includes a 12,000 IOPS baseline at a lower price than io1, so a 500 GiB volume needs no provisioned IOPS charge. Magnetic storage cannot deliver that performance and is a legacy option. A Multi-AZ standby adds an instance charge and does not change the storage type. Growing the volume to 2 TiB on io1 increases cost.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html"
+      ]
+    },
+    {
+      "id": "cost-database-011",
+      "type": "mcq",
+      "difficulty": 1,
+      "tags": [
+        "DynamoDB"
+      ],
+      "prompt": "A company runs a DynamoDB table in provisioned capacity mode with a steady baseline of 5,000 write capacity units that will not change for the next three years. How can it lower the cost of that baseline?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Switch the table to on-demand capacity mode",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Purchase DynamoDB reserved capacity for the baseline",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Enable Time to Live on every item",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Use the DynamoDB Standard-IA table class",
+          "correct": false
+        }
+      ],
+      "explanation": "Reserved capacity gives a discounted rate on provisioned read and write capacity for a one or three year commitment, which suits a flat baseline. On-demand mode costs more per request for steady traffic. TTL removes expired items and helps storage, not the provisioned throughput rate. Standard-IA lowers storage price, not the cost of write capacity.",
+      "sources": [
+        "https://aws.amazon.com/dynamodb/pricing/provisioned/"
+      ]
+    },
+    {
+      "id": "cost-database-012",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "Athena",
+        "S3"
+      ],
+      "prompt": "Analysts run a handful of ad hoc SQL queries each week against several terabytes of CSV and Parquet files in Amazon S3. The company wants to avoid paying for always-on database or warehouse capacity. Which solution is the lowest cost?",
+      "options": [
+        {
+          "id": "a",
+          "text": "A provisioned Amazon Redshift cluster that is loaded from S3 each week",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "An Amazon RDS for MySQL instance loaded with the files",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Amazon Athena querying the data in place in S3",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "An Amazon EMR cluster kept running between queries",
+          "correct": false
+        }
+      ],
+      "explanation": "Athena is serverless and charges by the data scanned for each query, so there is no idle cost for infrequent queries. A provisioned Redshift cluster and an RDS instance bill for capacity while idle and add data loading work. An EMR cluster left running bills for instances continuously.",
+      "sources": [
+        "https://docs.aws.amazon.com/athena/latest/ug/what-is.html"
+      ]
+    },
+    {
+      "id": "cost-database-013",
+      "type": "mcq",
+      "difficulty": 1,
+      "tags": [
+        "RDS",
+        "Graviton"
+      ],
+      "prompt": "A company runs a production RDS for MySQL instance on a db.r5 instance class and wants better price performance without changing the application. Which action fits?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Move to a Graviton-based instance class such as db.r6g, which RDS for MySQL supports",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Switch the engine to Amazon Redshift",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Remove the automated backups",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Replace the instance with a self-managed MySQL on Spot Instances",
+          "correct": false
+        }
+      ],
+      "explanation": "AWS Graviton-based DB instance classes generally offer better price performance for supported engines such as MySQL, with no application change. Redshift is a warehouse and would require redesign. Removing automated backups loses recovery ability and saves little. Spot Instances can be reclaimed at any time, which is unsuitable for a production database.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html"
+      ]
+    },
+    {
+      "id": "cost-database-014",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": [
+        "RDS"
+      ],
+      "prompt": "A company runs ten RDS for MySQL instances for development and testing, all sized and configured like production. Which TWO actions lower cost without affecting production? (Choose two.)",
+      "options": [
+        {
+          "id": "a",
+          "text": "Run the instances as Single-AZ deployments",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Use a three-year Reserved DB Instance for each instance even though they are used a few hours a week",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Enable Provisioned IOPS storage on all instances",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Stop the instances outside working hours with a schedule",
+          "correct": true
+        },
+        {
+          "id": "e",
+          "text": "Add a cross-Region read replica for each instance",
+          "correct": false
+        }
+      ],
+      "explanation": "Single-AZ removes the standby instance that non-production workloads do not need, and a schedule that stops instances outside working hours stops instance-hour charges. A three-year reservation commits to always-on payment for rarely used databases. Provisioned IOPS storage and cross-Region replicas both add cost.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_StopInstance.html",
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html"
+      ]
+    },
+    {
+      "id": "cost-database-015",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": [
+        "RDS",
+        "Backup"
+      ],
+      "prompt": "The monthly bill for an RDS database shows high backup storage charges. The business needs point-in-time recovery for 7 days only. Which TWO actions reduce backup cost? (Choose two.)",
+      "options": [
+        {
+          "id": "a",
+          "text": "Set the automated backup retention period to 7 days instead of 35",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Copy every snapshot to a second Region each day",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Delete manual snapshots that are no longer needed",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Enable Multi-AZ to move backups to the standby",
+          "correct": false
+        },
+        {
+          "id": "e",
+          "text": "Increase the backup retention period to 35 days for safety",
+          "correct": false
+        }
+      ],
+      "explanation": "A retention period matching the requirement stops paying for unneeded automated backup history, and manual snapshots stay until deleted, so removing old ones stops their storage charge. Daily cross-Region copies add storage and transfer cost. Multi-AZ does not reduce backup storage. A longer retention period increases backup storage.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html"
+      ]
+    },
+    {
+      "id": "cost-database-016",
+      "type": "scenario",
+      "scenarioId": "cost-database-sc-1",
+      "difficulty": 3,
+      "tags": [
+        "Aurora",
+        "DMS"
+      ],
+      "prompt": "Which solution best meets the requirements?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Migrate to Amazon Aurora PostgreSQL by using AWS Schema Conversion Tool and AWS DMS",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Keep the database on EC2 and buy a three-year Savings Plan for the instances",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Move the database to a larger EC2 instance and run backups to S3 with a script",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Rehost the same licensed database on a bigger Dedicated Host",
+          "correct": false
+        }
+      ],
+      "explanation": "Moving to an open-source-compatible managed engine removes license fees, and Aurora handles patching, backups and storage management, with SCT and DMS doing the conversion and data move. A Savings Plan lowers instance price but leaves license fees and self-management. A larger instance with scripted backups adds cost and keeps the operational burden. A Dedicated Host keeps license cost and adds a hardware commitment.",
+      "sources": [
+        "https://docs.aws.amazon.com/dms/latest/userguide/Welcome.html",
+        "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html"
+      ]
+    },
+    {
+      "id": "cost-database-017",
+      "type": "ordering",
+      "difficulty": 2,
+      "tags": [
+        "RDS",
+        "CloudWatch"
+      ],
+      "prompt": "Put these steps in the best order to right-size an over-provisioned RDS instance and then commit to a lower rate.",
+      "steps": [
+        "Purchase a Reserved DB Instance for the new size",
+        "Resize the DB instance to a smaller class during a maintenance window",
+        "Review CloudWatch CPU, memory and connection metrics over a representative period",
+        "Confirm performance is acceptable after the change"
+      ],
+      "correctOrder": [
+        2,
+        1,
+        3,
+        0
+      ],
+      "explanation": "Measure real utilization first, then resize, verify performance, and only then reserve the new size so the commitment matches stable usage rather than the old oversized instance.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithReservedDBInstances.html",
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/MonitoringOverview.html"
+      ]
+    }
+  ]
+}

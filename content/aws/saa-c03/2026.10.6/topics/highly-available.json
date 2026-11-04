@@ -13,7 +13,9 @@
       "DR strategies by rising cost and falling RTO: backup and restore, pilot light, warm standby, multi-site active/active",
       "S3 replication needs versioning; AWS Backup and Elastic Disaster Recovery protect data and servers centrally"
     ],
-    "diagrams": ["multi-az-web-tier"],
+    "diagrams": [
+      "multi-az-web-tier"
+    ],
     "docLinks": [
       "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html",
       "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html",
@@ -27,6 +29,10 @@
     {
       "id": "ha-sc-1",
       "text": "A company runs an e-commerce site in one Region on an Application Load Balancer, an Auto Scaling group across two AZs, and an Aurora MySQL cluster. The business now requires surviving a full Regional outage with an RTO of 15 minutes and an RPO of about one minute, while keeping operational effort low."
+    },
+    {
+      "id": "highly-available-sc-2",
+      "text": "A company runs a web application on EC2 instances in an Auto Scaling group across two Availability Zones behind an Application Load Balancer. Users log in, and their session data is held in the memory of the instance that served the login. When an instance is replaced or an AZ fails, users are logged out and lose their carts. The company wants sessions to survive instance and AZ failures."
     }
   ],
   "questions": [
@@ -501,6 +507,397 @@
       "explanation": "S3 Cross-Region Replication (CRR), part of S3 Replication, asynchronously copies objects between buckets in different Regions.",
       "sources": [
         "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html"
+      ]
+    },
+    {
+      "id": "highly-available-015",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "SQS",
+        "EC2"
+      ],
+      "prompt": "An order-intake web tier calls a processing tier directly. When the processing instances fail or are slow, orders are lost. What change makes the design fault tolerant with the least operational overhead?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Place an Amazon SQS queue between the tiers and have the processing instances poll it",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Increase the instance size of the processing tier",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Add a second ALB in front of the web tier",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Store orders in memory on the web instances until processing recovers",
+          "correct": false
+        }
+      ],
+      "explanation": "A queue decouples the tiers, keeps messages durably stored across AZs, and lets processing resume after a failure. A bigger instance is still a single point of failure and does not buffer work. A second ALB protects the web tier, not the processing hand-off. In-memory storage is lost when an instance fails.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html"
+      ]
+    },
+    {
+      "id": "highly-available-016",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "Aurora"
+      ],
+      "prompt": "An Aurora MySQL cluster has one writer and two Aurora Replicas in different AZs. The writer instance fails. What happens by default?",
+      "options": [
+        {
+          "id": "a",
+          "text": "The cluster stays read-only until an administrator restores a snapshot",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "A new writer is created from the latest automated backup in the same AZ",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "You must update the application to use the replica endpoint for writes",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Aurora promotes one of the replicas to be the new writer and the cluster endpoint follows it",
+          "correct": true
+        }
+      ],
+      "explanation": "Aurora automatically promotes a replica (by failover priority) and the cluster endpoint points to the new writer. Waiting for a snapshot restore is not how Aurora recovers. Aurora does not rebuild a writer from backups when replicas exist. The reader endpoint is read-only and applications keep using the cluster endpoint for writes.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Concepts.AuroraHighAvailability.html"
+      ]
+    },
+    {
+      "id": "highly-available-017",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "Lambda",
+        "VPC"
+      ],
+      "prompt": "A Lambda function is attached to a VPC to reach a database. Which configuration keeps the function available if one Availability Zone fails?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Attach the function to a single private subnet and raise reserved concurrency",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Attach the function to private subnets in at least two Availability Zones",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Attach the function only to a public subnet with an internet gateway",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Increase the function timeout to the maximum value",
+          "correct": false
+        }
+      ],
+      "explanation": "Lambda runs in the subnets you specify, so subnets in multiple AZs let it keep running when one AZ is impaired. A single subnet ties the function to one AZ whatever the concurrency. A public subnet does not add AZ resilience and does not give the function a public IP. A longer timeout does not help with an AZ failure.",
+      "sources": [
+        "https://docs.aws.amazon.com/lambda/latest/dg/security-resilience.html"
+      ]
+    },
+    {
+      "id": "highly-available-018",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "EC2",
+        "Auto Scaling"
+      ],
+      "prompt": "A legacy application can only run as a single instance, but it must recover automatically from instance or Availability Zone failure at the lowest cost. Which design fits?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Two instances in different AZs behind an ALB, both active",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "One instance with a larger size and termination protection",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "An Auto Scaling group with minimum, maximum, and desired capacity of 1, using subnets in multiple AZs",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "A single instance with CloudWatch alarm notifications sent to an administrator",
+          "correct": false
+        }
+      ],
+      "explanation": "An Auto Scaling group of size 1 replaces a failed instance and can launch it in another AZ. Two active copies break the single-instance constraint and cost more. Termination protection does not recover from failure. Notifying an administrator is manual and slow.",
+      "sources": [
+        "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html"
+      ]
+    },
+    {
+      "id": "highly-available-019",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "RDS"
+      ],
+      "prompt": "An application sees long connection errors during an RDS Multi-AZ failover because each connection pool reconnects slowly to the old address. Which service reduces the failover impact with the least code change?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Amazon RDS Proxy",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "AWS Global Accelerator",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Amazon ElastiCache",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Amazon SQS",
+          "correct": false
+        }
+      ],
+      "explanation": "RDS Proxy keeps a pool of connections and reconnects to the new primary, shortening application-visible failover time. Global Accelerator routes to endpoints and does not pool database connections. ElastiCache caches data but does not manage database connections. SQS decouples workloads but would require redesign.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html"
+      ]
+    },
+    {
+      "id": "highly-available-020",
+      "type": "mcq",
+      "difficulty": 1,
+      "tags": [
+        "S3"
+      ],
+      "prompt": "Which S3 storage class is a poor choice for data that must survive the loss of a single Availability Zone?",
+      "options": [
+        {
+          "id": "a",
+          "text": "S3 Standard",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "S3 One Zone-IA",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "S3 Standard-IA",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "S3 Intelligent-Tiering",
+          "correct": false
+        }
+      ],
+      "explanation": "S3 One Zone-IA stores data in one AZ, so an AZ loss can lose the data. S3 Standard, Standard-IA, and Intelligent-Tiering all store objects redundantly across at least three AZs.",
+      "sources": [
+        "https://aws.amazon.com/s3/storage-classes/"
+      ]
+    },
+    {
+      "id": "highly-available-021",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "AWS Backup",
+        "EBS"
+      ],
+      "prompt": "A company needs a backup-and-restore disaster recovery plan for EBS volumes and EFS file systems in one Region, with copies stored in a second Region and minimal custom scripting. What should it use?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Cron jobs on each instance that rsync data to another Region",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "A Lambda function per resource that calls the copy APIs on a schedule",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "An AWS Backup plan with a cross-Region copy rule",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Manual snapshots taken by the operations team each week",
+          "correct": false
+        }
+      ],
+      "explanation": "AWS Backup plans schedule backups centrally and can copy them to another Region automatically. Cron and rsync scripts need maintenance and are error prone. Per-resource Lambda functions are custom code to build and run. Manual snapshots are inconsistent and depend on people.",
+      "sources": [
+        "https://docs.aws.amazon.com/aws-backup/latest/devguide/cross-region-backup.html"
+      ]
+    },
+    {
+      "id": "highly-available-022",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": [
+        "SQS"
+      ],
+      "prompt": "Worker instances poll an SQS queue. A worker sometimes crashes mid-processing, and the message must not be lost. Which TWO practices achieve this?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Delete the message only after processing succeeds",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Delete the message immediately after receiving it",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Set the visibility timeout longer than the time needed to process a message",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Set the visibility timeout to zero seconds",
+          "correct": false
+        }
+      ],
+      "explanation": "Deleting after success means a crash leaves the message in the queue, and a sufficient visibility timeout lets it reappear for another worker only after the first attempt could finish. Deleting on receive loses the message if the worker crashes. A zero timeout makes messages instantly visible and causes duplicate processing.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html"
+      ]
+    },
+    {
+      "id": "highly-available-023",
+      "type": "multi",
+      "difficulty": 3,
+      "tags": [
+        "EBS"
+      ],
+      "prompt": "The only AZ hosting an EC2 instance and its EBS volume becomes unavailable. Which TWO actions let you recover the data in another AZ?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Attach the existing volume directly to an instance in a different AZ",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Create EBS snapshots regularly, for example with Amazon Data Lifecycle Manager",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Enable EBS Multi-Attach across the two AZs",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Create a new volume from the latest snapshot in the other AZ and attach it to a new instance",
+          "correct": true
+        }
+      ],
+      "explanation": "Snapshots are stored regionally, so a volume can be created from one in any AZ and attached to a replacement instance. A volume can only attach to instances in its own AZ. Multi-Attach also works only within one AZ.",
+      "sources": [
+        "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-snapshots.html"
+      ]
+    },
+    {
+      "id": "highly-available-024",
+      "type": "scenario",
+      "difficulty": 3,
+      "tags": [
+        "ElastiCache",
+        "ELB"
+      ],
+      "prompt": "Which change meets the requirement with the least operational overhead?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Enable sticky sessions on the ALB and keep sessions in instance memory",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Store session data in a Multi-AZ Amazon ElastiCache for Redis replication group",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Write sessions to a local file on each instance and copy them hourly with a script",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Use a larger instance type so that failures are less likely",
+          "correct": false
+        }
+      ],
+      "explanation": "A shared session store with automatic failover survives instance and AZ loss. Sticky sessions pin users to one instance, so the session is lost when it fails. Hourly file copies leave gaps and need custom scripts. Larger instances still fail and do not fix the design.",
+      "sources": [
+        "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/sticky-sessions.html",
+        "https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/AutoFailover.html"
+      ],
+      "scenarioId": "highly-available-sc-2"
+    },
+    {
+      "id": "highly-available-025",
+      "type": "matching",
+      "difficulty": 2,
+      "tags": [
+        "Auto Scaling",
+        "Route 53",
+        "RDS",
+        "ELB"
+      ],
+      "prompt": "Match each failure to the mechanism that handles it.",
+      "pairs": [
+        {
+          "left": "An instance in an Auto Scaling group fails its health check",
+          "right": "Auto Scaling terminates it and launches a replacement"
+        },
+        {
+          "left": "An RDS Multi-AZ primary fails",
+          "right": "Automatic failover to the standby"
+        },
+        {
+          "left": "A whole Region becomes unavailable",
+          "right": "Route 53 failover routing to a standby Region"
+        },
+        {
+          "left": "One Availability Zone is lost behind a load balancer",
+          "right": "Traffic is routed to healthy targets in the remaining AZs"
+        }
+      ],
+      "explanation": "Each pairing follows the standard resilience mechanism: Auto Scaling health replacement for instances, Multi-AZ standby promotion for the database, DNS failover for a Regional outage, and load balancer routing to healthy targets for an AZ loss.",
+      "sources": [
+        "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html"
       ]
     }
   ]

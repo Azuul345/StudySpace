@@ -1,0 +1,641 @@
+{
+    "schemaVersion": 1,
+    "topicId": "perf-network",
+    "domainId": "performant",
+    "name": "Determine high-performing and/or scalable network architectures",
+    "lesson": {
+        "summary": "Network performance comes from putting content close to users (CloudFront), using the AWS backbone for any protocol (Global Accelerator), choosing the right load balancer, steering users with Route 53, and using dedicated connectivity (Direct Connect) for hybrid workloads.",
+        "keyPoints": [
+            "CloudFront caches content at edge locations",
+            "Global Accelerator listeners support TCP and UDP, and it routes traffic over the AWS global network",
+            "ALB works at layer 7 and routes on request content such as path; NLB works at layer 4, can handle millions of requests per second, and has a static IP address per enabled AZ",
+            "Route 53 latency routing sends users to the lowest-latency Region",
+            "Direct Connect is a dedicated private network connection to AWS; Site-to-Site VPN is the internet-based alternative"
+        ],
+        "diagrams": [
+            "cloudfront-edge-caching"
+        ],
+        "docLinks": [
+            "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html",
+            "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html",
+            "https://docs.aws.amazon.com/global-accelerator/latest/dg/about-listeners.html",
+            "https://docs.aws.amazon.com/elasticloadbalancing/latest/network/introduction.html",
+            "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html",
+            "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html",
+            "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html"
+        ]
+    },
+    "scenarios": [
+        {
+            "id": "perf-network-sc-1",
+            "text": "A company must replicate about 10 Gbps of data continuously from its on-premises data center to AWS. Over its current internet VPN, throughput and latency vary widely and the nightly replication window is regularly missed."
+        },
+        {
+            "id": "perf-network-sc-2",
+            "text": "A company runs an HTTP API on Application Load Balancers in two AWS Regions. Customers worldwide must connect to fixed IP addresses that partners can allow-list, and traffic must move quickly to the other Region if one Region becomes unhealthy, without waiting for DNS caches to expire."
+        }
+    ],
+    "questions": [
+        {
+            "id": "perf-network-001",
+            "type": "mcq",
+            "difficulty": 1,
+            "tags": [
+                "CloudFront"
+            ],
+            "prompt": "A website serves large static images from an S3 bucket in one Region to users worldwide, and users far from the Region see slow load times. What should the architect add?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "An Amazon CloudFront distribution with the bucket as origin",
+                    "correct": true
+                },
+                {
+                    "id": "b",
+                    "text": "A larger EC2 instance in front of S3",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "An additional NAT gateway",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "An S3 lifecycle rule to Glacier",
+                    "correct": false
+                }
+            ],
+            "explanation": "CloudFront caches content at edge locations close to users and lowers latency. A larger EC2 instance, a NAT gateway or a lifecycle rule does nothing for geographic distance.",
+            "sources": [
+                "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html"
+            ]
+        },
+        {
+            "id": "perf-network-002",
+            "type": "mcq",
+            "difficulty": 2,
+            "tags": [
+                "Global Accelerator"
+            ],
+            "prompt": "A multiplayer game uses UDP and needs static IP addresses and the lowest latency for players around the world, routing them to the nearest healthy endpoint. Which service fits?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Amazon CloudFront",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "AWS Global Accelerator",
+                    "correct": true
+                },
+                {
+                    "id": "c",
+                    "text": "Application Load Balancer only",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "Amazon Route 53 simple routing",
+                    "correct": false
+                }
+            ],
+            "explanation": "Global Accelerator provides static anycast IP addresses, its listeners support TCP and UDP, and it routes traffic over the AWS global network to healthy endpoints. CloudFront is a content delivery network for caching content, an ALB works at layer 7 for application traffic and is not the fit for a UDP game, and simple routing returns records without latency steering or static IPs.",
+            "sources": [
+                "https://docs.aws.amazon.com/global-accelerator/latest/dg/about-listeners.html",
+                "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html"
+            ]
+        },
+        {
+            "id": "perf-network-003",
+            "type": "multi",
+            "difficulty": 2,
+            "tags": [
+                "ELB"
+            ],
+            "prompt": "Which TWO statements about Elastic Load Balancing are correct?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A Network Load Balancer works at layer 4 and can handle millions of requests per second",
+                    "correct": true
+                },
+                {
+                    "id": "b",
+                    "text": "An Application Load Balancer supports path-based routing",
+                    "correct": true
+                },
+                {
+                    "id": "c",
+                    "text": "A Classic Load Balancer is the recommended choice for new path-based routing designs",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "A Network Load Balancer routes traffic based on HTTP header contents",
+                    "correct": false
+                },
+                {
+                    "id": "e",
+                    "text": "An Application Load Balancer provides one static IP address per AZ by default",
+                    "correct": false
+                }
+            ],
+            "explanation": "The NLB guide states it works at the fourth layer and can handle millions of requests per second, and the ALB guide lists path conditions for routing on the request URL. The ALB guide lists path routing as a benefit over the Classic Load Balancer, so a Classic Load Balancer is not the choice for new path-based designs. An NLB works at layer 4, not on HTTP headers, and static IP addresses per enabled AZ are described in the NLB guide, not as an ALB default.",
+            "sources": [
+                "https://docs.aws.amazon.com/elasticloadbalancing/latest/network/introduction.html",
+                "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html"
+            ]
+        },
+        {
+            "id": "perf-network-004",
+            "type": "truefalse",
+            "difficulty": 1,
+            "tags": [
+                "Route 53"
+            ],
+            "statement": "Amazon Route 53 latency-based routing can direct users to the AWS Region that gives them the lowest network latency.",
+            "answer": true,
+            "explanation": "True. Latency routing returns the record for the Region with the lowest measured latency to the user.",
+            "sources": [
+                "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html"
+            ]
+        },
+        {
+            "id": "perf-network-005",
+            "type": "scenario",
+            "difficulty": 2,
+            "tags": [
+                "Direct Connect"
+            ],
+            "prompt": "Which connectivity option best meets the steady, high-bandwidth, low-jitter requirement?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Site-to-Site VPN over the internet",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "AWS Direct Connect",
+                    "correct": true
+                },
+                {
+                    "id": "c",
+                    "text": "A NAT gateway",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "VPC peering",
+                    "correct": false
+                }
+            ],
+            "explanation": "Direct Connect provides a dedicated private connection with consistent bandwidth and latency. VPN traffic crosses the public internet and varies, a NAT gateway only provides outbound internet access from private subnets, and VPC peering connects VPCs, not data centers.",
+            "sources": [
+                "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html"
+            ],
+            "scenarioId": "perf-network-sc-1"
+        },
+        {
+            "id": "perf-network-006",
+            "type": "scenario",
+            "difficulty": 3,
+            "tags": [
+                "Site-to-Site VPN",
+                "Direct Connect"
+            ],
+            "prompt": "Direct Connect provisioning will take several weeks, but the company needs encrypted connectivity to AWS right away. What should the architect do in the meantime?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Wait for Direct Connect before moving any data",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "Open the databases to the internet",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Use VPC peering to the on-premises network",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "Set up an AWS Site-to-Site VPN as interim connectivity",
+                    "correct": true
+                }
+            ],
+            "explanation": "Site-to-Site VPN can be created quickly and encrypts traffic with IPsec, so it works as an interim or backup path. Waiting delays the project, exposing databases publicly is insecure, and VPC peering cannot reach an on-premises network.",
+            "sources": [
+                "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html",
+                "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html"
+            ],
+            "scenarioId": "perf-network-sc-1"
+        },
+        {
+            "id": "perf-network-07",
+            "type": "mcq",
+            "difficulty": 2,
+            "tags": [
+                "S3"
+            ],
+            "prompt": "Branch offices on several continents upload large files to a single S3 bucket over the internet, and uploads from distant offices are slow. Which change speeds up the uploads with the least effort?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Create a separate bucket in every Region and merge the data nightly",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "Move the bucket to the S3 Glacier storage class",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Enable S3 Transfer Acceleration on the bucket and upload through its accelerate endpoint",
+                    "correct": true
+                },
+                {
+                    "id": "d",
+                    "text": "Place an Application Load Balancer in front of the bucket",
+                    "correct": false
+                }
+            ],
+            "explanation": "S3 Transfer Acceleration routes uploads to the nearest edge location and then over the AWS network to the bucket, which helps distant clients. Many buckets add merge work and operational overhead, a storage class changes cost and not upload speed, and an ALB cannot be placed in front of S3.",
+            "sources": [
+                "https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html"
+            ]
+        },
+        {
+            "id": "perf-network-08",
+            "type": "mcq",
+            "difficulty": 2,
+            "tags": [
+                "Direct Connect"
+            ],
+            "prompt": "A company has one Direct Connect connection and must reach VPCs in three different AWS Regions from its data center. Which approach is the simplest?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Associate the connection with a Direct Connect gateway and attach the VPCs through it",
+                    "correct": true
+                },
+                {
+                    "id": "b",
+                    "text": "Order a separate Direct Connect connection for every Region",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Peer the on-premises router with each VPC directly",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "Create a NAT gateway in each VPC and route on-premises traffic through it",
+                    "correct": false
+                }
+            ],
+            "explanation": "A Direct Connect gateway lets one connection reach VPCs in multiple Regions. Separate connections add cost and lead time, a router cannot peer with a VPC directly, and NAT gateways provide outbound internet access for private subnets, not on-premises connectivity.",
+            "sources": [
+                "https://docs.aws.amazon.com/directconnect/latest/UserGuide/direct-connect-gateways.html"
+            ]
+        },
+        {
+            "id": "perf-network-09",
+            "type": "mcq",
+            "difficulty": 2,
+            "tags": [
+                "Transit Gateway"
+            ],
+            "prompt": "A company has dozens of VPCs and an on-premises network that all need to communicate. Managing a full mesh of VPC peering connections has become unmanageable. What should the architect use?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A VPC peering connection from each VPC to every other VPC, with route tables updated by script",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "An internet gateway in every VPC with security groups opened to all addresses",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "An Application Load Balancer that spans all of the VPCs",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "An AWS Transit Gateway with each VPC and the VPN or Direct Connect attachment connected to it",
+                    "correct": true
+                }
+            ],
+            "explanation": "Transit Gateway acts as a regional hub, so each network attaches once instead of forming a mesh. Scripted peering still needs a connection per pair, internet gateways send traffic over the public internet and weaken security, and a load balancer distributes requests and does not route between networks.",
+            "sources": [
+                "https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html"
+            ]
+        },
+        {
+            "id": "perf-network-010",
+            "type": "mcq",
+            "difficulty": 2,
+            "tags": [
+                "EC2"
+            ],
+            "prompt": "A tightly coupled HPC job runs on EC2 instances and needs the lowest possible network latency and the highest throughput between nodes. Which placement should be used?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A spread placement group",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "A cluster placement group",
+                    "correct": true
+                },
+                {
+                    "id": "c",
+                    "text": "Instances in different Regions",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "Instances in separate accounts with no placement group",
+                    "correct": false
+                }
+            ],
+            "explanation": "A cluster placement group packs instances close together in one Availability Zone for low-latency, high-throughput node-to-node traffic. A spread placement group separates instances onto distinct hardware for fault isolation, and different Regions or accounts add latency.",
+            "sources": [
+                "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html"
+            ]
+        },
+        {
+            "id": "perf-network-011",
+            "type": "mcq",
+            "difficulty": 2,
+            "tags": [
+                "Route 53"
+            ],
+            "prompt": "A media company must serve a different version of its site depending on the country of the viewer, for licensing reasons. Which Route 53 routing policy fits?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Latency routing",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "Weighted routing",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Simple routing",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "Geolocation routing",
+                    "correct": true
+                }
+            ],
+            "explanation": "Geolocation routing answers DNS queries based on the location of the user, such as country. Latency routing picks the lowest-latency Region regardless of country, weighted routing splits traffic by percentage, and simple routing has no location logic.",
+            "sources": [
+                "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html"
+            ]
+        },
+        {
+            "id": "perf-network-012",
+            "type": "mcq",
+            "difficulty": 1,
+            "tags": [
+                "ALB"
+            ],
+            "prompt": "A web application sends requests for /api/* to one set of containers and /images/* to another set on EC2. Which load balancer routes on the URL path with the least configuration?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Application Load Balancer with path-based listener rules",
+                    "correct": true
+                },
+                {
+                    "id": "b",
+                    "text": "Network Load Balancer with TCP listeners",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Gateway Load Balancer",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "Route 53 simple routing record",
+                    "correct": false
+                }
+            ],
+            "explanation": "An ALB listener rule can match path conditions and forward to different target groups. An NLB works at layer 4 and does not inspect URL paths, a Gateway Load Balancer is for inline virtual appliances, and DNS records cannot see request paths.",
+            "sources": [
+                "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html"
+            ]
+        },
+        {
+            "id": "perf-network-013",
+            "type": "mcq",
+            "difficulty": 2,
+            "tags": [
+                "Gateway Load Balancer"
+            ],
+            "prompt": "A company must send all VPC traffic through a fleet of third-party firewall appliances that can scale out and remain transparent to the applications. Which service is designed for this?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Application Load Balancer",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "Network Load Balancer with IP targets",
+                    "correct": false
+                },
+                {
+                    "id": "c",
+                    "text": "Gateway Load Balancer",
+                    "correct": true
+                },
+                {
+                    "id": "d",
+                    "text": "Amazon CloudFront",
+                    "correct": false
+                }
+            ],
+            "explanation": "Gateway Load Balancer distributes traffic to virtual appliances and scales them while keeping the traffic path transparent. An ALB terminates HTTP and is not for inline appliances, an NLB is not built for transparent appliance insertion, and CloudFront is a content delivery network.",
+            "sources": [
+                "https://docs.aws.amazon.com/elasticloadbalancing/latest/gateway/introduction.html"
+            ]
+        },
+        {
+            "id": "perf-network-014",
+            "type": "multi",
+            "difficulty": 2,
+            "tags": [
+                "EC2"
+            ],
+            "prompt": "Which TWO actions help maximize network performance between EC2 instances in a tightly coupled workload?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Launch the instances in a cluster placement group",
+                    "correct": true
+                },
+                {
+                    "id": "b",
+                    "text": "Use instance types that support the Elastic Network Adapter for enhanced networking",
+                    "correct": true
+                },
+                {
+                    "id": "c",
+                    "text": "Launch the instances in a spread placement group",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "Attach larger EBS volumes to each instance",
+                    "correct": false
+                },
+                {
+                    "id": "e",
+                    "text": "Put the instances in different Regions for redundancy",
+                    "correct": false
+                }
+            ],
+            "explanation": "A cluster placement group keeps instances close for low latency, and ENA-based enhanced networking gives higher bandwidth and lower latency. A spread group isolates instances rather than packing them, EBS size does not change instance network speed, and cross-Region placement adds latency.",
+            "sources": [
+                "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html",
+                "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/enhanced-networking-ena.html"
+            ]
+        },
+        {
+            "id": "perf-network-015",
+            "type": "multi",
+            "difficulty": 2,
+            "tags": [
+                "VPC",
+                "S3"
+            ],
+            "prompt": "Which TWO options let instances in a private subnet reach Amazon S3 without sending traffic through an internet gateway?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "A gateway VPC endpoint for S3",
+                    "correct": true
+                },
+                {
+                    "id": "b",
+                    "text": "A VPC interface endpoint (AWS PrivateLink) for S3",
+                    "correct": true
+                },
+                {
+                    "id": "c",
+                    "text": "A NAT gateway in a public subnet",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "An internet gateway with a security group that allows all outbound traffic",
+                    "correct": false
+                },
+                {
+                    "id": "e",
+                    "text": "A VPC peering connection to the S3 service",
+                    "correct": false
+                }
+            ],
+            "explanation": "Gateway endpoints and interface endpoints both keep S3 access on the AWS network inside the VPC path. A NAT gateway and an internet gateway reach S3 through the internet gateway, and S3 is not a VPC so it cannot be peered.",
+            "sources": [
+                "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html",
+                "https://docs.aws.amazon.com/AmazonS3/latest/userguide/privatelink-interface-endpoints.html"
+            ]
+        },
+        {
+            "id": "perf-network-016",
+            "type": "scenario",
+            "difficulty": 3,
+            "tags": [
+                "Global Accelerator"
+            ],
+            "prompt": "Which solution meets the requirements with the least operational overhead?",
+            "options": [
+                {
+                    "id": "a",
+                    "text": "Route 53 latency records pointing at each ALB, with a low TTL",
+                    "correct": false
+                },
+                {
+                    "id": "b",
+                    "text": "An AWS Global Accelerator accelerator with an endpoint group for the ALB in each Region",
+                    "correct": true
+                },
+                {
+                    "id": "c",
+                    "text": "Two CloudFront distributions, one per Region, with different domain names",
+                    "correct": false
+                },
+                {
+                    "id": "d",
+                    "text": "An Application Load Balancer in each Region, with partners allowing the ALB IP addresses",
+                    "correct": false
+                }
+            ],
+            "explanation": "Global Accelerator provides two static anycast IP addresses and shifts traffic to healthy Regional endpoints quickly, without relying on DNS caching. DNS records still expose changing ALB addresses and depend on cache expiry, two CloudFront distributions do not offer shared fixed IPs or failover, and ALB IP addresses can change.",
+            "sources": [
+                "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html"
+            ],
+            "scenarioId": "perf-network-sc-2"
+        },
+        {
+            "id": "perf-network-017",
+            "type": "matching",
+            "difficulty": 1,
+            "tags": [
+                "CloudFront",
+                "Global Accelerator",
+                "Transit Gateway",
+                "Direct Connect"
+            ],
+            "prompt": "Match each service to the problem it is best suited to solve.",
+            "pairs": [
+                {
+                    "left": "Amazon CloudFront",
+                    "right": "Cache static content at edge locations near users"
+                },
+                {
+                    "left": "AWS Global Accelerator",
+                    "right": "Provide static anycast IP addresses that route to healthy Regional endpoints"
+                },
+                {
+                    "left": "AWS Transit Gateway",
+                    "right": "Connect many VPCs and on-premises networks through one hub"
+                },
+                {
+                    "left": "AWS Direct Connect",
+                    "right": "Provide a dedicated private network connection to AWS"
+                }
+            ],
+            "explanation": "CloudFront is a caching content delivery network, Global Accelerator offers static anycast IPs over the AWS network, Transit Gateway is a regional network hub, and Direct Connect is a dedicated private link from a data center.",
+            "sources": [
+                "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html",
+                "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html",
+                "https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html",
+                "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html"
+            ]
+        }
+    ]
+}

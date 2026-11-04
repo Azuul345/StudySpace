@@ -13,7 +13,9 @@
       "RDS Proxy pools connections so bursty Lambda or microservice traffic does not exhaust the database",
       "EventBridge routes events by rule; Step Functions orchestrates workflows; Kinesis Data Streams handles per-shard ordered, replayable streams"
     ],
-    "diagrams": ["sqs-decoupling"],
+    "diagrams": [
+      "sqs-decoupling"
+    ],
     "docLinks": [
       "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html",
       "https://docs.aws.amazon.com/sns/latest/dg/welcome.html",
@@ -27,6 +29,10 @@
     {
       "id": "sd-sc-1",
       "text": "A retailer runs its order service on an Auto Scaling group behind an Application Load Balancer. Each web server writes orders synchronously to a single RDS database. During flash sales the database saturates and orders are lost. Orders may be processed within a few minutes, but none can be lost."
+    },
+    {
+      "id": "scalable-decoupled-sc-2",
+      "text": "A media company lets customers upload video files to Amazon S3. Each file needs a transcoding step in a container image that can run for up to 40 minutes. Upload volume is highly variable, every file must be processed, failed jobs must be retried, and the team wants minimal server management."
     }
   ],
   "questions": [
@@ -504,6 +510,398 @@
       "explanation": "AWS Step Functions models workflows as state machines and provides retries, catch handlers, and branching, so you do not hand-code orchestration between functions.",
       "sources": [
         "https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html"
+      ]
+    },
+    {
+      "id": "scalable-decoupled-015",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "EventBridge"
+      ],
+      "prompt": "A company wants events from a SaaS partner application and from its own AWS services routed to different targets based on fields in the event, with no custom routing code. Which service fits best?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Amazon EventBridge with rules that match event patterns",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Amazon SQS with a consumer that inspects each message and forwards it",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "AWS Direct Connect with a routing table",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Amazon Route 53 weighted records",
+          "correct": false
+        }
+      ],
+      "explanation": "EventBridge rules match event content and deliver to chosen targets, and it supports partner event sources, so no routing code is needed. A single SQS queue would need custom forwarding code. Direct Connect is a network link, not an event router. Route 53 weighted records route DNS queries, not events.",
+      "sources": [
+        "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html"
+      ]
+    },
+    {
+      "id": "scalable-decoupled-016",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "Kinesis"
+      ],
+      "prompt": "Several independent applications must each read the same ordered stream of clickstream records, and a new application must be able to replay records from earlier in the day. Which service fits?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Amazon SQS standard queue, because each consumer deletes messages after reading",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Amazon SNS topic with HTTP subscribers",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Amazon SQS FIFO queue with one message group",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Amazon Kinesis Data Streams, because records are retained and many consumers can read them independently",
+          "correct": true
+        }
+      ],
+      "explanation": "Kinesis Data Streams keeps records for a retention period, preserves order per shard, and lets multiple consumers read and replay independently. An SQS queue removes a message once deleted so it cannot serve several readers or replays. SNS does not retain messages for replay. A FIFO queue still deletes consumed messages and does not provide multi-consumer replay.",
+      "sources": [
+        "https://docs.aws.amazon.com/streams/latest/dev/introduction.html"
+      ]
+    },
+    {
+      "id": "scalable-decoupled-017",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "Auto Scaling"
+      ],
+      "prompt": "Traffic to a web application follows a regular daily pattern that repeats every week, and instances take several minutes to warm up. The team wants capacity ready before the load arrives. What should they configure?",
+      "options": [
+        {
+          "id": "a",
+          "text": "A simple scaling policy with a long cooldown",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Predictive scaling on the Auto Scaling group",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "A larger instance type with a fixed group size",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "An SQS queue in front of the load balancer",
+          "correct": false
+        }
+      ],
+      "explanation": "Predictive scaling uses historical load to forecast demand and launches capacity ahead of time, which suits recurring patterns and slow warm-up. A simple policy reacts only after load rises. A fixed size wastes money off-peak and does not scale. An SQS queue does not fit a synchronous web front end.",
+      "sources": [
+        "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-predictive-scaling.html"
+      ]
+    },
+    {
+      "id": "scalable-decoupled-018",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "SNS"
+      ],
+      "prompt": "An SNS topic publishes order events. The shipping queue must receive only events where the order type is \"physical\", while the billing queue receives all events. What is the simplest way?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Create two topics and have the publisher decide which to use",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Run a Lambda function that filters and forwards messages to the shipping queue",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Add a subscription filter policy to the shipping queue subscription",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Use a FIFO queue for shipping, which discards other message types",
+          "correct": false
+        }
+      ],
+      "explanation": "An SNS subscription filter policy delivers only messages whose attributes match, with no extra code. Two topics push routing logic into the publisher and couple it to consumers. A forwarding Lambda adds components to run. FIFO queues do not filter by content.",
+      "sources": [
+        "https://docs.aws.amazon.com/sns/latest/dg/sns-subscription-filter-policies.html"
+      ]
+    },
+    {
+      "id": "scalable-decoupled-019",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "Aurora"
+      ],
+      "prompt": "A read-heavy reporting workload overloads the writer of an Amazon Aurora cluster. Read demand varies during the day. Which approach scales reads with the least operational effort?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Create a larger writer instance only",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Copy the database nightly to a new cluster for reporting",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Add Aurora Replicas and use Aurora Auto Scaling to adjust their number, with reads sent to the reader endpoint",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Move reporting queries to the writer during off-peak hours",
+          "correct": false
+        }
+      ],
+      "explanation": "Aurora Replicas serve reads, the reader endpoint balances across them, and Aurora Auto Scaling adds or removes replicas with load. A larger writer does not offload reads. Nightly copies give stale data and add work. Running reports on the writer keeps the contention.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Integrating.AutoScaling.html"
+      ]
+    },
+    {
+      "id": "scalable-decoupled-020",
+      "type": "mcq",
+      "difficulty": 3,
+      "tags": [
+        "SQS",
+        "Auto Scaling"
+      ],
+      "prompt": "Worker instances in an Auto Scaling group process jobs from an SQS queue. The team wants the group to grow and shrink with the backlog. Which metric approach is recommended?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Scale on average CPU utilization of the group only",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Scale on a backlog-per-instance value computed from queue depth and the group size",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Scale on the number of messages sent per minute by the producer",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Scale on network out of the load balancer",
+          "correct": false
+        }
+      ],
+      "explanation": "A backlog-per-instance metric ties capacity to the work waiting and to how many workers exist, so scaling matches demand. CPU may stay low while the queue grows. Producer send rate ignores consumer throughput. Load balancer traffic is unrelated to a queue-driven worker fleet.",
+      "sources": [
+        "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-using-sqs-queue.html"
+      ]
+    },
+    {
+      "id": "scalable-decoupled-021",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "DynamoDB"
+      ],
+      "prompt": "A new application has unpredictable, spiky traffic, and the team does not want to plan or manage capacity for its NoSQL table. Which option fits?",
+      "options": [
+        {
+          "id": "a",
+          "text": "DynamoDB provisioned capacity with a fixed number of units",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "A self-managed Cassandra cluster on EC2",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "An RDS instance with Multi-AZ enabled",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "DynamoDB on-demand capacity mode",
+          "correct": true
+        }
+      ],
+      "explanation": "On-demand mode scales read and write capacity automatically and bills per request, which suits unpredictable traffic with no capacity planning. Fixed provisioned units can throttle in spikes. Self-managed Cassandra adds heavy operations. RDS is relational and still needs instance sizing.",
+      "sources": [
+        "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/on-demand-capacity-mode.html"
+      ]
+    },
+    {
+      "id": "scalable-decoupled-022",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": [
+        "ELB",
+        "Auto Scaling"
+      ],
+      "prompt": "An Auto Scaling group behind an Application Load Balancer is scaling in and users see failed requests on terminating instances. Which TWO actions reduce this?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Set a deregistration delay on the target group so in-flight requests can finish",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Disable health checks on the target group",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Use a termination lifecycle hook so an instance can finish work before it is terminated",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Reduce the group minimum size to zero",
+          "correct": false
+        },
+        {
+          "id": "e",
+          "text": "Remove the load balancer and use DNS round robin",
+          "correct": false
+        }
+      ],
+      "explanation": "A deregistration delay lets the load balancer drain in-flight requests, and a termination lifecycle hook pauses termination so the instance can complete work. Disabling health checks sends traffic to bad instances. A minimum of zero does not protect requests. DNS round robin gives no draining and responds slowly to changes.",
+      "sources": [
+        "https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html"
+      ]
+    },
+    {
+      "id": "scalable-decoupled-023",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": [
+        "Lambda",
+        "SQS"
+      ],
+      "prompt": "Which TWO services can be polled by AWS Lambda through an event source mapping?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Amazon SNS topics",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Amazon SQS queues",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Amazon S3 bucket policies",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Amazon Kinesis data streams",
+          "correct": true
+        },
+        {
+          "id": "e",
+          "text": "Amazon CloudFront distributions",
+          "correct": false
+        }
+      ],
+      "explanation": "Lambda event source mappings poll SQS queues and Kinesis streams and invoke the function with batches. SNS pushes to Lambda through a subscription rather than being polled. Bucket policies and CloudFront distributions are not event sources that Lambda polls.",
+      "sources": [
+        "https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventsourcemapping.html"
+      ]
+    },
+    {
+      "id": "scalable-decoupled-024",
+      "type": "scenario",
+      "difficulty": 3,
+      "tags": [
+        "S3",
+        "SQS",
+        "Fargate"
+      ],
+      "prompt": "Which solution meets these requirements with the least operational overhead?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Trigger a Lambda function from each S3 upload and run the transcoding inside it",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Send S3 event notifications to an SQS queue and run the transcoding container as Fargate tasks that scale on queue depth",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Run a fixed fleet of EC2 instances that list the bucket every minute",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Publish S3 events to an SNS topic with an email subscription for operators to start jobs",
+          "correct": false
+        }
+      ],
+      "explanation": "S3 to SQS buffers uploads durably and gives retries, and Fargate tasks run long containers without servers while scaling with the backlog. Lambda is limited to 15 minutes per invocation, so 40-minute jobs fail. A fixed EC2 fleet needs management and wastes capacity between spikes. Email notifications make processing manual.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html"
+      ],
+      "scenarioId": "scalable-decoupled-sc-2"
+    },
+    {
+      "id": "scalable-decoupled-025",
+      "type": "ordering",
+      "difficulty": 2,
+      "tags": [
+        "Auto Scaling",
+        "ELB"
+      ],
+      "prompt": "Put these events in the order they happen when a target tracking policy scales out an Auto Scaling group behind an Application Load Balancer.",
+      "steps": [
+        "The load balancer starts routing requests to the new instance",
+        "The group launches a new instance",
+        "A CloudWatch metric stays above the target value",
+        "The new instance passes the target group health checks"
+      ],
+      "correctOrder": [
+        2,
+        1,
+        3,
+        0
+      ],
+      "explanation": "Target tracking reacts to a metric above its target, the group launches an instance, the instance must pass health checks, and only then does the load balancer send it traffic.",
+      "sources": [
+        "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html"
       ]
     }
   ]

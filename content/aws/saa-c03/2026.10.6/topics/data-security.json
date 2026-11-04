@@ -1,0 +1,775 @@
+{
+  "schemaVersion": 1,
+  "topicId": "data-security",
+  "domainId": "secure",
+  "name": "Determine appropriate data security controls",
+  "lesson": {
+    "summary": "Protect data with encryption at rest and in transit, strong key management, and controls that prevent tampering or loss. Use AWS KMS for key management, ACM for TLS certificates, S3 Object Lock and AWS Backup Vault Lock for immutability, and Amazon Macie to find sensitive data.",
+    "keyPoints": [
+      "SSE-KMS with a customer managed key gives control and CloudTrail auditing of key use",
+      "Enforce TLS with aws:SecureTransport and ACM certificates",
+      "KMS automatic rotation keeps the same key ARN",
+      "AWS managed keys cannot be shared across accounts; use customer managed keys",
+      "Multi-Region keys support cross-Region disaster recovery",
+      "S3 Object Lock compliance mode gives immutable retention",
+      "Macie discovers sensitive data in S3; CloudHSM offers dedicated HSMs"
+    ],
+    "diagrams": [
+      "kms-envelope-encryption"
+    ],
+    "docLinks": [
+      "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingEncryption.html",
+      "https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html",
+      "https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html",
+      "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html",
+      "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "data-security-sc-1",
+      "text": "A healthcare company stores patient records in Amazon S3 and Amazon RDS in one AWS Region and keeps a disaster recovery copy in a second Region. Compliance requires encryption at rest with keys the company controls, and those keys must rotate every year."
+    },
+    {
+      "id": "data-security-sc-2",
+      "text": "A media company stores legal hold footage in Amazon S3. Auditors require that the objects cannot be deleted or altered by any user for five years, even by account administrators. The company also needs all objects encrypted with a key it controls and wants public access blocked."
+    }
+  ],
+  "questions": [
+    {
+      "id": "data-security-001",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "S3",
+        "KMS"
+      ],
+      "prompt": "A company must encrypt objects in S3 with keys the company controls, and every use of the key must be auditable in CloudTrail. Which option meets this with the least operational overhead?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Server-side encryption with Amazon S3 managed keys (SSE-S3)",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Client-side encryption with keys stored on an on-premises server",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Server-side encryption with a customer managed AWS KMS key (SSE-KMS)",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "No encryption, relying on a private bucket",
+          "correct": false
+        }
+      ],
+      "explanation": "SSE-KMS with a customer managed key gives the company control over the key policy and logs each key use to CloudTrail while S3 handles the encryption. SSE-S3 keys are not controlled or individually audited by the customer. Client-side encryption with on-premises keys adds heavy operational work. A private bucket does not encrypt the data.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingEncryption.html",
+        "https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html"
+      ]
+    },
+    {
+      "id": "data-security-002",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "S3"
+      ],
+      "prompt": "A security team needs to guarantee that all requests to an S3 bucket use TLS. What should they do?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Enable default encryption on the bucket",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Add a bucket policy statement that denies requests when aws:SecureTransport is false",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Enable S3 versioning",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Turn on S3 Block Public Access",
+          "correct": false
+        }
+      ],
+      "explanation": "A deny statement conditioned on aws:SecureTransport rejects any request made over plain HTTP. Default encryption protects data at rest, not the connection. Versioning protects against overwrites. Block Public Access prevents public policies and ACLs but does not force HTTPS.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies.html",
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/security-best-practices.html"
+      ]
+    },
+    {
+      "id": "data-security-003",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "S3"
+      ],
+      "prompt": "A regulation requires that financial records in S3 cannot be deleted or overwritten by anyone, including the root user, for seven years. Which feature should the architect use?",
+      "options": [
+        {
+          "id": "a",
+          "text": "S3 Versioning with MFA delete",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "S3 Object Lock in governance mode",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "A bucket policy that denies s3:DeleteObject",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "S3 Object Lock in compliance mode with a seven-year retention period",
+          "correct": true
+        }
+      ],
+      "explanation": "Compliance mode prevents any user, including root, from deleting or overwriting a locked object version during the retention period. Governance mode can be bypassed by users with special permission. A bucket policy can be changed by an administrator. MFA delete protects versions but does not enforce an immutable retention period.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"
+      ]
+    },
+    {
+      "id": "data-security-004",
+      "type": "mcq",
+      "difficulty": 3,
+      "tags": [
+        "EBS",
+        "KMS"
+      ],
+      "prompt": "A company encrypted an EBS volume with the AWS managed key aws/ebs and now needs to share a snapshot of it with another AWS account. What must the company do?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Copy the snapshot and re-encrypt it with a customer managed KMS key, then share the snapshot and grant the other account access to the key",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Make the snapshot public",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Share the snapshot directly; the other account can decrypt with the AWS managed key",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Disable encryption on the volume using the console",
+          "correct": false
+        }
+      ],
+      "explanation": "AWS managed keys cannot be shared across accounts, so the snapshot must be re-encrypted with a customer managed key and that key must be made available to the target account. Sharing as is leaves the other account unable to decrypt. Public snapshots would expose the data. Encryption cannot simply be disabled on an existing encrypted volume.",
+      "sources": [
+        "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-modifying-snapshot-permissions.html",
+        "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-encryption.html"
+      ]
+    },
+    {
+      "id": "data-security-005",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": [
+        "ACM",
+        "RDS"
+      ],
+      "prompt": "Which TWO actions protect data in transit? (Choose two.)",
+      "options": [
+        {
+          "id": "a",
+          "text": "Use an ACM certificate on an HTTPS listener of an Application Load Balancer",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Enable EBS encryption on the instance volumes",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Require TLS connections to the RDS database instance",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Enable S3 default encryption with SSE-S3",
+          "correct": false
+        },
+        {
+          "id": "e",
+          "text": "Turn on RDS storage encryption",
+          "correct": false
+        }
+      ],
+      "explanation": "An ACM certificate on an HTTPS listener encrypts client connections, and requiring TLS to RDS encrypts the database connection. EBS encryption, S3 default encryption, and RDS storage encryption all protect data at rest, not data in transit.",
+      "sources": [
+        "https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html",
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.SSL.html"
+      ]
+    },
+    {
+      "id": "data-security-006",
+      "type": "truefalse",
+      "difficulty": 2,
+      "tags": [
+        "KMS"
+      ],
+      "statement": "When automatic rotation is enabled for a customer managed KMS key, the key ID and ARN change, so applications must be updated to use the new key.",
+      "answer": false,
+      "explanation": "False. Rotation replaces the key material but the key ID, ARN, and aliases stay the same, and KMS can still decrypt data encrypted under older key material.",
+      "sources": [
+        "https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html"
+      ]
+    },
+    {
+      "id": "data-security-007",
+      "type": "matching",
+      "difficulty": 1,
+      "tags": [
+        "CloudHSM",
+        "ACM",
+        "Backup",
+        "KMS"
+      ],
+      "prompt": "Match each service or feature to its purpose.",
+      "pairs": [
+        {
+          "left": "AWS CloudHSM",
+          "right": "Dedicated single-tenant hardware security modules you control"
+        },
+        {
+          "left": "AWS Certificate Manager",
+          "right": "Provisions and renews public TLS certificates for integrated services"
+        },
+        {
+          "left": "AWS Backup Vault Lock",
+          "right": "Write-once-read-many protection for backups"
+        },
+        {
+          "left": "KMS key policy",
+          "right": "Primary resource policy that controls who can use a KMS key"
+        }
+      ],
+      "explanation": "Each pairing reflects the documented purpose of the service or feature.",
+      "sources": [
+        "https://docs.aws.amazon.com/cloudhsm/latest/userguide/introduction.html",
+        "https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html",
+        "https://docs.aws.amazon.com/aws-backup/latest/devguide/vault-lock.html",
+        "https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html"
+      ]
+    },
+    {
+      "id": "data-security-008",
+      "type": "scenario",
+      "difficulty": 2,
+      "tags": [
+        "KMS",
+        "S3",
+        "RDS"
+      ],
+      "prompt": "Which approach meets the annual rotation requirement without changing application code?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Create a new key every year and re-encrypt all data manually",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Use an AWS managed key and ask AWS to rotate on demand",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Use a customer managed KMS key with automatic key rotation enabled",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Store the encryption key in the application source code",
+          "correct": false
+        }
+      ],
+      "scenarioId": "data-security-sc-1",
+      "explanation": "Automatic rotation on a customer managed key rotates the key material on a schedule while the key ARN stays the same, so the applications need no changes. Manual re-encryption is heavy work. AWS managed keys are rotated on AWS's schedule and the customer does not control them. A key in source code is insecure.",
+      "sources": [
+        "https://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html"
+      ]
+    },
+    {
+      "id": "data-security-009",
+      "type": "scenario",
+      "difficulty": 3,
+      "tags": [
+        "KMS",
+        "S3"
+      ],
+      "prompt": "Which feature lets the disaster recovery Region decrypt the replicated data using a key related to the primary key without a cross-Region call to the primary Region?",
+      "options": [
+        {
+          "id": "a",
+          "text": "A key alias with the same name in both Regions",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "A KMS multi-Region key with a replica in the DR Region",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "An S3 bucket policy that copies the key material",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "An IAM role in the DR Region that assumes the primary key",
+          "correct": false
+        }
+      ],
+      "scenarioId": "data-security-sc-1",
+      "explanation": "Multi-Region keys have the same key ID and key material in each Region, so ciphertext can be decrypted in the DR Region using a local replica. Aliases with the same name are separate, unrelated keys. A bucket policy does not copy key material. A role cannot assume a KMS key.",
+      "sources": [
+        "https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html"
+      ]
+    },
+    {
+      "id": "data-security-010",
+      "type": "typed",
+      "difficulty": 1,
+      "tags": [
+        "Macie",
+        "S3"
+      ],
+      "prompt": "Which AWS service automatically discovers and reports sensitive data such as personally identifiable information stored in Amazon S3 buckets?",
+      "rubric": [
+        {
+          "any": [
+            "macie",
+            "amazon macie"
+          ]
+        }
+      ],
+      "explanation": "Amazon Macie uses machine learning and pattern matching to discover sensitive data in S3 and reports findings.",
+      "sources": [
+        "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html",
+        "https://docs.aws.amazon.com/macie/latest/user/data-classification.html"
+      ]
+    },
+    {
+      "id": "data-security-011",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "Secrets Manager",
+        "RDS"
+      ],
+      "prompt": "A company stores database credentials for an Amazon RDS for MySQL instance. Security policy requires the password to change automatically every 30 days with no application downtime and minimal custom code. Which solution meets this requirement with the least operational overhead?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Store the password in an encrypted S3 object and run a scheduled Lambda function that rewrites it.",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Store the password as a SecureString in Systems Manager Parameter Store and rotate it by hand each month.",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Store the credentials in AWS Secrets Manager and enable automatic rotation with the managed rotation for RDS.",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Store the password in an environment variable of each EC2 instance and redeploy the AMI every 30 days.",
+          "correct": false
+        }
+      ],
+      "explanation": "Secrets Manager supports built-in automatic rotation for RDS credentials, so applications fetch the current secret with no custom rotation code. The S3 plus Lambda design needs custom code to change the password in the database and keep it in sync. Parameter Store SecureString does not offer native automatic rotation, so manual rotation is error-prone. Environment variables baked into an AMI require redeployments and expose the secret on each instance.",
+      "sources": [
+        "https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html",
+        "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html"
+      ]
+    },
+    {
+      "id": "data-security-012",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "Macie",
+        "S3"
+      ],
+      "prompt": "A company is migrating millions of documents into several S3 buckets and must locate any files containing credit card numbers or government ID numbers so they can be remediated. Which solution requires the least effort?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Enable Amazon Macie and run sensitive data discovery jobs on the buckets.",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Enable Amazon GuardDuty S3 protection to scan object contents for card numbers.",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Write a Lambda function that downloads every object and applies regular expressions.",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Enable AWS Config rules to list objects that match sensitive data patterns.",
+          "correct": false
+        }
+      ],
+      "explanation": "Macie uses managed data identifiers to find sensitive data such as card and ID numbers in S3. GuardDuty S3 protection detects suspicious access activity, not the content of objects. A custom Lambda scanner works but carries large development and maintenance overhead. AWS Config evaluates resource configuration, not object contents.",
+      "sources": [
+        "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html"
+      ]
+    },
+    {
+      "id": "data-security-013",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "S3",
+        "KMS"
+      ],
+      "prompt": "An application uploads a very large number of small objects to an S3 bucket using SSE-KMS. The company sees high AWS KMS request charges and throttling. Which change reduces KMS requests and cost the most while keeping SSE-KMS?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Switch the bucket to SSE-C and have clients supply their own keys.",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Replace the customer managed key with an AWS managed key.",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Move the objects to S3 Intelligent-Tiering.",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Enable S3 Bucket Keys on the bucket.",
+          "correct": true
+        }
+      ],
+      "explanation": "S3 Bucket Keys let S3 generate short-lived bucket-level data keys from the KMS key, cutting the number of KMS calls by a large margin. SSE-C removes KMS and would force clients to manage and send keys on every request. Switching to an AWS managed key still calls KMS per object. Intelligent-Tiering changes storage class and has no effect on encryption request volume.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucket-key.html"
+      ]
+    },
+    {
+      "id": "data-security-014",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "RDS",
+        "KMS"
+      ],
+      "prompt": "A company has an existing unencrypted Amazon RDS for PostgreSQL instance and a new requirement to encrypt data at rest. What is the correct approach?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Modify the instance and turn on the encryption setting; RDS encrypts the volume in place with no downtime.",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Create a snapshot, copy it with encryption enabled, and restore a new DB instance from the encrypted copy.",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Enable S3 default encryption on the automated backup bucket that RDS uses.",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Attach a KMS key policy to the existing instance so new writes are encrypted.",
+          "correct": false
+        }
+      ],
+      "explanation": "An unencrypted RDS instance cannot be encrypted in place; the supported path is to copy a snapshot with encryption and restore from it. Modifying the instance to enable encryption is not supported for an existing unencrypted instance. RDS backups are not stored in a bucket you configure. A key policy only governs key use and does not encrypt an existing instance.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Encryption.html"
+      ]
+    },
+    {
+      "id": "data-security-015",
+      "type": "mcq",
+      "difficulty": 1,
+      "tags": [
+        "EFS"
+      ],
+      "prompt": "A company mounts an Amazon EFS file system from EC2 instances and must protect data in transit between the instances and the file system. Which option does this?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Enable EFS encryption at rest when the file system is created.",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Place the instances and mount targets in the same Availability Zone.",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Mount the file system using the EFS mount helper with TLS enabled.",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Attach a security group that allows only NFS port 2049.",
+          "correct": false
+        }
+      ],
+      "explanation": "The EFS mount helper with the tls option wraps NFS traffic in TLS, which encrypts data in transit. Encryption at rest protects stored data, not the network path. Using the same Availability Zone does not encrypt traffic. A security group restricts who can connect but does not encrypt the connection.",
+      "sources": [
+        "https://docs.aws.amazon.com/efs/latest/ug/encryption.html"
+      ]
+    },
+    {
+      "id": "data-security-016",
+      "type": "mcq",
+      "difficulty": 3,
+      "tags": [
+        "S3",
+        "KMS"
+      ],
+      "prompt": "Account A owns an S3 bucket whose objects are encrypted with a customer managed KMS key in Account A. A role in Account B must read the objects. The S3 bucket policy already allows the role. Reads still fail with an access denied error. What is the most likely missing permission?",
+      "options": [
+        {
+          "id": "a",
+          "text": "The Account A key policy must allow the Account B role to use kms:Decrypt, and the role needs matching permissions.",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Account B must enable S3 Transfer Acceleration on the bucket.",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "The bucket must be switched to SSE-S3, because KMS keys cannot be used across accounts.",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Account B must create a VPC peering connection to Account A.",
+          "correct": false
+        }
+      ],
+      "explanation": "Cross-account use of a customer managed key requires permission in the key policy of the owning account and in the IAM policy of the calling role. KMS keys can be used across accounts, so changing to SSE-S3 is unnecessary. Transfer Acceleration affects transfer speed, not authorization. S3 is reached over its public API or endpoints, so VPC peering is not involved.",
+      "sources": [
+        "https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-modifying-external-accounts.html",
+        "https://docs.aws.amazon.com/kms/latest/developerguide/overview.html"
+      ]
+    },
+    {
+      "id": "data-security-017",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "DynamoDB",
+        "KMS"
+      ],
+      "prompt": "A company needs to know which of its DynamoDB tables are encrypted at rest and wants the least management effort. What is true about DynamoDB encryption at rest?",
+      "options": [
+        {
+          "id": "a",
+          "text": "It must be enabled per table with a customer provided key before data is written.",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "It is available only when the table is placed inside a VPC.",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "It requires the application to encrypt each attribute before calling the API.",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "All tables are encrypted at rest by default, and you choose the type of KMS key used.",
+          "correct": true
+        }
+      ],
+      "explanation": "DynamoDB encrypts all table data at rest by default, with a choice of AWS owned, AWS managed, or customer managed KMS keys. It does not require customer provided keys per table. DynamoDB is not deployed in a VPC, so that is not a condition. Client-side attribute encryption is optional and not required for encryption at rest.",
+      "sources": [
+        "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/EncryptionAtRest.html"
+      ]
+    },
+    {
+      "id": "data-security-018",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": [
+        "S3",
+        "KMS"
+      ],
+      "prompt": "A company wants to prevent unencrypted objects from ever being stored in an S3 bucket and to make encryption automatic for developers. Which TWO actions meet this? (Choose two.)",
+      "options": [
+        {
+          "id": "a",
+          "text": "Enable default encryption on the bucket with SSE-KMS.",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Enable S3 versioning on the bucket.",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Add a bucket policy that denies s3:PutObject requests lacking server-side encryption headers.",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Enable S3 Transfer Acceleration.",
+          "correct": false
+        },
+        {
+          "id": "e",
+          "text": "Configure a lifecycle rule to expire unencrypted objects after one day.",
+          "correct": false
+        }
+      ],
+      "explanation": "Default encryption applies encryption automatically to new objects, and a deny policy on missing encryption headers rejects non-compliant uploads. Versioning protects against overwrites but does not encrypt. Transfer Acceleration speeds transfer and does not affect encryption. A lifecycle rule would still allow unencrypted objects to exist before expiry.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingEncryption.html"
+      ]
+    },
+    {
+      "id": "data-security-019",
+      "type": "multi",
+      "difficulty": 3,
+      "tags": [
+        "KMS",
+        "S3"
+      ],
+      "prompt": "A company replicates objects encrypted with SSE-KMS from a source S3 bucket to a bucket in another Region. Which TWO items must be in place for the replicated objects to be encrypted with a KMS key in the destination Region? (Choose two.)",
+      "options": [
+        {
+          "id": "a",
+          "text": "A KMS key in the destination Region specified in the replication rule.",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Versioning disabled on both buckets.",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "The replication IAM role must have permission to decrypt with the source key and encrypt with the destination key.",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "The destination bucket must be in the same Region as the source.",
+          "correct": false
+        },
+        {
+          "id": "e",
+          "text": "Objects must first be changed to SSE-C.",
+          "correct": false
+        }
+      ],
+      "explanation": "The replication rule must name a destination Region KMS key, and the replication role needs kms:Decrypt on the source key and kms:Encrypt on the destination key. Versioning must be enabled, not disabled, for replication. A cross-Region setup by definition has buckets in different Regions. SSE-C objects are not suited to this and conversion is not required.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication-config-for-kms-objects.html"
+      ]
+    },
+    {
+      "id": "data-security-020",
+      "type": "ordering",
+      "difficulty": 2,
+      "tags": [
+        "RDS",
+        "KMS"
+      ],
+      "prompt": "Put the steps in order to encrypt an existing unencrypted Amazon RDS database with minimal data loss.",
+      "steps": [
+        "Restore a new DB instance from the encrypted snapshot copy",
+        "Create a manual snapshot of the unencrypted DB instance",
+        "Copy the snapshot and enable encryption with a KMS key",
+        "Point the application to the new encrypted DB instance"
+      ],
+      "correctOrder": [
+        1,
+        2,
+        0,
+        3
+      ],
+      "explanation": "Take a snapshot first, copy it with encryption enabled, restore a new instance from that encrypted copy, and finally switch the application over. The order matters because encryption can only be applied during the copy and restore cannot occur before the encrypted copy exists.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Encryption.html"
+      ]
+    },
+    {
+      "id": "data-security-021",
+      "type": "scenario",
+      "scenarioId": "data-security-sc-2",
+      "difficulty": 3,
+      "tags": [
+        "S3",
+        "KMS"
+      ],
+      "prompt": "Which configuration meets all of the auditor requirements with the least operational overhead?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Enable S3 Object Lock in governance mode with a five-year retention period, SSE-S3, and a bucket policy.",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Enable S3 Object Lock in compliance mode with a five-year retention period, SSE-KMS using a customer managed key, and S3 Block Public Access.",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Enable S3 versioning with MFA delete, SSE-KMS using an AWS managed key, and a lifecycle rule.",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Store the footage on an encrypted EBS volume and take daily snapshots retained for five years.",
+          "correct": false
+        }
+      ],
+      "explanation": "Compliance mode prevents any user, including the root user, from overwriting or deleting protected versions during retention, SSE-KMS with a customer managed key gives control of the key, and Block Public Access removes public exposure. Governance mode can be bypassed by users with special permissions, and SSE-S3 does not give key control. MFA delete can be disabled by the root user and an AWS managed key is not company controlled. EBS snapshots are not suited to object storage and can be deleted.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html",
+        "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingEncryption.html"
+      ]
+    }
+  ]
+}
