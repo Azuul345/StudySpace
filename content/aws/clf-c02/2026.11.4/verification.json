@@ -1,0 +1,762 @@
+{
+  "schemaVersion": 1,
+  "verifier": "independent verifier agent (separate from the author)",
+  "verifiedOn": "2026-11-04",
+  "status": "verified",
+  "summary": {
+    "checked": 88,
+    "passed": 88,
+    "failed": 0,
+    "withCaveats": 44
+  },
+  "items": [
+    {
+      "kind": "question",
+      "id": "cloud-concepts-001",
+      "result": "pass",
+      "reason": "Page defines cloud computing as on-demand IT resources over the internet with pay-as-you-go pricing and contrasts it with owning and maintaining data centers.",
+      "urlChecked": "https://aws.amazon.com/what-is-cloud-computing/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "cloud-concepts-002",
+      "result": "pass",
+      "reason": "Page says you pay only when you consume resources and need not invest heavily before use, so the statement is false as keyed.",
+      "urlChecked": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "cloud-concepts-003",
+      "result": "pass",
+      "reason": "Stop guessing capacity (scale up and down, no idle resources) is the benefit the page gives for the seasonal spike scenario.",
+      "urlChecked": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html",
+      "carried": false,
+      "caveat": "Physical security of data centers as an AWS responsibility is not on the cited page; it is confirmed on the shared responsibility page."
+    },
+    {
+      "kind": "question",
+      "id": "cloud-concepts-004",
+      "result": "pass",
+      "reason": "Page confirms paying only for resources consumed, with costs tracking usage under variable expense.",
+      "urlChecked": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "cloud-concepts-005",
+      "result": "pass",
+      "reason": "All four matched pairs (stop guessing capacity, speed and agility, go global in minutes, economies of scale) are described on the page.",
+      "urlChecked": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "cloud-concepts-006",
+      "result": "pass",
+      "reason": "Pay-as-you-go pricing is named on the page as the model where you pay for what you consume; typed rubric matches.",
+      "urlChecked": "https://aws.amazon.com/what-is-cloud-computing/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "global-infrastructure-001",
+      "result": "pass",
+      "reason": "Page says a Region is a separate geographic area with multiple Availability Zones, and an AZ is one or more discrete data centers with redundant power, networking and connectivity.",
+      "urlChecked": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "global-infrastructure-002",
+      "result": "pass",
+      "reason": "Page states each Region has at least three Availability Zones.",
+      "urlChecked": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-availability-zones.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "global-infrastructure-003",
+      "result": "pass",
+      "reason": "Page says deploying across multiple AZs keeps the application available if one fails, and a single-zone deployment loses everything with that zone.",
+      "urlChecked": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html",
+      "carried": false,
+      "caveat": "The nightly disk copy and vendor-repair distractor explanations are not on the cited page."
+    },
+    {
+      "kind": "question",
+      "id": "global-infrastructure-004",
+      "result": "pass",
+      "reason": "Page says each Region is designed to be isolated from the other Regions.",
+      "urlChecked": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "global-infrastructure-005",
+      "result": "pass",
+      "reason": "Page hierarchy is Region containing AZs, and AZ is one or more data centers; correctOrder [1,2,0] gives Region, Availability Zone, Data center.",
+      "urlChecked": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "global-infrastructure-006",
+      "result": "pass",
+      "reason": "Page says deploying in multiple AZs keeps the application available if one fails and is a best practice; the two keyed options are supported.",
+      "urlChecked": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html",
+      "carried": false,
+      "caveat": "The claim that no design guarantees zero downtime is not stated on the cited page; the page only says failures can occur though rarely."
+    },
+    {
+      "kind": "question",
+      "id": "shared-responsibility-001",
+      "result": "pass",
+      "reason": "AWS owns security of the cloud including data center facilities; guest OS patching and access decisions are customer tasks.",
+      "urlChecked": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "shared-responsibility-002",
+      "result": "pass",
+      "reason": "Page says customers manage their data, access permissions (IAM) and encryption options; AWS operates the infrastructure.",
+      "urlChecked": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+      "carried": false,
+      "caveat": "Client-side encryption before upload is not named on the page; the page only refers to customer encryption options for their data."
+    },
+    {
+      "kind": "question",
+      "id": "shared-responsibility-003",
+      "result": "pass",
+      "reason": "Page says on EC2 the customer patches the guest OS and applications, so the customer is responsible.",
+      "urlChecked": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "shared-responsibility-004",
+      "result": "pass",
+      "reason": "Page says on EC2 the customer patches the guest OS and installed applications while AWS patches the underlying infrastructure; the statement is false as keyed.",
+      "urlChecked": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "shared-responsibility-005",
+      "result": "pass",
+      "reason": "Each matched pair (facilities and hardware to AWS, guest OS patching and data access to customer) is consistent with the page split.",
+      "urlChecked": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "shared-responsibility-006",
+      "result": "pass",
+      "reason": "Page defines the AWS part as security of the infrastructure running its services, which matches the typed phrase security of the cloud.",
+      "urlChecked": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "cloud-use-case-001",
+      "result": "pass",
+      "reason": "Page lists eu-west-1 as the Ireland Region with three Availability Zones; deploying in a Region near customers is the first step.",
+      "urlChecked": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-availability-zones.html",
+      "carried": false,
+      "caveat": "The latency benefit of a nearby Region is not stated on the cited AZ page; it appears on the six-advantages whitepaper."
+    },
+    {
+      "kind": "question",
+      "id": "cloud-use-case-002",
+      "result": "pass",
+      "reason": "Page supports multiple AZs for availability and states Regions are isolated and not automatically replicated, consistent with a second Region.",
+      "urlChecked": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html",
+      "carried": false,
+      "caveat": "That a second Region improves availability is inferred from Region isolation rather than stated on the cited page."
+    },
+    {
+      "kind": "question",
+      "id": "cloud-use-case-003",
+      "result": "pass",
+      "reason": "Page says AWS secures the physical facilities and the customer manages its own data, including encryption options.",
+      "urlChecked": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+      "carried": false,
+      "caveat": "The page refers to customer encryption options rather than stating encryption as a duty in those exact words."
+    },
+    {
+      "kind": "question",
+      "id": "ec2-basics-001",
+      "result": "pass",
+      "reason": "AMI page says an AMI must be specified at launch; the instance-type choice is covered by the instance types page.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "ec2-basics-002",
+      "result": "pass",
+      "reason": "Family purposes (balanced, HPC/compute-bound, in-memory, graphics/accelerators, high-throughput local storage) match the instance types page.",
+      "urlChecked": "https://aws.amazon.com/ec2/instance-types/",
+      "carried": false,
+      "caveat": "Scientific modeling, machine learning and data warehousing are not named for these families on the cited page; it names HPC and deep learning simulations, and high-throughput databases."
+    },
+    {
+      "kind": "question",
+      "id": "ec2-basics-003",
+      "result": "pass",
+      "reason": "Instance types page describes compute optimized instances for compute-bound applications needing high-performance processors.",
+      "urlChecked": "https://aws.amazon.com/ec2/instance-types/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "ec2-basics-004",
+      "result": "pass",
+      "reason": "AMI page says an AMI provides the software to boot an instance, includes a block device mapping, and multiple instances can be launched from one AMI.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "ec2-basics-005",
+      "result": "pass",
+      "reason": "SDK reference guide lists the language SDKs (Java, Python, JavaScript and others) that application code uses to call AWS services.",
+      "urlChecked": "https://docs.aws.amazon.com/sdkref/latest/guide/overview.html",
+      "carried": false,
+      "caveat": "The page does not use the exact phrase application code calls services; the Console, billing statement and hardware key distractors are not on it."
+    },
+    {
+      "kind": "question",
+      "id": "ec2-basics-006",
+      "result": "pass",
+      "reason": "Shared responsibility page says EC2 customers manage the guest OS including patches, and configure the security group firewall; AWS handles data center physical security.",
+      "urlChecked": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "ec2-basics-007",
+      "result": "pass",
+      "reason": "Dedicated Instances page says by default multiple AWS accounts might share the same physical hardware, and that dedicated instances are isolated at host hardware level.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-instance.html",
+      "carried": false,
+      "caveat": "The Regions and private network distractor explanations are not on the cited page."
+    },
+    {
+      "kind": "question",
+      "id": "ec2-basics-008",
+      "result": "pass",
+      "reason": "Instance types page names the accelerated computing category and says it uses hardware accelerators or co-processors for graphics processing.",
+      "urlChecked": "https://aws.amazon.com/ec2/instance-types/",
+      "carried": false,
+      "caveat": "The cited page does not name GPUs or machine learning for this category; the explanation GPU and machine learning wording is not on it."
+    },
+    {
+      "kind": "question",
+      "id": "ec2-pricing-001",
+      "result": "pass",
+      "reason": "EC2 pricing page says On-Demand requires no upfront payment or long-term commitment and bills by the hour or second.",
+      "urlChecked": "https://aws.amazon.com/ec2/pricing/",
+      "carried": false,
+      "caveat": "The claim that Capacity Reservations give no discount on their own is not on the cited pages; the page only says capacity can be reserved in an Availability Zone."
+    },
+    {
+      "kind": "question",
+      "id": "ec2-pricing-002",
+      "result": "pass",
+      "reason": "Savings Plans page gives rates below On-Demand for a one or three year commitment; the Reserved Instances pricing page confirms Standard RIs have 1-year or 3-year terms with discounts off On-Demand.",
+      "urlChecked": "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html",
+      "carried": false,
+      "caveat": "The Spot Instances and On-Demand distractor explanations are not on the cited pages."
+    },
+    {
+      "kind": "question",
+      "id": "ec2-pricing-003",
+      "result": "pass",
+      "reason": "Spot page says Spot Instances are well suited to batch jobs and background processing, and that applications must tolerate interruption.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "ec2-pricing-004",
+      "result": "pass",
+      "reason": "Spot page says Spot Instances can be interrupted and suit flexible applications, so the statement that they suit critical uninterruptible work is false.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "ec2-pricing-005",
+      "result": "pass",
+      "reason": "Dedicated Hosts page says a Dedicated Host is a physical server fully dedicated to your use, with visibility and control over instance placement.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "scaling-messaging-001",
+      "result": "pass",
+      "reason": "Auto Scaling page says groups add or remove instances as demand on the application increases or decreases.",
+      "urlChecked": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html",
+      "carried": false,
+      "caveat": "The cited page does not define the word elasticity; the explanation definition is not stated there."
+    },
+    {
+      "kind": "question",
+      "id": "scaling-messaging-002",
+      "result": "pass",
+      "reason": "Auto Scaling page says the group never goes below the minimum number of instances.",
+      "urlChecked": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html",
+      "carried": false,
+      "caveat": "The claim that a group works within a single Region is not on the cited page."
+    },
+    {
+      "kind": "question",
+      "id": "scaling-messaging-003",
+      "result": "pass",
+      "reason": "Elastic Load Balancing page says it automatically distributes incoming traffic across multiple targets such as EC2 instances.",
+      "urlChecked": "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "scaling-messaging-004",
+      "result": "pass",
+      "reason": "SQS page says messages are held until a consumer processes and deletes them; SNS and EventBridge pages confirm one-to-many publish-subscribe and event routing.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "scaling-messaging-005",
+      "result": "pass",
+      "reason": "SQS page says queues decouple distributed components so each consumer works from its own messages, supporting independent processing of the other steps.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html",
+      "carried": false,
+      "caveat": "The claims that tight coupling spreads failures and that stopping orders or local storage are poor designs are reasoning not stated on the cited pages."
+    },
+    {
+      "kind": "question",
+      "id": "scaling-messaging-006",
+      "result": "pass",
+      "reason": "Auto Scaling page says it adjusts the number of instances with demand, and the ELB page says it distributes traffic across them; the load balancer creating Regions is not supported.",
+      "urlChecked": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "scaling-messaging-007",
+      "result": "pass",
+      "reason": "Auto Scaling page says there are no additional fees and you only pay for the AWS resources you use, so charging for stopped group members is false.",
+      "urlChecked": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "serverless-and-lambda-001",
+      "result": "pass",
+      "reason": "Lambda welcome page says Lambda runs code in response to events without provisioning or managing servers.",
+      "urlChecked": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "serverless-and-lambda-002",
+      "result": "pass",
+      "reason": "Shared responsibility page says the customer manages its data, IAM permissions and application security while AWS runs the infrastructure.",
+      "urlChecked": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "serverless-and-lambda-003",
+      "result": "pass",
+      "reason": "Pricing page says Lambda charges only for what you use and bills compute at 1 ms granularity.",
+      "urlChecked": "https://aws.amazon.com/lambda/pricing/",
+      "carried": false,
+      "caveat": "The claim that you pay nothing for idle servers is not on the cited page; it says Web Functions bill memory between requests, so idle-free billing holds only for some function types."
+    },
+    {
+      "kind": "question",
+      "id": "serverless-and-lambda-004",
+      "result": "pass",
+      "reason": "Lambda welcome page says Lambda scales automatically to demand, runs code when an event triggers it, and AWS manages patching.",
+      "urlChecked": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "serverless-and-lambda-005",
+      "result": "pass",
+      "reason": "EC2 concepts page says AMIs include the OS and you configure security and networking; Lambda welcome page supports the serverless row.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html",
+      "carried": false,
+      "caveat": "The cited EC2 concepts page does not say in those words that the customer manages the operating system; Elastic Beanstalk support is on its own page, which is not cited here."
+    },
+    {
+      "kind": "question",
+      "id": "serverless-and-lambda-006",
+      "result": "pass",
+      "reason": "Lambda welcome page says Lambda runs code in response to events without servers to manage; typed rubric lambda matches.",
+      "urlChecked": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "containers-and-orchestration-001",
+      "result": "pass",
+      "reason": "Containers page says containers give consistent, automated workflows across environments, which supports the consistency answer.",
+      "urlChecked": "https://aws.amazon.com/containers/",
+      "carried": false,
+      "caveat": "The cited page does not define containers or say they package dependencies; the packaging wording is not on it."
+    },
+    {
+      "kind": "question",
+      "id": "containers-and-orchestration-002",
+      "result": "pass",
+      "reason": "Containers page supports ECS managing containers, ECR storing container software, and EKS running Kubernetes applications; Fargate page confirms Fargate runs without servers.",
+      "urlChecked": "https://aws.amazon.com/containers/",
+      "carried": false,
+      "caveat": "The cited page does not state in those exact terms that ECS is an orchestrator or that EKS is managed; that wording is not on it."
+    },
+    {
+      "kind": "question",
+      "id": "containers-and-orchestration-003",
+      "result": "pass",
+      "reason": "Page says VM images contain their own OS and are GB-sized, containers package only what one application needs and are MB-sized, and names Amazon ECS as the service running Docker containers on AWS; keyed A and C supported, B and D false.",
+      "urlChecked": "https://aws.amazon.com/compare/the-difference-between-containers-and-virtual-machines/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "containers-and-orchestration-004",
+      "result": "pass",
+      "reason": "Fargate page says it removes the need to provision, configure or scale clusters of EC2 instances, so the false statement is correct as keyed.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "containers-and-orchestration-005",
+      "result": "pass",
+      "reason": "Containers page says ECR is where you store, share and deploy container software; typed rubric ecr matches.",
+      "urlChecked": "https://aws.amazon.com/containers/",
+      "carried": false,
+      "caveat": "Version control of images is not mentioned on the cited page."
+    },
+    {
+      "kind": "question",
+      "id": "additional-compute-services-001",
+      "result": "pass",
+      "reason": "AWS Batch page says it plans, schedules and runs containerized simulation and analytics workloads, scaling compute across several options.",
+      "urlChecked": "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html",
+      "carried": false,
+      "caveat": "The cited page does not state that jobs run in parallel; the distractor explanations for Lightsail, Elastic Beanstalk and Outposts are not on it."
+    },
+    {
+      "kind": "question",
+      "id": "additional-compute-services-002",
+      "result": "pass",
+      "reason": "Elastic Beanstalk page says it provisions instances, configures load balancing, sets up health monitoring and dynamically scales the environment.",
+      "urlChecked": "https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "additional-compute-services-003",
+      "result": "pass",
+      "reason": "Page says Lightsail offers a low monthly price, VPS instances and storage, and supports building a blog or personal website; keyed answer supported.",
+      "urlChecked": "https://aws.amazon.com/lightsail/",
+      "carried": false,
+      "caveat": "Networking as a standalone Lightsail offering and Fargate as serverless compute for containers are not on the cited Lightsail page."
+    },
+    {
+      "kind": "question",
+      "id": "additional-compute-services-004",
+      "result": "pass",
+      "reason": "Outposts page says it extends AWS infrastructure and services to customer premises for lower latency and local data processing needs; keyed answer supported.",
+      "urlChecked": "https://docs.aws.amazon.com/outposts/latest/userguide/what-is-outposts.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "additional-compute-services-005",
+      "result": "pass",
+      "reason": "All four pairs are supported: Elastic Beanstalk deploys and scales applications, Batch schedules and scales batch jobs, Lightsail is a low-cost monthly simple server, Outposts is AWS infrastructure on premises.",
+      "urlChecked": "https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "infrastructure-as-code-001",
+      "result": "pass",
+      "reason": "CloudFormation page says one template describes all resources and can be reused to provision identical resources consistently across multiple Regions.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "infrastructure-as-code-002",
+      "result": "pass",
+      "reason": "CLI page says it automates through scripts, CloudFormation page says it provisions from templates, and SDK overview lists language SDKs; Console as web interface is implied by the CLI page's 'browser-based AWS Management Console' wording.",
+      "urlChecked": "https://aws.amazon.com/cli/",
+      "carried": false,
+      "caveat": "The SDK pair 'calling AWS services from application code' is not stated on the SDK overview page, which is a reference guide; it is implied by the language SDK list."
+    },
+    {
+      "kind": "question",
+      "id": "infrastructure-as-code-003",
+      "result": "pass",
+      "reason": "CLI page says it lets you control multiple AWS services from the command line and automate them through scripts.",
+      "urlChecked": "https://aws.amazon.com/cli/",
+      "carried": false,
+      "caveat": "The claim that the CLI needs no account or permissions is contrary to the page's 'use your existing console credentials' wording; the 'not visual' and 'does not replace services' distractor reasons are not stated on the page."
+    },
+    {
+      "kind": "question",
+      "id": "infrastructure-as-code-004",
+      "result": "pass",
+      "reason": "CloudFormation page says you create a template describing your AWS resources and CloudFormation provisions and configures them for you.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "infrastructure-as-code-005",
+      "result": "pass",
+      "reason": "SDK overview lists per-language AWS SDKs, which supports the SDK as the tool for application code; the page does not mention S3 or application-code calls explicitly.",
+      "urlChecked": "https://docs.aws.amazon.com/sdkref/latest/guide/overview.html",
+      "carried": false,
+      "caveat": "The page does not name Amazon S3 or state that SDKs let application code call services; the paper form, billing dashboard and Outposts distractor reasons are not on it."
+    },
+    {
+      "kind": "question",
+      "id": "going-global-001",
+      "result": "pass",
+      "reason": "CloudFront page says data is delivered through 750+ globally dispersed PoPs to reduce latency, so CloudFront is the keyed answer.",
+      "urlChecked": "https://aws.amazon.com/cloudfront/",
+      "carried": false,
+      "caveat": "The explanation's descriptions of AWS Batch, Lightsail and Outposts are not on the cited pages."
+    },
+    {
+      "kind": "question",
+      "id": "going-global-002",
+      "result": "pass",
+      "reason": "CloudFront page supports global PoP delivery for low-latency content, which fits a video company without its own servers in each country.",
+      "urlChecked": "https://aws.amazon.com/cloudfront/",
+      "carried": false,
+      "caveat": "The explanation's claim that the other options need local data centers is not on the cited pages; 'videos start quickly' is inferred from the low-latency wording."
+    },
+    {
+      "kind": "question",
+      "id": "going-global-003",
+      "result": "pass",
+      "reason": "CloudFront page states 750+ globally dispersed Points of Presence that reduce latency, so the statement is true as keyed.",
+      "urlChecked": "https://aws.amazon.com/cloudfront/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "going-global-004",
+      "result": "pass",
+      "reason": "Regions page says deploying across multiple AZs keeps the app available if one fails, and that some resources can be replicated across Regions but are not replicated automatically.",
+      "urlChecked": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html",
+      "carried": false,
+      "caveat": "The claim that no design guarantees zero downtime is not stated on the cited pages."
+    },
+    {
+      "kind": "question",
+      "id": "going-global-005",
+      "result": "pass",
+      "reason": "CloudFront page describes a global content delivery network of PoPs, supporting the typed answer CloudFront.",
+      "urlChecked": "https://aws.amazon.com/cloudfront/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "going-global-006",
+      "result": "pass",
+      "reason": "CloudFront page says it reduces latency through 750+ globally dispersed Points of Presence, so the latency purpose is supported.",
+      "urlChecked": "https://aws.amazon.com/cloudfront/",
+      "carried": false,
+      "caveat": "The page does not explicitly say PoPs deliver content from locations close to users; that wording is inferred. The explanation that PoPs do not replace Availability Zones, change prices, or guarantee no failure is not stated on the page (AZs not mentioned; no uptime guarantee)."
+    },
+    {
+      "kind": "question",
+      "id": "networking-foundations-001",
+      "result": "pass",
+      "reason": "Page says you launch resources in a logically isolated virtual network that you define; key answer supported.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html",
+      "carried": false,
+      "caveat": "The explanation physically isolated data center and domain name system distractor reasons are not on the cited page."
+    },
+    {
+      "kind": "question",
+      "id": "networking-foundations-002",
+      "result": "pass",
+      "reason": "Page says public subnets have a route to an internet gateway and private subnets do not; keyed design matches.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html",
+      "carried": false,
+      "caveat": "The explanation claims that the other options are unreliable or expose the database are not on the cited page."
+    },
+    {
+      "kind": "question",
+      "id": "networking-foundations-003",
+      "result": "pass",
+      "reason": "Page says each subnet must reside entirely within one Availability Zone and cannot span zones; statement is false as keyed.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "networking-foundations-004",
+      "result": "pass",
+      "reason": "Page says the virtual private gateway is the Amazon-side VPN endpoint of a Site-to-Site VPN attached to a VPC, creating an encrypted link from your network.",
+      "urlChecked": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html",
+      "carried": false,
+      "caveat": "The explanation claims that route tables and subnets do not create a connection, and that internet gateways serve public traffic, are not on this VPN page."
+    },
+    {
+      "kind": "question",
+      "id": "networking-foundations-005",
+      "result": "pass",
+      "reason": "Internet gateway pair is supported by the IGW page; the virtual private gateway and subnet pairs are supported by the VPN and subnet pages.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html",
+      "carried": false,
+      "caveat": "The virtual private gateway and subnet pairs are supported by the VPN and subnet pages, not by the IGW page cited here."
+    },
+    {
+      "kind": "question",
+      "id": "connectivity-options-001",
+      "result": "pass",
+      "reason": "Page says Site-to-Site VPN creates an encrypted connection between your on-premises network and a VPC; key answer supported.",
+      "urlChecked": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html",
+      "carried": false,
+      "caveat": "The lower-cost and no-dedicated-line claims are not stated on the cited page, which lists hourly connection charges; the Direct Connect, Client VPN and PrivateLink distractor reasons are not on it."
+    },
+    {
+      "kind": "question",
+      "id": "connectivity-options-002",
+      "result": "pass",
+      "reason": "Page says AWS Client VPN provides secure access to AWS resources and on-premises networks from any location via a VPN client.",
+      "urlChecked": "https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/what-is.html",
+      "carried": false,
+      "caveat": "The explanation descriptions of Direct Connect, internet gateway and CloudFront are not on the cited page."
+    },
+    {
+      "kind": "question",
+      "id": "connectivity-options-003",
+      "result": "pass",
+      "reason": "Page describes Direct Connect as a dedicated private network connection from your network to AWS with high port speeds, supporting the high-bandwidth answer.",
+      "urlChecked": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html",
+      "carried": false,
+      "caveat": "The phrase consistent bandwidth and the claim that the standard internet is congested are not stated on the cited page."
+    },
+    {
+      "kind": "question",
+      "id": "connectivity-options-004",
+      "result": "pass",
+      "reason": "Page says PrivateLink needs no internet gateway, NAT device, public IP address, Direct Connect or VPN; statement is false as keyed.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "connectivity-options-005",
+      "result": "pass",
+      "reason": "Page describes Direct Connect as providing a dedicated private connection between your network and AWS; typed rubric matches.",
+      "urlChecked": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "network-security-001",
+      "result": "pass",
+      "reason": "Page says a security group is associated with an instance such as an EC2 instance and controls its inbound and outbound traffic; key answer supported.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html",
+      "carried": false,
+      "caveat": "The explanation fine-grained wording and the reasons the subnet change, virtual private gateway and passwords are wrong are not on the cited page."
+    },
+    {
+      "kind": "question",
+      "id": "network-security-002",
+      "result": "pass",
+      "reason": "Page says network ACLs allow or deny traffic at the subnet level and are stateless; key answer supported.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "network-security-003",
+      "result": "pass",
+      "reason": "Page says network ACLs allow or deny traffic at the subnet level and support both rule types; key answer supported.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html",
+      "carried": false,
+      "caveat": "The page does not explicitly say security groups only hold allow rules; that part of the explanation is not on the cited page."
+    },
+    {
+      "kind": "question",
+      "id": "network-security-004",
+      "result": "pass",
+      "reason": "Page says security groups are associated with instances and are stateful, so responses to allowed traffic are allowed regardless of outbound rules; keyed options A and C are supported and B and D are not.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html",
+      "carried": false,
+      "caveat": "The page does not explicitly state that security groups only contain allow rules; that part of the explanation is not on it."
+    },
+    {
+      "kind": "question",
+      "id": "network-security-005",
+      "result": "pass",
+      "reason": "Page says AWS protects the infrastructure running its services, and customers configure the security group firewall on their EC2 instances, so customer network traffic protection holds.",
+      "urlChecked": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "global-edge-001",
+      "result": "pass",
+      "reason": "Page describes Route 53 as a DNS web service and explains how it connects a domain name to the website resources; the name-to-address function is implied rather than stated word for word.",
+      "urlChecked": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html",
+      "carried": false,
+      "caveat": "The explanation statements that filtering is done by security groups and network ACLs, and that VPC provisioning is separate, are not on the cited page."
+    },
+    {
+      "kind": "question",
+      "id": "global-edge-002",
+      "result": "pass",
+      "reason": "Page says CloudFront delivers static and dynamic content from edge locations close to users, with the lowest latency edge serving the request; keyed answer supported.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html",
+      "carried": false,
+      "caveat": "The statement that Global Accelerator routes rather than caches content is not stated on the cited Global Accelerator page."
+    },
+    {
+      "kind": "question",
+      "id": "global-edge-003",
+      "result": "pass",
+      "reason": "Page says Route 53 provides domain registration and DNS routing of traffic to your resources; keyed answer supported.",
+      "urlChecked": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html",
+      "carried": false,
+      "caveat": "The page does not explicitly say Route 53 routes to non-AWS resources; the statement that Direct Connect is a network link and Global Accelerator does not manage domains is not on it."
+    },
+    {
+      "kind": "question",
+      "id": "global-edge-004",
+      "result": "pass",
+      "reason": "Page says Global Accelerator directs traffic over the AWS global network to healthy endpoints and reacts to changes in health; keyed answer supported.",
+      "urlChecked": "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html",
+      "carried": false,
+      "caveat": "The explanation claim that the other options do not route around unhealthy locations is not stated on the cited pages."
+    },
+    {
+      "kind": "question",
+      "id": "global-edge-005",
+      "result": "pass",
+      "reason": "Page describes Amazon CloudFront as a worldwide content delivery network of edge locations; typed rubric matches.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html",
+      "carried": false
+    }
+  ]
+}

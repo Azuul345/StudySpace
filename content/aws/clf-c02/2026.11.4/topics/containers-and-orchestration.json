@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 1,
+  "topicId": "containers-and-orchestration",
+  "domainId": "technology",
+  "name": "Containers on AWS: ECS, EKS, ECR and Fargate",
+  "lesson": {
+    "summary": "A container packages an application together with everything it needs to run, so it behaves the same on any machine. Containers share the host operating system, which makes them lighter and faster to start than virtual machines. AWS offers tools for each part of the container job: Amazon ECR stores container images, Amazon ECS and Amazon EKS orchestrate containers across a fleet, and AWS Fargate runs containers without you managing the servers underneath.",
+    "keyPoints": [
+      "A container packages an application with the libraries and settings it needs, so it runs the same on any compatible system",
+      "Containers share the host operating system, so they start faster and use fewer resources than virtual machines",
+      "Amazon ECR stores, manages and version controls container images",
+      "Amazon ECS orchestrates containers on AWS to deploy, scale and manage them",
+      "Amazon EKS runs Kubernetes, a popular open-source container orchestration system, as a managed service",
+      "AWS Fargate is a serverless compute option for containers, so you do not provision or manage the servers",
+      "ECS and EKS can run on EC2 instances you manage or on Fargate"
+    ],
+    "docLinks": [
+      "https://aws.amazon.com/containers/",
+      "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html"
+    ],
+    "simpleSummary": "A container packs an app with everything it needs, so it runs the same everywhere. Amazon ECR stores container images. ECS and EKS run and manage many containers. Fargate runs containers without you managing the servers underneath.",
+    "mnemonic": "Naruto hint: A container is a sealed ninja scroll. It works the same wherever you open it, and ECS or EKS is the Hokage team that decides where each scroll is sent.",
+    "diagrams": [
+      "clf-containers-vs-vms"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "containers-sc-1",
+      "text": "An e-commerce team builds a website that works on each developer's laptop but fails on the staging server because of missing libraries and different settings. The team wants the same application to run identically in every environment."
+    }
+  ],
+  "questions": [
+    {
+      "id": "containers-and-orchestration-001",
+      "type": "scenario",
+      "difficulty": 1,
+      "tags": [
+        "containers"
+      ],
+      "scenarioId": "containers-sc-1",
+      "prompt": "Which approach best solves the problem in this scenario?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Package the application and its dependencies into a container image",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Give each environment a different copy of the application code",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Ask each developer to configure a separate laptop by hand",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Move the website to a single virtual machine and stop testing",
+          "correct": false
+        }
+      ],
+      "explanation": "A container packages the application with everything it needs, so the same image behaves the same in every environment. Separate copies, hand configuration and skipping testing do not give a consistent result.",
+      "sources": [
+        "https://aws.amazon.com/containers/"
+      ],
+      "simplePrompt": "A developer's app works on a laptop but fails on the test server. How do containers help?",
+      "simpleExplanation": "A container packs the app with everything it needs, so the same package works in every place."
+    },
+    {
+      "id": "containers-and-orchestration-002",
+      "type": "matching",
+      "difficulty": 2,
+      "tags": [
+        "ECS",
+        "EKS",
+        "ECR",
+        "Fargate"
+      ],
+      "prompt": "Match each AWS container service with what it does.",
+      "pairs": [
+        {
+          "left": "Amazon ECS",
+          "right": "Orchestrates containers on AWS"
+        },
+        {
+          "left": "Amazon EKS",
+          "right": "Runs managed Kubernetes"
+        },
+        {
+          "left": "Amazon ECR",
+          "right": "Stores and manages container images"
+        },
+        {
+          "left": "AWS Fargate",
+          "right": "Runs containers without you managing servers"
+        }
+      ],
+      "explanation": "ECS orchestrates containers, EKS runs Kubernetes as a managed service, ECR stores container images, and Fargate runs containers serverlessly.",
+      "sources": [
+        "https://aws.amazon.com/containers/",
+        "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html"
+      ],
+      "simplePrompt": "Match each container service to what it does.",
+      "simpleExplanation": "ECS runs containers on AWS, EKS runs managed Kubernetes, ECR stores the images, and Fargate runs containers without servers to manage."
+    },
+    {
+      "id": "containers-and-orchestration-003",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": [
+        "containers",
+        "virtual machines"
+      ],
+      "prompt": "Which TWO statements about containers compared with virtual machines are correct? (Choose two.)",
+      "options": [
+        {
+          "id": "a",
+          "text": "Containers do not include their own full operating system; virtual machine images do",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Each container always runs its own full guest operating system",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Container images are usually much smaller than virtual machine images",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "Containers cannot run on AWS",
+          "correct": false
+        }
+      ],
+      "explanation": "Virtual machine images contain their own operating system and are much larger, while containers package only what one application needs. The page names Amazon ECS as the service that runs Docker containers on AWS.",
+      "sources": [
+        "https://aws.amazon.com/compare/the-difference-between-containers-and-virtual-machines/"
+      ],
+      "simplePrompt": "Which two statements about containers and virtual machines are right?",
+      "simpleExplanation": "A virtual machine has a full operating system inside it, which makes it big. A container is much smaller because it holds only what the app needs."
+    },
+    {
+      "id": "containers-and-orchestration-004",
+      "type": "truefalse",
+      "difficulty": 2,
+      "tags": [
+        "Fargate"
+      ],
+      "statement": "With AWS Fargate you must provision and manage the EC2 servers that run your containers.",
+      "answer": false,
+      "explanation": "False. Fargate is serverless compute for containers, so you do not provision or manage the servers underneath.",
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html"
+      ],
+      "simplePrompt": "True or false: with Fargate you must manage the servers under your containers.",
+      "simpleExplanation": "False. Fargate looks after the servers, so you only manage your containers."
+    },
+    {
+      "id": "containers-and-orchestration-005",
+      "type": "typed",
+      "difficulty": 2,
+      "tags": [
+        "ECR"
+      ],
+      "prompt": "Type the name of the AWS service where you store and manage container images.",
+      "rubric": [
+        {
+          "any": [
+            "ecr",
+            "elastic container registry"
+          ]
+        }
+      ],
+      "explanation": "Amazon Elastic Container Registry (ECR) stores, manages and version controls container images.",
+      "sources": [
+        "https://aws.amazon.com/containers/"
+      ],
+      "simplePrompt": "Type the name of the AWS service where you keep container images.",
+      "simpleExplanation": "Amazon ECR, the Elastic Container Registry."
+    }
+  ]
+}

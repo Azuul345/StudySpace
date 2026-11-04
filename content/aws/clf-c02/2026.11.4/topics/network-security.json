@@ -1,0 +1,199 @@
+{
+  "schemaVersion": 1,
+  "topicId": "network-security",
+  "domainId": "security",
+  "name": "Network security in a VPC: network ACLs and security groups",
+  "lesson": {
+    "summary": "Two components control traffic in a VPC. A network ACL is a firewall at the subnet level. It is stateless and checks inbound and outbound traffic against allow and deny rules. A security group is a firewall attached to an instance. It is stateful, so return traffic for an allowed request is permitted automatically, and it holds only allow rules. Securing these components is the customer's responsibility under the shared responsibility model.",
+    "keyPoints": [
+      "A network ACL controls traffic at the subnet level and is stateless, so return traffic must be allowed explicitly",
+      "Network ACLs can contain both allow and deny rules",
+      "A security group controls traffic for an instance such as an EC2 instance and is stateful",
+      "Security groups only contain allow rules, and by default they deny all inbound traffic and allow all outbound traffic",
+      "Use security groups for fine-grained control of individual instances and network ACLs for broad control of a subnet",
+      "The customer configures network ACLs and security groups, so they are part of the customer's security responsibility"
+    ],
+    "docLinks": [
+      "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html",
+      "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html",
+      "https://aws.amazon.com/compliance/shared-responsibility-model/"
+    ],
+    "simpleSummary": "Two tools protect traffic inside a VPC. A network ACL guards the whole subnet and checks each packet, in and out, with allow and deny rules. A security group guards one server. It remembers the conversation, so replies to allowed requests get through, and it only has allow rules.",
+    "mnemonic": "Naruto hint: The network ACL is the gate guard who checks every visitor coming and going. The security group is the guard inside a single house who remembers who already came in."
+  },
+  "scenarios": [
+    {
+      "id": "network-security-sc-1",
+      "text": "A retail customer runs several EC2 instances in a public subnet. The application needs many different rules for traffic to each instance, and the team wants to apply them per instance."
+    }
+  ],
+  "questions": [
+    {
+      "id": "network-security-001",
+      "type": "scenario",
+      "difficulty": 2,
+      "tags": [
+        "security groups"
+      ],
+      "scenarioId": "network-security-sc-1",
+      "prompt": "Which feature should the team use to set traffic rules for each instance?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Security groups attached to the EC2 instances",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Changing the public subnet to a private subnet",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "A virtual private gateway",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "A password on each instance",
+          "correct": false
+        }
+      ],
+      "explanation": "Security groups are attached to instances and provide fine-grained traffic rules per instance. Changing the subnet type would remove the public access the application needs, and a virtual private gateway and passwords do not filter traffic per instance.",
+      "sources": [
+        "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html"
+      ],
+      "simplePrompt": "A retail team needs to set traffic rules for each EC2 server in a public subnet. Which feature?",
+      "simpleExplanation": "Security groups, attached to each server."
+    },
+    {
+      "id": "network-security-002",
+      "type": "mcq",
+      "difficulty": 1,
+      "tags": [
+        "network ACLs"
+      ],
+      "prompt": "Which component performs stateless packet filtering at the subnet level?",
+      "options": [
+        {
+          "id": "a",
+          "text": "A network access control list (network ACL)",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "A security group",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "An Amazon VPC",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "A private subnet",
+          "correct": false
+        }
+      ],
+      "explanation": "A network ACL filters packets crossing a subnet border and does not remember earlier requests, which makes it stateless. A security group is stateful, and a VPC or subnet does not filter packets on its own.",
+      "sources": [
+        "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html"
+      ],
+      "simplePrompt": "Which part checks traffic at the subnet level and does not remember earlier requests?",
+      "simpleExplanation": "A network ACL. It checks each packet and forgets what came before."
+    },
+    {
+      "id": "network-security-003",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "network ACLs",
+        "security groups"
+      ],
+      "prompt": "A customer wants broad control of traffic in and out of a subnet and needs both allow and deny rules. Which solution fits best?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Network ACLs",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Security groups, which only hold allow rules",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Changing the subnet to a public subnet",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "A virtual private gateway",
+          "correct": false
+        }
+      ],
+      "explanation": "Network ACLs control traffic at the subnet level and support both allow and deny rules. Security groups only hold allow rules, and the other two options do not control subnet traffic.",
+      "sources": [
+        "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html"
+      ],
+      "simplePrompt": "A customer needs broad control of traffic in and out of a subnet, with allow and deny rules. Which fits?",
+      "simpleExplanation": "Network ACLs, because they guard the whole subnet and can allow or deny."
+    },
+    {
+      "id": "network-security-004",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": [
+        "stateful",
+        "security groups"
+      ],
+      "prompt": "Which TWO statements about security groups are correct? (Choose two.)",
+      "options": [
+        {
+          "id": "a",
+          "text": "They are stateful, so return traffic for an allowed request is permitted automatically",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "They are stateless and must allow return traffic explicitly",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "They attach to instances such as EC2 instances",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "They can contain deny rules",
+          "correct": false
+        }
+      ],
+      "explanation": "Security groups are stateful and attach to instances. They only hold allow rules, and stateless behaviour describes network ACLs.",
+      "sources": [
+        "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html"
+      ],
+      "simplePrompt": "Which two things are true about security groups?",
+      "simpleExplanation": "They remember the conversation, so replies get through, and they are attached to servers."
+    },
+    {
+      "id": "network-security-005",
+      "type": "truefalse",
+      "difficulty": 1,
+      "tags": [
+        "shared responsibility"
+      ],
+      "statement": "Configuring network traffic protection for the resources in your VPC is the customer's responsibility under the shared responsibility model.",
+      "answer": true,
+      "explanation": "True. AWS secures the underlying infrastructure, while the customer is responsible for network traffic protection for its own resources, such as configuring security groups.",
+      "sources": [
+        "https://aws.amazon.com/compliance/shared-responsibility-model/"
+      ],
+      "simplePrompt": "True or false: keeping traffic safe inside your VPC is your job under the shared responsibility model.",
+      "simpleExplanation": "True. AWS guards the base, and you set the traffic rules for your own resources."
+    }
+  ]
+}

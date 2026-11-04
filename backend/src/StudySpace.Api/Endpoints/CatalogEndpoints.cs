@@ -79,6 +79,8 @@ public static class CatalogEndpoints
                 KeyPoints = System.Text.Json.JsonSerializer.Deserialize<List<string>>(topic.Lesson.KeyPointsJson),
                 DocLinks = System.Text.Json.JsonSerializer.Deserialize<List<string>>(topic.Lesson.DocLinksJson),
                 Diagrams = System.Text.Json.JsonSerializer.Deserialize<List<string>>(topic.Lesson.DiagramsJson),
+                SimpleSummary = topic.Lesson.SimpleSummary == "" ? null : topic.Lesson.SimpleSummary,
+                Mnemonic = topic.Lesson.Mnemonic == "" ? null : topic.Lesson.Mnemonic,
             },
             QuestionCount = count,
         });

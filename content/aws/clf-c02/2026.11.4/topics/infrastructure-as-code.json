@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "topicId": "infrastructure-as-code",
+  "domainId": "technology",
+  "name": "Infrastructure as code, CLI, SDKs and the Console",
+  "lesson": {
+    "summary": "You can work with AWS through the Management Console, the AWS Command Line Interface (CLI), the AWS SDKs, or infrastructure as code. AWS CloudFormation lets you describe your resources in a template and provisions and configures them for you, so each new environment or location is set up the same way. The CLI automates routine tasks with scripts, and the SDKs call AWS services from application code.",
+    "keyPoints": [
+      "AWS Management Console: a web interface for working with AWS resources",
+      "AWS CLI: runs AWS commands from a terminal and can automate routine tasks with scripts",
+      "AWS SDKs: provide libraries for programming languages so applications can call AWS services",
+      "Infrastructure as code describes resources in a file so deployments are repeatable",
+      "AWS CloudFormation models and provisions AWS resources from a template and configures them for you",
+      "Using the same template in each environment keeps deployments consistent and reduces manual errors"
+    ],
+    "docLinks": [
+      "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html",
+      "https://aws.amazon.com/cli/",
+      "https://docs.aws.amazon.com/sdkref/latest/guide/overview.html"
+    ],
+    "simpleSummary": "You can run AWS from the web console, from the command line (CLI), from code (SDK), or from a written template. A template such as CloudFormation describes everything you want, so each new place gets exactly the same setup with fewer mistakes.",
+    "mnemonic": "Naruto hint: CloudFormation is the Clone Jutsu blueprint. One scroll describes the whole team, and every new copy is built exactly the same way."
+  },
+  "scenarios": [
+    {
+      "id": "infra-as-code-sc-1",
+      "text": "A biomedical company deploys the same application to several Regions. The application has a web server, a database and a message queue, and the team wants each deployment to be identical and to need as little manual work as possible."
+    }
+  ],
+  "questions": [
+    {
+      "id": "infrastructure-as-code-001",
+      "type": "scenario",
+      "difficulty": 2,
+      "tags": [
+        "CloudFormation",
+        "infrastructure as code"
+      ],
+      "scenarioId": "infra-as-code-sc-1",
+      "prompt": "Which approach best meets the team's needs in this scenario?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Use AWS CloudFormation with one template for every Region",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Set up each Region by hand in the Management Console",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Keep the deployment steps in a personal notebook and follow them each time",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Deploy only the web server and skip the database and queue",
+          "correct": false
+        }
+      ],
+      "explanation": "A CloudFormation template describes all the resources, so each Region gets the same consistent setup with little manual work. Manual steps and notebooks increase errors, and skipping components does not meet the requirement.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html"
+      ],
+      "simplePrompt": "A team runs the same app in several Regions and wants every setup to match with little manual work. What works best?",
+      "simpleExplanation": "AWS CloudFormation with one template for every Region. The template makes every setup the same."
+    },
+    {
+      "id": "infrastructure-as-code-002",
+      "type": "matching",
+      "difficulty": 2,
+      "tags": [
+        "AWS interfaces"
+      ],
+      "prompt": "Match each way of working with AWS to what it is best for.",
+      "pairs": [
+        {
+          "left": "AWS Management Console",
+          "right": "Working with AWS resources through a web interface"
+        },
+        {
+          "left": "AWS CLI",
+          "right": "Automating routine tasks with commands and scripts"
+        },
+        {
+          "left": "AWS SDKs",
+          "right": "Calling AWS services from application code"
+        },
+        {
+          "left": "AWS CloudFormation",
+          "right": "Describing and provisioning resources from a template"
+        }
+      ],
+      "explanation": "The Console is a web interface, the CLI runs commands and scripts, the SDKs call services from code, and CloudFormation provisions resources from a template.",
+      "sources": [
+        "https://aws.amazon.com/cli/",
+        "https://docs.aws.amazon.com/sdkref/latest/guide/overview.html",
+        "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html"
+      ],
+      "simplePrompt": "Match each way of working with AWS to what it is best for.",
+      "simpleExplanation": "The console is a web page, the CLI runs commands and scripts, the SDK lets code use AWS, and CloudFormation builds everything from a template."
+    },
+    {
+      "id": "infrastructure-as-code-003",
+      "type": "mcq",
+      "difficulty": 1,
+      "tags": [
+        "CLI"
+      ],
+      "prompt": "What is the main advantage of the AWS CLI over the Management Console for routine work?",
+      "options": [
+        {
+          "id": "a",
+          "text": "It automates repeated tasks through commands and scripts",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "It shows a visual drag-and-drop interface",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "It needs no account or permissions",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "It replaces the need for AWS services",
+          "correct": false
+        }
+      ],
+      "explanation": "The CLI runs commands and scripts, so routine tasks can be repeated and automated. It is not a visual interface, it still needs an account and permissions, and it does not replace AWS services.",
+      "sources": [
+        "https://aws.amazon.com/cli/"
+      ],
+      "simplePrompt": "What is the main advantage of the CLI over the console for repeated work?",
+      "simpleExplanation": "You can put the steps in a script, so the job runs the same way every time without clicking."
+    },
+    {
+      "id": "infrastructure-as-code-004",
+      "type": "truefalse",
+      "difficulty": 1,
+      "tags": [
+        "CloudFormation"
+      ],
+      "statement": "AWS CloudFormation lets you describe your AWS resources in a template and provisions and configures them for you.",
+      "answer": true,
+      "explanation": "True. CloudFormation models resources from a template and provisions and configures them.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html"
+      ],
+      "simplePrompt": "True or false: CloudFormation describes your resources in a template and sets them up for you.",
+      "simpleExplanation": "True. You write the template, and CloudFormation builds the resources from it."
+    },
+    {
+      "id": "infrastructure-as-code-005",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "SDK"
+      ],
+      "prompt": "An application developer wants to store user uploads in Amazon S3 from the application code. Which AWS tool is designed for that?",
+      "options": [
+        {
+          "id": "a",
+          "text": "The AWS SDK for the programming language used by the application",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "A paper form sent to AWS",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "The billing dashboard",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "AWS Outposts",
+          "correct": false
+        }
+      ],
+      "explanation": "The AWS SDK lets application code call services such as Amazon S3. A paper form, the billing dashboard and Outposts do not do this.",
+      "sources": [
+        "https://docs.aws.amazon.com/sdkref/latest/guide/overview.html"
+      ],
+      "simplePrompt": "An app developer wants to save user uploads to Amazon S3 from the code. Which tool is for that?",
+      "simpleExplanation": "The AWS SDK for the language the app is written in."
+    }
+  ]
+}

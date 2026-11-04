@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "packId": "aws-clf-c02",
+  "version": "2026.11.4",
+  "exam": {
+    "code": "CLF-C02",
+    "name": "AWS Certified Cloud Practitioner"
+  },
+  "domains": [
+    { "id": "concepts", "name": "Cloud Concepts", "weightPercent": 24, "sortOrder": 1 },
+    { "id": "security", "name": "Security and Compliance", "weightPercent": 30, "sortOrder": 2 },
+    { "id": "technology", "name": "Cloud Technology and Services", "weightPercent": 34, "sortOrder": 3 },
+    { "id": "billing", "name": "Billing, Pricing, and Support", "weightPercent": 12, "sortOrder": 4 }
+  ],
+  "sources": [
+    { "url": "https://docs.aws.amazon.com/aws-certification/latest/examguides/cloud-practitioner-02.html", "accessedOn": "2026-11-04" },
+    { "url": "https://aws.amazon.com/what-is-cloud-computing/", "accessedOn": "2026-11-04" },
+    { "url": "https://aws.amazon.com/compliance/shared-responsibility-model/", "accessedOn": "2026-11-04" }
+  ]
+}

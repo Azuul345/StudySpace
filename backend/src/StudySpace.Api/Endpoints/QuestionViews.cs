@@ -22,7 +22,9 @@ public sealed record QuestionView(
     ScenarioView? Scenario,
     IReadOnlyList<OptionView>? Options,
     PairsView? Pairs,
-    IReadOnlyList<string>? Steps);
+    IReadOnlyList<string>? Steps,
+    string? SimplePrompt = null,
+    string? Mnemonic = null);
 
 public static class QuestionViews
 {
@@ -51,7 +53,9 @@ public static class QuestionViews
             JsonSerializer.Deserialize<List<string>>(q.TagsJson) ?? [],
             q.TopicId,
             scenario is null ? null : new ScenarioView(scenario.Id, scenario.Text),
-            options, pairs, steps);
+            options, pairs, steps,
+            q.SimplePrompt == "" ? null : q.SimplePrompt,
+            q.Mnemonic == "" ? null : q.Mnemonic);
     }
 
     /// The right-hand side of a matching question is shown in a stable order that does not follow the answer order.

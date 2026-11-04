@@ -1,0 +1,279 @@
+{
+  "schemaVersion": 1,
+  "topicId": "scaling-and-messaging",
+  "domainId": "technology",
+  "name": "Scaling, load balancing and decoupled messaging",
+  "lesson": {
+    "summary": "Scalability is the ability to handle more load by adding resources, and elasticity is adjusting resources up and down as demand changes. EC2 Auto Scaling adds and removes instances within a minimum and maximum size, and Elastic Load Balancing spreads incoming traffic across them. Decoupling parts of an application with messaging services such as SQS, SNS and EventBridge keeps one slow or failing part from bringing down the others.",
+    "keyPoints": [
+      "Scalability is the ability to handle a larger load by adding resources, scaling up (bigger) or out (more machines)",
+      "Elasticity is adjusting resources up and down dynamically as demand changes",
+      "EC2 Auto Scaling adds and removes instances between a minimum and a maximum size to match demand",
+      "Auto Scaling groups keep a minimum number of instances running, and you pay only for the instances that run",
+      "Elastic Load Balancing distributes incoming traffic across instances, which can sit in several Availability Zones",
+      "Auto Scaling and Elastic Load Balancing work together: Auto Scaling changes the number of instances and the load balancer routes traffic to them",
+      "Tightly coupled components fail together; loosely coupled components communicate through messages",
+      "Amazon SQS holds messages in a queue until a consumer processes and deletes them",
+      "Amazon SNS sends one message to many subscribers (publish-subscribe)",
+      "Amazon EventBridge routes events, such as an order placed, to the services that need them"
+    ],
+    "docLinks": [
+      "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html",
+      "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html",
+      "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html",
+      "https://docs.aws.amazon.com/sns/latest/dg/welcome.html",
+      "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html"
+    ],
+    "simpleSummary": "Scaling means having enough computers for the crowd. Auto Scaling adds servers when there are more visitors and removes them when there are fewer. Load balancers share the visitors between the servers. Message services let one part of an app drop a note for another part, so a slow part does not stop the rest.",
+    "mnemonic": "Naruto hint: Auto Scaling is like the Shadow Clones: more appear when the fight gets busy and disappear when it is quiet. A load balancer is Kakashi sending each ninja to a different job."
+  },
+  "scenarios": [
+    {
+      "id": "scaling-messaging-sc-1",
+      "text": "An online food delivery service receives a burst of orders at dinner time. A payment step, a restaurant notification step and a delivery step must all happen for each order, and the payment step is sometimes slow."
+    }
+  ],
+  "questions": [
+    {
+      "id": "scaling-messaging-001",
+      "type": "mcq",
+      "difficulty": 1,
+      "tags": [
+        "scalability",
+        "elasticity"
+      ],
+      "prompt": "Which statement best describes elasticity in AWS?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Permanently increasing capacity once for long-term growth",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Growing and shrinking resources automatically as demand changes",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Buying fixed hardware that never changes size",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Manually changing the instance type each month",
+          "correct": false
+        }
+      ],
+      "explanation": "Elasticity means resources grow and shrink automatically as demand changes. Scalability is the broader ability to handle more load, and the other options describe fixed or manual capacity.",
+      "sources": [
+        "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html"
+      ],
+      "simplePrompt": "What is elasticity?",
+      "simpleExplanation": "Elasticity means your resources grow and shrink by themselves as the demand changes."
+    },
+    {
+      "id": "scaling-messaging-002",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "Auto Scaling"
+      ],
+      "prompt": "In an EC2 Auto Scaling group, what does the minimum capacity setting define?",
+      "options": [
+        {
+          "id": "a",
+          "text": "The most instances the group can ever run",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "The least number of instances kept running",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "The instance type used for every new instance",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "The number of Regions the group can use",
+          "correct": false
+        }
+      ],
+      "explanation": "Minimum capacity is the fewest instances the group keeps running. The maximum is the upper limit, the instance type is set by the launch configuration or template, and a group works within a single Region.",
+      "sources": [
+        "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html"
+      ],
+      "simplePrompt": "In an Auto Scaling group, what does the minimum setting mean?",
+      "simpleExplanation": "It is the smallest number of servers that stay running, even when there are few visitors."
+    },
+    {
+      "id": "scaling-messaging-003",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "Elastic Load Balancing"
+      ],
+      "prompt": "What is the main job of Elastic Load Balancing?",
+      "options": [
+        {
+          "id": "a",
+          "text": "To distribute incoming traffic across multiple resources such as EC2 instances",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "To store customer files in buckets",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "To send billing reports to customers",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "To write application code automatically",
+          "correct": false
+        }
+      ],
+      "explanation": "Elastic Load Balancing distributes incoming application traffic across targets such as EC2 instances, improving performance and availability. The other options describe different services.",
+      "sources": [
+        "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html"
+      ],
+      "simplePrompt": "What is the main job of Elastic Load Balancing?",
+      "simpleExplanation": "It shares incoming traffic between your servers so no single server is overloaded."
+    },
+    {
+      "id": "scaling-messaging-004",
+      "type": "matching",
+      "difficulty": 2,
+      "tags": [
+        "messaging"
+      ],
+      "prompt": "Match each AWS messaging or routing service with what it does.",
+      "pairs": [
+        {
+          "left": "Amazon SQS",
+          "right": "Holds messages in a queue until they are processed"
+        },
+        {
+          "left": "Amazon SNS",
+          "right": "Sends one message to many subscribers"
+        },
+        {
+          "left": "Amazon EventBridge",
+          "right": "Routes events, such as an order placed, to other services"
+        },
+        {
+          "left": "Elastic Load Balancing",
+          "right": "Spreads incoming traffic across instances"
+        }
+      ],
+      "explanation": "SQS is a queue, SNS is publish-subscribe fan-out, EventBridge routes events between services, and Elastic Load Balancing spreads traffic across instances.",
+      "sources": [
+        "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html",
+        "https://docs.aws.amazon.com/sns/latest/dg/welcome.html",
+        "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html"
+      ],
+      "simplePrompt": "Match each messaging or routing service to what it does.",
+      "simpleExplanation": "SQS holds messages in a line, SNS sends one message to many listeners, EventBridge sends events to the right services, and the load balancer shares traffic."
+    },
+    {
+      "id": "scaling-messaging-005",
+      "type": "scenario",
+      "difficulty": 2,
+      "tags": [
+        "decoupling"
+      ],
+      "scenarioId": "scaling-messaging-sc-1",
+      "prompt": "Which design best stops a slow payment step from holding up the whole food delivery flow?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Put every step in one tightly coupled service so they fail together",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Send the events for each order through a message service so the other steps continue independently",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Stop accepting orders whenever payment is slow",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Store each order on a laptop until payment finishes",
+          "correct": false
+        }
+      ],
+      "explanation": "Decoupling with a message service such as SQS or EventBridge lets each step work from its own queue, so one slow step does not stop the others. Tight coupling spreads failures, and stopping orders or local storage are not reliable designs.",
+      "sources": [
+        "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html",
+        "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html"
+      ],
+      "simplePrompt": "How can you stop a slow payment step from holding up a whole food delivery order?",
+      "simpleExplanation": "Send each order's events through a message service, so the other steps keep working on their own."
+    },
+    {
+      "id": "scaling-messaging-006",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": [
+        "decoupling",
+        "Auto Scaling"
+      ],
+      "prompt": "Which TWO statements about Auto Scaling and Elastic Load Balancing are correct? (Choose two.)",
+      "options": [
+        {
+          "id": "a",
+          "text": "Auto Scaling changes the number of instances as demand changes",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Elastic Load Balancing spreads incoming traffic across the instances",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "The two services have no relationship and cannot be used together",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Elastic Load Balancing creates new Regions when traffic rises",
+          "correct": false
+        }
+      ],
+      "explanation": "Auto Scaling adjusts the instance count and Elastic Load Balancing distributes traffic across them, and they work together. Load balancers do not create Regions, and the two services are designed to be used together.",
+      "sources": [
+        "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html",
+        "https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/what-is-load-balancing.html"
+      ],
+      "simplePrompt": "Which two statements about Auto Scaling and load balancers are right?",
+      "simpleExplanation": "Auto Scaling changes the number of servers, and the load balancer shares the traffic between them."
+    },
+    {
+      "id": "scaling-messaging-007",
+      "type": "truefalse",
+      "difficulty": 1,
+      "tags": [
+        "Auto Scaling"
+      ],
+      "statement": "Auto Scaling charges you for every instance in the group, even the ones that are not running.",
+      "answer": false,
+      "explanation": "False. You pay for the instances that run, so Auto Scaling avoids paying for idle capacity.",
+      "sources": [
+        "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html"
+      ],
+      "simplePrompt": "True or false: Auto Scaling charges you for servers that are switched off.",
+      "simpleExplanation": "False. You pay only for the servers that are running."
+    }
+  ]
+}

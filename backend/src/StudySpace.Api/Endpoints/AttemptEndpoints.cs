@@ -82,6 +82,7 @@ public static class AttemptEndpoints
             grade.IsCorrect,
             grade.NeedsConfirmation,
             question.Explanation,
+            SimpleExplanation = question.SimpleExplanation == "" ? null : question.SimpleExplanation,
             Caveat = question.VerificationCaveat,
             Correct = QuestionViews.CorrectAnswer(question),
         });
@@ -170,6 +171,7 @@ public static class AttemptEndpoints
                 IsCorrect = answer?.IsCorrect,
                 Given = answer is null ? (JsonElement?)null : JsonDocument.Parse(answer.GivenAnswerJson).RootElement,
                 q.Explanation,
+                SimpleExplanation = q.SimpleExplanation == "" ? null : q.SimpleExplanation,
                 Caveat = q.VerificationCaveat,
                 Correct = QuestionViews.CorrectAnswer(q),
             };

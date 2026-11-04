@@ -1,13 +1,17 @@
 import type { AttemptSummary, Question } from '../api/client'
 import { Caveat } from '../components/Caveat'
+import { ModeSwitch } from '../components/ModeSwitch'
+import { useStudyMode } from '../components/studyMode'
 import { formatCorrect } from './formatCorrect'
 
 /// Result of a finished attempt: score, then every question with the right answer and explanation.
 export function Review({ summary, questions, timedOut }: { summary: AttemptSummary; questions: Question[]; timedOut?: boolean }) {
   const byId = new Map(questions.map((q) => [q.id, q]))
+  const [mode, setMode] = useStudyMode()
   return (
     <section>
       <h1>Review</h1>
+      <ModeSwitch mode={mode} onChange={setMode} />
       {timedOut && <p role="status">Time is up. Your exam was submitted automatically.</p>}
       <p className="score">
         {summary.correct} of {summary.total} correct ({summary.percent}%)
@@ -22,7 +26,7 @@ export function Review({ summary, questions, timedOut }: { summary: AttemptSumma
                 <strong>{r.answered ? (r.isCorrect ? 'Correct' : 'Incorrect') : 'Unanswered'}</strong> · {r.prompt}
               </p>
               {question && !r.isCorrect && <p>Answer: {formatCorrect(question, r.correct)}</p>}
-              <p>{r.explanation}</p>
+              <p>{mode === 'simple' && r.simpleExplanation ? r.simpleExplanation : r.explanation}</p>
               <Caveat text={r.caveat} />
             </li>
           )

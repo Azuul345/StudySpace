@@ -26,7 +26,9 @@ public sealed record ParsedTopic(
     IReadOnlyList<string> DocLinks,
     IReadOnlyList<ParsedScenario> Scenarios,
     IReadOnlyList<ParsedQuestion> Questions,
-    IReadOnlyList<string>? Diagrams = null);
+    IReadOnlyList<string>? Diagrams = null,
+    string? SimpleSummary = null,
+    string? Mnemonic = null);
 
 public sealed record ParsedScenario(string Id, string Text);
 
@@ -44,6 +46,9 @@ public sealed record ParsedQuestion(
     IReadOnlyList<string> Tags,
     IReadOnlyList<string> Sources,
     IReadOnlyList<ParsedOption> Options,
-    string? DataJson);
+    string? DataJson,
+    string? SimplePrompt = null,
+    string? SimpleExplanation = null,
+    string? Mnemonic = null);
 
 public sealed record ParsedFlashcard(string Id, string Term, string Definition);

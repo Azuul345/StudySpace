@@ -3,6 +3,9 @@ import { Link, useParams } from 'react-router-dom'
 import { getTopic } from '../api/client'
 import { Async } from '../components/Async'
 import { Markdown } from '../components/Markdown'
+import { Mnemonic } from '../components/Mnemonic'
+import { ModeSwitch } from '../components/ModeSwitch'
+import { useStudyMode } from '../components/studyMode'
 import { Diagram } from '../diagrams/Diagram'
 import { diagramRegistry } from '../diagrams/registry'
 import { useLoad } from '../components/useLoad'
@@ -19,6 +22,7 @@ function httpsOnly(urls: string[]): string[] {
 
 export function TopicPage() {
   const { id } = useParams()
+  const [mode, setMode] = useStudyMode()
   const topic = useLoad(useCallback(() => getTopic(Number(id)), [id]))
   return (
     <section>
@@ -49,7 +53,9 @@ export function TopicPage() {
               )}
               {t.lesson ? (
                 <div className="lesson">
-                  <Markdown source={t.lesson.summary} />
+                  <ModeSwitch mode={mode} onChange={setMode} />
+                  <Markdown source={mode === 'simple' && t.lesson.simpleSummary ? t.lesson.simpleSummary : t.lesson.summary} />
+                  <Mnemonic text={t.lesson.mnemonic} />
                   <h2>Key points</h2>
                   <ul className="keypoints">
                     {t.lesson.keyPoints.map((k) => (
