@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "topicId": "networking-foundations",
+  "domainId": "technology",
+  "name": "Networking foundations: VPCs, subnets and gateways",
+  "lesson": {
+    "summary": "Networking in the AWS Cloud means connecting devices and resources so they can exchange data. An Amazon VPC is a logically isolated network you define inside AWS, and it spans the Availability Zones of one Region. Subnets split a VPC into sections that sit in one Availability Zone each. An internet gateway lets public traffic reach resources in a VPC, and a virtual private gateway lets a private, encrypted connection reach the VPC from your own network.",
+    "keyPoints": [
+      "Networking means interconnected devices that exchange data and resources",
+      "Amazon VPC is a logically isolated section of the AWS Cloud where you launch resources in a virtual network you define",
+      "A subnet is a section of a VPC that holds resources such as EC2 instances, and each subnet sits in one Availability Zone",
+      "A public subnet holds resources that must be reachable from the internet, such as a website",
+      "A private subnet holds resources that should only be reachable through your private network, such as a database",
+      "An internet gateway connects a VPC to the internet so public traffic can reach resources",
+      "A virtual private gateway, with a VPN connection, connects your data center to a VPC over an encrypted tunnel"
+    ],
+    "docLinks": [
+      "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html",
+      "https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html",
+      "https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html",
+      "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "networking-foundations-sc-1",
+      "text": "A company is building an application with a public website and a customer database. The database must not be reachable from the internet, but the website must be."
+    }
+  ],
+  "questions": [
+    {
+      "id": "networking-foundations-001",
+      "type": "mcq",
+      "difficulty": 1,
+      "tags": ["VPC"],
+      "prompt": "Which statement best describes an Amazon VPC?",
+      "options": [
+        { "id": "a", "text": "A logically isolated section of the AWS Cloud where you launch resources in a virtual network you define", "correct": true },
+        { "id": "b", "text": "A physically isolated data center inside an AWS Region", "correct": false },
+        { "id": "c", "text": "A system that translates domain names to IP addresses", "correct": false },
+        { "id": "d", "text": "A single server that hosts your web application", "correct": false }
+      ],
+      "explanation": "An Amazon VPC is a logically isolated section of the AWS Cloud in which you define a virtual network. A physically isolated data center describes an Availability Zone or Region concept, a domain name system translates names, and a VPC is not one server.",
+      "sources": ["https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html"]
+    },
+    {
+      "id": "networking-foundations-002",
+      "type": "scenario",
+      "difficulty": 2,
+      "tags": ["subnets"],
+      "scenarioId": "networking-foundations-sc-1",
+      "prompt": "Which design meets the company's requirements?",
+      "options": [
+        { "id": "a", "text": "Put the website in a public subnet and the database in a private subnet", "correct": true },
+        { "id": "b", "text": "Put both the website and the database in a public subnet", "correct": false },
+        { "id": "c", "text": "Give the database a public IP address and rely on a password", "correct": false },
+        { "id": "d", "text": "Store the database on a laptop in the office", "correct": false }
+      ],
+      "explanation": "A public subnet holds resources that must be reachable from the internet, while a private subnet holds resources that should only be reachable through your private network. The other options would expose the database or are not reliable designs.",
+      "sources": ["https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html"]
+    },
+    {
+      "id": "networking-foundations-003",
+      "type": "truefalse",
+      "difficulty": 1,
+      "tags": ["subnets"],
+      "statement": "A subnet can span more than one Availability Zone.",
+      "answer": false,
+      "explanation": "False. Each subnet resides in one Availability Zone. A VPC spans all the Availability Zones in its Region.",
+      "sources": ["https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html"]
+    },
+    {
+      "id": "networking-foundations-004",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": ["gateways"],
+      "prompt": "Your company wants an encrypted connection from its on-premises data center to a VPC. Which component should it attach to the VPC?",
+      "options": [
+        { "id": "a", "text": "A virtual private gateway", "correct": true },
+        { "id": "b", "text": "An internet gateway", "correct": false },
+        { "id": "c", "text": "A route table", "correct": false },
+        { "id": "d", "text": "A subnet", "correct": false }
+      ],
+      "explanation": "A virtual private gateway is the VPC end of a VPN connection, which sends encrypted traffic from your data center into the VPC. An internet gateway serves public internet traffic, while route tables and subnets do not create a connection on their own.",
+      "sources": ["https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html"]
+    },
+    {
+      "id": "networking-foundations-005",
+      "type": "matching",
+      "difficulty": 2,
+      "tags": ["gateways", "subnets"],
+      "prompt": "Match each component with what it does.",
+      "pairs": [
+        { "left": "Internet gateway", "right": "Connects a VPC to the internet for public traffic" },
+        { "left": "Virtual private gateway", "right": "Connects a VPC to your private network over VPN" },
+        { "left": "Public subnet", "right": "Holds resources reachable from the internet" },
+        { "left": "Private subnet", "right": "Holds resources reachable only through your private network" }
+      ],
+      "explanation": "The internet gateway serves public internet traffic, the virtual private gateway serves VPN connections to your private network, and public and private subnets differ in whether the internet can reach their resources.",
+      "sources": ["https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html", "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html", "https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html"]
+    }
+  ]
+}

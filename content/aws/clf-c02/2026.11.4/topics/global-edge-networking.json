@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "topicId": "global-edge-networking",
+  "domainId": "technology",
+  "name": "Global edge networking: Route 53, CloudFront and Global Accelerator",
+  "lesson": {
+    "summary": "Edge networking brings content and routing closer to users. Amazon Route 53 is a DNS service that translates domain names to IP addresses and routes users to AWS or non-AWS resources. Amazon CloudFront is a content delivery network that caches copies of content near users. AWS Global Accelerator sends user traffic onto the AWS global network and fails over quickly when an application location becomes unhealthy.",
+    "keyPoints": [
+      "DNS translates human-readable domain names into IP addresses",
+      "Amazon Route 53 is a DNS service that also registers domain names and routes users to AWS or non-AWS resources",
+      "Amazon CloudFront is a content delivery network that caches copies of content at locations close to users",
+      "AWS Global Accelerator directs user traffic through the AWS global network and routes around unhealthy application locations",
+      "Route 53, CloudFront and Global Accelerator often work together in a multi-Region design"
+    ],
+    "docLinks": [
+      "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html",
+      "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html",
+      "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "global-edge-sc-1",
+      "text": "A financial company must deliver training videos and static content to consultants around the world with low latency. Separately, a media company wants one service to register its domain names and route traffic to resources both in AWS and elsewhere."
+    }
+  ],
+  "questions": [
+    {
+      "id": "global-edge-001",
+      "type": "mcq",
+      "difficulty": 1,
+      "tags": ["DNS", "Route 53"],
+      "prompt": "What is the primary function of a DNS service?",
+      "options": [
+        { "id": "a", "text": "It translates human-readable domain names to machine-readable IP addresses", "correct": true },
+        { "id": "b", "text": "It filters inbound and outbound traffic to EC2 instances", "correct": false },
+        { "id": "c", "text": "It provisions a logically isolated section of the AWS Cloud", "correct": false },
+        { "id": "d", "text": "It creates a subsection of a VPC", "correct": false }
+      ],
+      "explanation": "DNS translates domain names into IP addresses, like a phone book for the internet. Filtering traffic is a job for security groups and network ACLs, and provisioning or subdividing a VPC are separate networking tasks.",
+      "sources": ["https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html"]
+    },
+    {
+      "id": "global-edge-002",
+      "type": "scenario",
+      "difficulty": 2,
+      "tags": ["CloudFront"],
+      "scenarioId": "global-edge-sc-1",
+      "prompt": "Which service best delivers the training videos and static content with low latency?",
+      "options": [
+        { "id": "a", "text": "Amazon CloudFront", "correct": true },
+        { "id": "b", "text": "AWS Global Accelerator", "correct": false },
+        { "id": "c", "text": "Amazon Route 53", "correct": false },
+        { "id": "d", "text": "Amazon VPC", "correct": false }
+      ],
+      "explanation": "CloudFront is a content delivery network that caches copies of content near users, which gives low latency for videos and static content. Global Accelerator routes traffic rather than caching content, Route 53 resolves domain names, and a VPC is a private network.",
+      "sources": ["https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html"]
+    },
+    {
+      "id": "global-edge-003",
+      "type": "scenario",
+      "difficulty": 2,
+      "tags": ["Route 53"],
+      "scenarioId": "global-edge-sc-1",
+      "prompt": "Which service lets the media company register and manage its domain names and route traffic to resources both in AWS and elsewhere?",
+      "options": [
+        { "id": "a", "text": "Amazon Route 53", "correct": true },
+        { "id": "b", "text": "Amazon CloudFront", "correct": false },
+        { "id": "c", "text": "AWS Direct Connect", "correct": false },
+        { "id": "d", "text": "AWS Global Accelerator", "correct": false }
+      ],
+      "explanation": "Route 53 is a DNS service that registers and manages domain names and routes users to AWS and non-AWS resources. CloudFront caches content, Direct Connect is a network link, and Global Accelerator routes traffic without managing domain names.",
+      "sources": ["https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html"]
+    },
+    {
+      "id": "global-edge-004",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": ["Global Accelerator"],
+      "prompt": "A customer wants traffic routing that reacts quickly when an application location becomes unhealthy. Which service fits best?",
+      "options": [
+        { "id": "a", "text": "AWS Global Accelerator", "correct": true },
+        { "id": "b", "text": "AWS Direct Connect", "correct": false },
+        { "id": "c", "text": "Amazon Route 53 domain registration only", "correct": false },
+        { "id": "d", "text": "Amazon VPC", "correct": false }
+      ],
+      "explanation": "Global Accelerator directs traffic through the AWS global network and fails over quickly when a location is unhealthy. The other options do not route traffic around unhealthy application locations.",
+      "sources": ["https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html"]
+    },
+    {
+      "id": "global-edge-005",
+      "type": "typed",
+      "difficulty": 1,
+      "tags": ["CloudFront"],
+      "prompt": "Type the name of the AWS content delivery network service.",
+      "rubric": [
+        { "any": ["cloudfront", "amazon cloudfront"] }
+      ],
+      "explanation": "Amazon CloudFront is a content delivery network that caches copies of content near users.",
+      "sources": ["https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html"]
+    }
+  ]
+}

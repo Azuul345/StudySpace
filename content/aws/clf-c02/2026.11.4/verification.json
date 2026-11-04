@@ -4,10 +4,10 @@
   "verifiedOn": "2026-11-04",
   "status": "verified",
   "summary": {
-    "checked": 68,
-    "passed": 68,
+    "checked": 88,
+    "passed": 88,
     "failed": 0,
-    "withCaveats": 33
+    "withCaveats": 48
   },
   "items": [
     {
@@ -586,6 +586,181 @@
       "urlChecked": "https://aws.amazon.com/cloudfront/",
       "carried": false,
       "caveat": "The page does not explicitly say PoPs deliver content from locations close to users; that wording is inferred. The explanation that PoPs do not replace Availability Zones, change prices, or guarantee no failure is not stated on the page (AZs not mentioned; no uptime guarantee)."
+    },
+    {
+      "kind": "question",
+      "id": "networking-foundations-001",
+      "result": "pass",
+      "reason": "Page says you launch resources in a logically isolated virtual network that you define; key answer supported.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html",
+      "carried": false,
+      "caveat": "The explanation physically isolated data center and domain name system distractor reasons are not on the cited page."
+    },
+    {
+      "kind": "question",
+      "id": "networking-foundations-002",
+      "result": "pass",
+      "reason": "Page says public subnets have a route to an internet gateway and private subnets do not; keyed design matches.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html",
+      "carried": false,
+      "caveat": "The explanation claims that the other options are unreliable or expose the database are not on the cited page."
+    },
+    {
+      "kind": "question",
+      "id": "networking-foundations-003",
+      "result": "pass",
+      "reason": "Page says each subnet must reside entirely within one Availability Zone and cannot span zones; statement is false as keyed.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "networking-foundations-004",
+      "result": "pass",
+      "reason": "Page says the virtual private gateway is the Amazon-side VPN endpoint of a Site-to-Site VPN attached to a VPC, creating an encrypted link from your network.",
+      "urlChecked": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html",
+      "carried": false,
+      "caveat": "The explanation claims that route tables and subnets do not create a connection, and that internet gateways serve public traffic, are not on this VPN page."
+    },
+    {
+      "kind": "question",
+      "id": "networking-foundations-005",
+      "result": "pass",
+      "reason": "Internet gateway pair is supported by the IGW page; the virtual private gateway and subnet pairs are supported by the VPN and subnet pages.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html",
+      "carried": false,
+      "caveat": "The virtual private gateway and subnet pairs are supported by the VPN and subnet pages, not by the IGW page cited here."
+    },
+    {
+      "kind": "question",
+      "id": "connectivity-options-001",
+      "result": "pass",
+      "reason": "Page says Site-to-Site VPN creates an encrypted connection between your on-premises network and a VPC; key answer supported.",
+      "urlChecked": "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html",
+      "carried": false,
+      "caveat": "The lower-cost and no-dedicated-line claims are not stated on the cited page, which lists hourly connection charges; the Direct Connect, Client VPN and PrivateLink distractor reasons are not on it."
+    },
+    {
+      "kind": "question",
+      "id": "connectivity-options-002",
+      "result": "pass",
+      "reason": "Page says AWS Client VPN provides secure access to AWS resources and on-premises networks from any location via a VPN client.",
+      "urlChecked": "https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/what-is.html",
+      "carried": false,
+      "caveat": "The explanation descriptions of Direct Connect, internet gateway and CloudFront are not on the cited page."
+    },
+    {
+      "kind": "question",
+      "id": "connectivity-options-003",
+      "result": "pass",
+      "reason": "Page describes Direct Connect as a dedicated private network connection from your network to AWS with high port speeds, supporting the high-bandwidth answer.",
+      "urlChecked": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html",
+      "carried": false,
+      "caveat": "The phrase consistent bandwidth and the claim that the standard internet is congested are not stated on the cited page."
+    },
+    {
+      "kind": "question",
+      "id": "connectivity-options-004",
+      "result": "pass",
+      "reason": "Page says PrivateLink needs no internet gateway, NAT device, public IP address, Direct Connect or VPN; statement is false as keyed.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "connectivity-options-005",
+      "result": "pass",
+      "reason": "Page describes Direct Connect as providing a dedicated private connection between your network and AWS; typed rubric matches.",
+      "urlChecked": "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "network-security-001",
+      "result": "pass",
+      "reason": "Page says a security group is associated with an instance such as an EC2 instance and controls its inbound and outbound traffic; key answer supported.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html",
+      "carried": false,
+      "caveat": "The explanation fine-grained wording and the reasons the subnet change, virtual private gateway and passwords are wrong are not on the cited page."
+    },
+    {
+      "kind": "question",
+      "id": "network-security-002",
+      "result": "pass",
+      "reason": "Page says network ACLs allow or deny traffic at the subnet level and are stateless; key answer supported.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "network-security-003",
+      "result": "pass",
+      "reason": "Page says network ACLs allow or deny traffic at the subnet level and support both rule types; key answer supported.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html",
+      "carried": false,
+      "caveat": "The page does not explicitly say security groups only hold allow rules; that part of the explanation is not on the cited page."
+    },
+    {
+      "kind": "question",
+      "id": "network-security-004",
+      "result": "pass",
+      "reason": "Page says security groups are associated with instances and are stateful, so responses to allowed traffic are allowed regardless of outbound rules; keyed options A and C are supported and B and D are not.",
+      "urlChecked": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html",
+      "carried": false,
+      "caveat": "The page does not explicitly state that security groups only contain allow rules; that part of the explanation is not on it."
+    },
+    {
+      "kind": "question",
+      "id": "network-security-005",
+      "result": "pass",
+      "reason": "Page says customers configure the security group firewall on EC2 instances and manage their network and data protection within the cloud; the security group part is supported.",
+      "urlChecked": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+      "carried": false,
+      "caveat": "The cited page does not mention network ACLs, so the network ACL part of the statement is not supported by it."
+    },
+    {
+      "kind": "question",
+      "id": "global-edge-001",
+      "result": "pass",
+      "reason": "Page describes Route 53 as a DNS web service and explains how it connects a domain name to the website resources; the name-to-address function is implied rather than stated word for word.",
+      "urlChecked": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html",
+      "carried": false,
+      "caveat": "The explanation statements that filtering is done by security groups and network ACLs, and that VPC provisioning is separate, are not on the cited page."
+    },
+    {
+      "kind": "question",
+      "id": "global-edge-002",
+      "result": "pass",
+      "reason": "Page says CloudFront delivers static and dynamic content from edge locations close to users, with the lowest latency edge serving the request; keyed answer supported.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html",
+      "carried": false,
+      "caveat": "The statement that Global Accelerator routes rather than caches content is not stated on the cited Global Accelerator page."
+    },
+    {
+      "kind": "question",
+      "id": "global-edge-003",
+      "result": "pass",
+      "reason": "Page says Route 53 provides domain registration and DNS routing of traffic to your resources; keyed answer supported.",
+      "urlChecked": "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html",
+      "carried": false,
+      "caveat": "The page does not explicitly say Route 53 routes to non-AWS resources; the statement that Direct Connect is a network link and Global Accelerator does not manage domains is not on it."
+    },
+    {
+      "kind": "question",
+      "id": "global-edge-004",
+      "result": "pass",
+      "reason": "Page says Global Accelerator directs traffic over the AWS global network to healthy endpoints and reacts to changes in health; keyed answer supported.",
+      "urlChecked": "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html",
+      "carried": false,
+      "caveat": "The explanation claim that the other options do not route around unhealthy locations is not stated on the cited pages."
+    },
+    {
+      "kind": "question",
+      "id": "global-edge-005",
+      "result": "pass",
+      "reason": "Page describes Amazon CloudFront as a worldwide content delivery network of edge locations; typed rubric matches.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html",
+      "carried": false
     }
   ]
 }
