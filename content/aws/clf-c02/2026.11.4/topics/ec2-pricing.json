@@ -19,6 +19,11 @@
       "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html",
       "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html",
       "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html"
+    ],
+    "simpleSummary": "EC2 has several ways to pay. On-Demand is pay as you go with no promise. Savings Plans and Reserved Instances are cheaper if you promise to use them for one or three years. Spot is very cheap but can be taken back at short notice. Dedicated Hosts give you a whole physical server.",
+    "mnemonic": "Naruto hint: Pay as you go is like buying ramen at the stall, one bowl at a time. A promise for a year or three is like Ichiraku's membership card: cheaper, but you have to keep coming back.",
+    "diagrams": [
+      "ec2-purchase-options"
     ]
   },
   "scenarios": [
@@ -61,7 +66,9 @@
       "explanation": "On-Demand Instances have no commitment and bill for the time they run. Dedicated Hosts are a physical server option, Reserved Instances need a long commitment, and Capacity Reservations hold capacity without giving a discount on their own.",
       "sources": [
         "https://aws.amazon.com/ec2/pricing/"
-      ]
+      ],
+      "simplePrompt": "Which pricing option has no promise and charges for the time a server runs?",
+      "simpleExplanation": "On-Demand. You pay for the time the server runs, with no long-term promise."
     },
     {
       "id": "ec2-pricing-002",
@@ -98,7 +105,9 @@
       "sources": [
         "https://docs.aws.amazon.com/savingsplans/latest/userguide/what-is-savings-plans.html",
         "https://aws.amazon.com/ec2/pricing/reserved-instances/"
-      ]
+      ],
+      "simplePrompt": "Which two options are cheaper for a steady workload if you promise one or three years?",
+      "simpleExplanation": "Savings Plans and Reserved Instances. You promise to use them for a long time, and you pay less."
     },
     {
       "id": "ec2-pricing-003",
@@ -134,7 +143,9 @@
       "explanation": "Spot Instances use spare capacity at a large discount and suit fault-tolerant work that can restart. Dedicated Hosts are not needed for a restartable job, and Spot Instances can run batch work.",
       "sources": [
         "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html"
-      ]
+      ],
+      "simplePrompt": "Which pricing choice fits a nightly batch job that can restart if it is stopped?",
+      "simpleExplanation": "Spot Instances. They are very cheap, and a job that can restart is fine if the server is taken back."
     },
     {
       "id": "ec2-pricing-004",
@@ -148,7 +159,9 @@
       "explanation": "False. Spot Instances can be reclaimed by AWS when the capacity is needed, so they suit fault-tolerant or flexible work rather than critical workloads that cannot be interrupted.",
       "sources": [
         "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-spot-instances.html"
-      ]
+      ],
+      "simplePrompt": "True or false: Spot Instances are good for a critical job that must never stop.",
+      "simpleExplanation": "False. Spot servers can be taken back at short notice, so they are for jobs that can restart."
     },
     {
       "id": "ec2-pricing-005",
@@ -183,7 +196,9 @@
       "explanation": "Dedicated Hosts give exclusive use of a physical server and control over instance placement, which fits compliance needs. Spot, On-Demand and Savings Plans are pricing models on shared infrastructure, not control over the physical server.",
       "sources": [
         "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html"
-      ]
+      ],
+      "simplePrompt": "A financial company must control the physical server and where its servers are placed, for compliance. Which option fits?",
+      "simpleExplanation": "Dedicated Hosts. You get a whole physical server just for you, so you control where things run."
     }
   ]
 }

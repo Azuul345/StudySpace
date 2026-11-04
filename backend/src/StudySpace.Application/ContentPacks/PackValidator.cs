@@ -24,7 +24,7 @@ public static class PackValidator
     private static readonly string[] ManifestFields = ["schemaVersion", "packId", "version", "exam", "domains", "sources"];
     private static readonly string[] TopicFields = ["schemaVersion", "topicId", "domainId", "name", "lesson", "scenarios", "questions"];
     private static readonly string[] FlashcardFileFields = ["schemaVersion", "cards"];
-    private static readonly string[] QuestionCommonFields = ["id", "type", "difficulty", "tags", "explanation", "sources"];
+    private static readonly string[] QuestionCommonFields = ["id", "type", "difficulty", "tags", "explanation", "sources", "simplePrompt", "simpleExplanation", "mnemonic"];
 
     private static readonly Dictionary<string, string[]> TypeFields = new()
     {
@@ -183,9 +183,11 @@ public static class PackValidator
 
         c.Text(root, string.Empty, "name", 120);
 
-        if (c.Object(root, string.Empty, "lesson", ["summary", "keyPoints", "docLinks", "diagrams"]) is { } lesson)
+        if (c.Object(root, string.Empty, "lesson", ["summary", "keyPoints", "docLinks", "diagrams", "simpleSummary", "mnemonic"]) is { } lesson)
         {
             c.Text(lesson, "lesson", "summary", 1000);
+            OptionalText(c, lesson, "lesson", "simpleSummary", 1000);
+            OptionalText(c, lesson, "lesson", "mnemonic", 300);
             if (c.Array(lesson, "lesson", "keyPoints", 1, 10) is { } points)
             {
                 for (var i = 0; i < points.Length; i++)
@@ -240,6 +242,15 @@ public static class PackValidator
         }
     }
 
+    /// Optional plain-text field: checked only when present, so packs without it stay valid.
+    private static void OptionalText(PackChecker c, JsonElement obj, string path, string name, int maxLength)
+    {
+        if (obj.TryGetProperty(name, out var value))
+        {
+            c.TextAt(value, PackChecker.Join(path, name), maxLength);
+        }
+    }
+
     private static void ValidateQuestion(PackChecker c, JsonElement question, string path, HashSet<string> questionIds, HashSet<string> scenarioIds)
     {
         if (question.ValueKind != JsonValueKind.Object)
@@ -278,6 +289,9 @@ public static class PackValidator
         }
 
         c.Text(question, path, "explanation", 2000);
+        OptionalText(c, question, path, "simplePrompt", 1000);
+        OptionalText(c, question, path, "simpleExplanation", 2000);
+        OptionalText(c, question, path, "mnemonic", 300);
         UrlArray(c, question, path, "sources", 1, 10);
 
         if (type == "truefalse")

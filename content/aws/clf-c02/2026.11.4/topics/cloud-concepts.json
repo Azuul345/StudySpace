@@ -17,7 +17,9 @@
     "docLinks": [
       "https://aws.amazon.com/what-is-cloud-computing/",
       "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html"
-    ]
+    ],
+    "simpleSummary": "Cloud computing means renting computer power, storage and databases over the internet. You pay for what you use, and you do not have to buy and look after your own servers.",
+    "mnemonic": "Naruto hint: Like a Shadow Clone Jutsu, the cloud makes more copies of what you need when you need them, and you only pay for the clones you use."
   },
   "scenarios": [
     {
@@ -30,84 +32,189 @@
       "id": "cloud-concepts-001",
       "type": "mcq",
       "difficulty": 1,
-      "tags": ["cloud computing", "definition"],
+      "tags": [
+        "cloud computing",
+        "definition"
+      ],
       "prompt": "Which statement best defines cloud computing?",
       "options": [
-        { "id": "a", "text": "Buying your own servers and keeping them in an office server room", "correct": false },
-        { "id": "b", "text": "On-demand delivery of IT resources over the internet with pay-as-you-go pricing", "correct": true },
-        { "id": "c", "text": "One large computer that a single company owns and shares only with its own staff", "correct": false },
-        { "id": "d", "text": "Software that is installed separately on each employee's laptop", "correct": false }
+        {
+          "id": "a",
+          "text": "Buying your own servers and keeping them in an office server room",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "On-demand delivery of IT resources over the internet with pay-as-you-go pricing",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "One large computer that a single company owns and shares only with its own staff",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Software that is installed separately on each employee's laptop",
+          "correct": false
+        }
       ],
       "explanation": "Cloud computing is on-demand delivery of IT resources over the internet with pay-as-you-go pricing. Owning servers in an office room is the traditional model it replaces. A single large computer used only by one company is not a cloud model by definition. Software installed on each laptop is the opposite of resources delivered on demand.",
-      "sources": ["https://aws.amazon.com/what-is-cloud-computing/"]
+      "sources": [
+        "https://aws.amazon.com/what-is-cloud-computing/"
+      ],
+      "simplePrompt": "A short definition: what is cloud computing?",
+      "simpleExplanation": "Cloud computing means getting IT services over the internet, on demand, and paying only for what you use."
     },
     {
       "id": "cloud-concepts-002",
       "type": "truefalse",
       "difficulty": 1,
-      "tags": ["cloud computing", "pricing"],
+      "tags": [
+        "cloud computing",
+        "pricing"
+      ],
       "statement": "In the AWS Cloud you must buy the hardware before you can use any computing resources.",
       "answer": false,
       "explanation": "False. The cloud removes the need to invest heavily in data centers and servers before you know how you will use them. You pay for the resources you consume.",
-      "sources": ["https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html"
+      ],
+      "simplePrompt": "True or false: do you have to buy the hardware before you use AWS?",
+      "simpleExplanation": "False. You can start using AWS without buying servers first. You pay for what you use."
     },
     {
       "id": "cloud-concepts-003",
       "type": "scenario",
       "difficulty": 2,
-      "tags": ["cloud computing", "capacity"],
+      "tags": [
+        "cloud computing",
+        "capacity"
+      ],
       "scenarioId": "cloud-concepts-sc-1",
       "prompt": "Which benefit of cloud computing matters most to the shop owner in this scenario?",
       "options": [
-        { "id": "a", "text": "Benefit from economies of scale", "correct": false },
-        { "id": "b", "text": "Stop guessing capacity", "correct": true },
-        { "id": "c", "text": "Physical security of the data center", "correct": false },
-        { "id": "d", "text": "A fixed hardware cost that never changes", "correct": false }
+        {
+          "id": "a",
+          "text": "Benefit from economies of scale",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Stop guessing capacity",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Physical security of the data center",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "A fixed hardware cost that never changes",
+          "correct": false
+        }
       ],
       "explanation": "Stop guessing capacity means you can access as much or as little capacity as you need and scale up or down quickly, so the shop does not pay for idle servers after the sale. Economies of scale lower prices but do not solve the capacity question. Physical security is an AWS responsibility, not the benefit in question. A fixed hardware cost is the problem the cloud removes.",
-      "sources": ["https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html"
+      ],
+      "simplePrompt": "A small shop expects a big sale but does not know how many visitors it will get. What cloud benefit helps most?",
+      "simpleExplanation": "Stop guessing capacity: you can add or remove resources quickly, so you do not pay for idle servers after the sale."
     },
     {
       "id": "cloud-concepts-004",
       "type": "multi",
       "difficulty": 2,
-      "tags": ["cloud computing", "pricing"],
+      "tags": [
+        "cloud computing",
+        "pricing"
+      ],
       "prompt": "Which TWO statements describe trading fixed expense for variable expense? (Choose two.)",
       "options": [
-        { "id": "a", "text": "You pay upfront for servers you may never use", "correct": false },
-        { "id": "b", "text": "You pay only for the resources you consume", "correct": true },
-        { "id": "c", "text": "Your costs can rise and fall with actual usage", "correct": true },
-        { "id": "d", "text": "You must sign a multi-year contract for all of your hardware", "correct": false }
+        {
+          "id": "a",
+          "text": "You pay upfront for servers you may never use",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "You pay only for the resources you consume",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Your costs can rise and fall with actual usage",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "You must sign a multi-year contract for all of your hardware",
+          "correct": false
+        }
       ],
       "explanation": "Variable expense means you pay for what you consume, so costs go up and down with usage. Paying upfront for unused servers is the fixed-expense model. A multi-year hardware contract is also a fixed commitment.",
-      "sources": ["https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html"
+      ],
+      "simplePrompt": "Which two statements describe paying for only what you use?",
+      "simpleExplanation": "Paying for only what you use means your bill goes up when you use more and down when you use less."
     },
     {
       "id": "cloud-concepts-005",
       "type": "matching",
       "difficulty": 2,
-      "tags": ["cloud benefits"],
+      "tags": [
+        "cloud benefits"
+      ],
       "prompt": "Match each cloud benefit with the example that shows it.",
       "pairs": [
-        { "left": "Stop guessing capacity", "right": "Adding more capacity within minutes when a campaign starts" },
-        { "left": "Increase speed and agility", "right": "A new test environment is ready in minutes instead of weeks" },
-        { "left": "Go global in minutes", "right": "Deploying the same application in several Regions with a few clicks" },
-        { "left": "Benefit from economies of scale", "right": "Lower pay-as-you-go prices as AWS usage grows across many customers" }
+        {
+          "left": "Stop guessing capacity",
+          "right": "Adding more capacity within minutes when a campaign starts"
+        },
+        {
+          "left": "Increase speed and agility",
+          "right": "A new test environment is ready in minutes instead of weeks"
+        },
+        {
+          "left": "Go global in minutes",
+          "right": "Deploying the same application in several Regions with a few clicks"
+        },
+        {
+          "left": "Benefit from economies of scale",
+          "right": "Lower pay-as-you-go prices as AWS usage grows across many customers"
+        }
       ],
       "explanation": "Each benefit maps to one example: scaling with demand shows stop guessing capacity, self-service provisioning in minutes shows speed and agility, multi-Region deployment shows going global, and lower prices from aggregated usage show economies of scale.",
-      "sources": ["https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html"
+      ],
+      "simplePrompt": "Match each cloud benefit with an example.",
+      "simpleExplanation": "Each benefit has one clear example: adding capacity fast, setting things up in minutes, going to new countries quickly, and lower prices as more people share the cloud."
     },
     {
       "id": "cloud-concepts-006",
       "type": "typed",
       "difficulty": 2,
-      "tags": ["pricing"],
+      "tags": [
+        "pricing"
+      ],
       "prompt": "Type the name of the pricing model in which you pay only for the resources you use.",
       "rubric": [
-        { "any": ["pay as you go", "variable expense"] }
+        {
+          "any": [
+            "pay as you go",
+            "variable expense"
+          ]
+        }
       ],
       "explanation": "Pay-as-you-go pricing means you pay only for the resources you consume. It is the same idea as variable expense, which replaces fixed upfront costs.",
-      "sources": ["https://aws.amazon.com/what-is-cloud-computing/"]
+      "sources": [
+        "https://aws.amazon.com/what-is-cloud-computing/"
+      ],
+      "simplePrompt": "What is the name of the pricing model where you pay only for what you use?",
+      "simpleExplanation": "Pay as you go means you pay only for what you use. It is the same idea as variable expense, which replaces fixed upfront costs."
     }
   ]
 }

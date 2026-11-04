@@ -12,10 +12,34 @@ import { EndpointVsNatBody } from './endpointVsNat'
 import { VpcPublicPrivateBody } from './vpcPublicPrivate'
 import { SqsDecouplingBody } from './sqsDecoupling'
 import { S3StorageLifecycleBody } from './s3StorageLifecycle'
+import { ClfRegionsAzsBody } from './clfRegionsAzs'
+import { ClfSharedResponsibilityBody } from './clfSharedResponsibility'
+import { ClfContainersVsVmsBody } from './clfContainersVsVms'
 import type { DiagramDef } from './types'
 
 /// Diagram ids that lessons may list. Unknown ids are ignored, so an older app never breaks on a newer pack.
 export const diagramRegistry: Record<string, DiagramDef> = {
+  'clf-regions-azs': {
+    title: 'AWS Regions and Availability Zones',
+    description:
+      'Each AWS Region is a separate geographic area with at least three Availability Zones. Each zone is one or more data centers with its own power and network. Spreading an application across zones keeps it running if one zone fails.',
+    viewBox: '0 0 640 290',
+    Body: ClfRegionsAzsBody,
+  },
+  'clf-shared-responsibility': {
+    title: 'Shared responsibility: security of the cloud and in the cloud',
+    description:
+      'AWS is responsible for security of the cloud, including data center buildings, hardware and the global network. The customer is responsible for security in the cloud, including its data, who can access it, the operating system on EC2, and the firewall rules and application it runs.',
+    viewBox: '0 0 640 275',
+    Body: ClfSharedResponsibilityBody,
+  },
+  'clf-containers-vs-vms': {
+    title: 'Containers compared with virtual machines',
+    description:
+      'A virtual machine runs a full guest operating system on a hypervisor, so each machine carries its own OS copy. A container runs on a shared host operating system through a container engine and packages only the resources one application needs.',
+    viewBox: '0 0 640 290',
+    Body: ClfContainersVsVmsBody,
+  },
   'vpc-public-private': {
     title: 'Public and private subnets with a NAT gateway',
     description:

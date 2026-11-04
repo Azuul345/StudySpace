@@ -16,6 +16,11 @@
     "docLinks": [
       "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html",
       "https://aws.amazon.com/cloudfront/"
+    ],
+    "simpleSummary": "AWS runs in many places around the world. When you open your app in a new place, you choose the place with care: near your users, allowed by the rules that apply to your data, with the services you need, and at a price you can afford. Small edge sites keep copies of popular files close to people, so they load faster.",
+    "mnemonic": "Naruto hint: Choosing a Region is like choosing which village to set up in. Edge locations are the hidden sentries that keep a copy of the village scrolls close to every gate.",
+    "diagrams": [
+      "cloudfront-edge-caching"
     ]
   },
   "scenarios": [
@@ -59,7 +64,9 @@
       "explanation": "Amazon CloudFront delivers data through globally dispersed points of presence to reduce latency. Batch runs batch jobs, Lightsail is simple hosting, and Outposts runs AWS in your own data center.",
       "sources": [
         "https://aws.amazon.com/cloudfront/"
-      ]
+      ],
+      "simplePrompt": "Which AWS approach reduces delay by serving content from places around the world?",
+      "simpleExplanation": "Amazon CloudFront. It serves data from many places close to users, so it arrives faster."
     },
     {
       "id": "going-global-002",
@@ -95,7 +102,9 @@
       "explanation": "CloudFront uses a global network of points of presence to deliver content with low latency without building servers in each country. The other options either need local data centers or do not deliver content quickly to everyone.",
       "sources": [
         "https://aws.amazon.com/cloudfront/"
-      ]
+      ],
+      "simplePrompt": "A video company has viewers in many countries and wants videos to start quickly without building its own servers. Which service fits?",
+      "simpleExplanation": "Amazon CloudFront. It keeps copies of the videos close to each viewer, so they start quickly."
     },
     {
       "id": "going-global-003",
@@ -109,7 +118,9 @@
       "explanation": "True. The CloudFront page describes more than 750 globally dispersed points of presence that reduce latency.",
       "sources": [
         "https://aws.amazon.com/cloudfront/"
-      ]
+      ],
+      "simplePrompt": "True or false: CloudFront uses more than 750 places around the world to speed up content.",
+      "simpleExplanation": "True. CloudFront has more than 750 points of presence worldwide, so content is close to users."
     },
     {
       "id": "going-global-004",
@@ -145,7 +156,9 @@
       "explanation": "Spreading resources across Availability Zones supports availability, and replication across Regions is configured by the customer because it is not automatic. No design guarantees zero downtime, and AWS does not replicate every resource automatically.",
       "sources": [
         "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html"
-      ]
+      ],
+      "simplePrompt": "Which two statements about designing across Regions and Availability Zones are right?",
+      "simpleExplanation": "Spreading across zones keeps your app up if one zone fails, and copying data to another Region is something you have to set up yourself."
     },
     {
       "id": "going-global-005",
@@ -166,7 +179,9 @@
       "explanation": "Amazon CloudFront delivers content through a global network of points of presence to reduce latency.",
       "sources": [
         "https://aws.amazon.com/cloudfront/"
-      ]
+      ],
+      "simplePrompt": "Type the name of the AWS service that delivers content from many places around the world.",
+      "simpleExplanation": "Amazon CloudFront."
     },
     {
       "id": "going-global-006",
@@ -202,7 +217,9 @@
       "explanation": "The CloudFront page describes its globally dispersed points of presence as a way to reduce latency. They do not replace Availability Zones, change prices, or guarantee that an application never fails.",
       "sources": [
         "https://aws.amazon.com/cloudfront/"
-      ]
+      ],
+      "simplePrompt": "Why does CloudFront use points of presence all around the world?",
+      "simpleExplanation": "They reduce delay, because the content comes from a place close to the user."
     }
   ]
 }

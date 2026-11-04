@@ -16,6 +16,11 @@
       "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html",
       "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html",
       "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html"
+    ],
+    "simpleSummary": "Edge services bring your content and your routing closer to users. Route 53 turns a web name into an address and can send people to the right place. CloudFront keeps copies of files near users so videos and pages load quickly. Global Accelerator sends traffic over AWS's own fast network and moves users to a healthy place when one fails.",
+    "mnemonic": "Naruto hint: Route 53 is the Hidden Leaf directory that tells every visitor where to go. CloudFront is the set of messenger hawks that keep copies of scrolls near every gate. Global Accelerator is a secret shortcut that finds a healthy path when one gate is closed.",
+    "diagrams": [
+      "cloudfront-edge-caching"
     ]
   },
   "scenarios": [
@@ -29,75 +34,175 @@
       "id": "global-edge-001",
       "type": "mcq",
       "difficulty": 1,
-      "tags": ["DNS", "Route 53"],
+      "tags": [
+        "DNS",
+        "Route 53"
+      ],
       "prompt": "What is the primary function of a DNS service?",
       "options": [
-        { "id": "a", "text": "It translates human-readable domain names to machine-readable IP addresses", "correct": true },
-        { "id": "b", "text": "It filters inbound and outbound traffic to EC2 instances", "correct": false },
-        { "id": "c", "text": "It provisions a logically isolated section of the AWS Cloud", "correct": false },
-        { "id": "d", "text": "It creates a subsection of a VPC", "correct": false }
+        {
+          "id": "a",
+          "text": "It translates human-readable domain names to machine-readable IP addresses",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "It filters inbound and outbound traffic to EC2 instances",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "It provisions a logically isolated section of the AWS Cloud",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "It creates a subsection of a VPC",
+          "correct": false
+        }
       ],
       "explanation": "DNS translates domain names into IP addresses, like a phone book for the internet. Filtering traffic is a job for security groups and network ACLs, and provisioning or subdividing a VPC are separate networking tasks.",
-      "sources": ["https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html"
+      ],
+      "simplePrompt": "What does DNS do?",
+      "simpleExplanation": "It turns a human-friendly name into the number address a computer uses."
     },
     {
       "id": "global-edge-002",
       "type": "scenario",
       "difficulty": 2,
-      "tags": ["CloudFront"],
+      "tags": [
+        "CloudFront"
+      ],
       "scenarioId": "global-edge-sc-1",
       "prompt": "Which service best delivers the training videos and static content with low latency?",
       "options": [
-        { "id": "a", "text": "Amazon CloudFront", "correct": true },
-        { "id": "b", "text": "AWS Global Accelerator", "correct": false },
-        { "id": "c", "text": "Amazon Route 53", "correct": false },
-        { "id": "d", "text": "Amazon VPC", "correct": false }
+        {
+          "id": "a",
+          "text": "Amazon CloudFront",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "AWS Global Accelerator",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Amazon Route 53",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Amazon VPC",
+          "correct": false
+        }
       ],
       "explanation": "CloudFront is a content delivery network that caches copies of content near users, which gives low latency for videos and static content. Global Accelerator routes traffic rather than caching content, Route 53 resolves domain names, and a VPC is a private network.",
-      "sources": ["https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html"
+      ],
+      "simplePrompt": "A company wants training videos and files delivered to staff around the world with low delay. Which service?",
+      "simpleExplanation": "Amazon CloudFront. It keeps copies of the files near each user."
     },
     {
       "id": "global-edge-003",
       "type": "scenario",
       "difficulty": 2,
-      "tags": ["Route 53"],
+      "tags": [
+        "Route 53"
+      ],
       "scenarioId": "global-edge-sc-1",
       "prompt": "Which service lets the media company register and manage its domain names and route traffic to resources both in AWS and elsewhere?",
       "options": [
-        { "id": "a", "text": "Amazon Route 53", "correct": true },
-        { "id": "b", "text": "Amazon CloudFront", "correct": false },
-        { "id": "c", "text": "AWS Direct Connect", "correct": false },
-        { "id": "d", "text": "AWS Global Accelerator", "correct": false }
+        {
+          "id": "a",
+          "text": "Amazon Route 53",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "Amazon CloudFront",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "AWS Direct Connect",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "AWS Global Accelerator",
+          "correct": false
+        }
       ],
       "explanation": "Route 53 is a DNS service that registers and manages domain names and routes users to AWS and non-AWS resources. CloudFront caches content, Direct Connect is a network link, and Global Accelerator routes traffic without managing domain names.",
-      "sources": ["https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html"
+      ],
+      "simplePrompt": "A media company wants one service to manage its domain names and send traffic to AWS and to other places. Which service?",
+      "simpleExplanation": "Amazon Route 53. It manages domain names and routes visitors."
     },
     {
       "id": "global-edge-004",
       "type": "mcq",
       "difficulty": 2,
-      "tags": ["Global Accelerator"],
+      "tags": [
+        "Global Accelerator"
+      ],
       "prompt": "A customer wants traffic routing that reacts quickly when an application location becomes unhealthy. Which service fits best?",
       "options": [
-        { "id": "a", "text": "AWS Global Accelerator", "correct": true },
-        { "id": "b", "text": "AWS Direct Connect", "correct": false },
-        { "id": "c", "text": "Amazon Route 53 domain registration only", "correct": false },
-        { "id": "d", "text": "Amazon VPC", "correct": false }
+        {
+          "id": "a",
+          "text": "AWS Global Accelerator",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "AWS Direct Connect",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Amazon Route 53 domain registration only",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Amazon VPC",
+          "correct": false
+        }
       ],
       "explanation": "Global Accelerator directs traffic through the AWS global network and fails over quickly when a location is unhealthy. The other options do not route traffic around unhealthy application locations.",
-      "sources": ["https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/global-accelerator/latest/dg/what-is-global-accelerator.html"
+      ],
+      "simplePrompt": "Which service sends a user to a healthy place when one application location fails?",
+      "simpleExplanation": "AWS Global Accelerator. It finds a working path quickly."
     },
     {
       "id": "global-edge-005",
       "type": "typed",
       "difficulty": 1,
-      "tags": ["CloudFront"],
+      "tags": [
+        "CloudFront"
+      ],
       "prompt": "Type the name of the AWS content delivery network service.",
       "rubric": [
-        { "any": ["cloudfront", "amazon cloudfront"] }
+        {
+          "any": [
+            "cloudfront",
+            "amazon cloudfront"
+          ]
+        }
       ],
       "explanation": "Amazon CloudFront is a content delivery network that caches copies of content near users.",
-      "sources": ["https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html"
+      ],
+      "simplePrompt": "Type the name of the AWS content delivery network.",
+      "simpleExplanation": "Amazon CloudFront."
     }
   ]
 }

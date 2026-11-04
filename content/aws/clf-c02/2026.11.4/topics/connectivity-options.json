@@ -17,7 +17,9 @@
       "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html",
       "https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html",
       "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html"
-    ]
+    ],
+    "simpleSummary": "There are four main ways to connect to AWS. Client VPN is for one person working from home. Site-to-Site VPN is a safe, encrypted link between an office and AWS. PrivateLink lets your VPC use a service privately. Direct Connect is a dedicated cable from your building to AWS for large, steady traffic.",
+    "mnemonic": "Naruto hint: Client VPN is a single ninja sent on a secret mission. Site-to-Site VPN is a sealed messenger scroll between two villages. Direct Connect is a private road only for your village."
   },
   "scenarios": [
     {
@@ -30,69 +32,152 @@
       "id": "connectivity-options-001",
       "type": "scenario",
       "difficulty": 2,
-      "tags": ["Site-to-Site VPN"],
+      "tags": [
+        "Site-to-Site VPN"
+      ],
       "scenarioId": "connectivity-options-sc-1",
       "prompt": "Which connection option fits best?",
       "options": [
-        { "id": "a", "text": "AWS Site-to-Site VPN", "correct": true },
-        { "id": "b", "text": "AWS Direct Connect", "correct": false },
-        { "id": "c", "text": "AWS Client VPN", "correct": false },
-        { "id": "d", "text": "AWS PrivateLink", "correct": false }
+        {
+          "id": "a",
+          "text": "AWS Site-to-Site VPN",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "AWS Direct Connect",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "AWS Client VPN",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "AWS PrivateLink",
+          "correct": false
+        }
       ],
       "explanation": "Site-to-Site VPN gives encrypted connections between office networks and a VPC at a lower cost, without a dedicated line. Direct Connect is for higher or more consistent bandwidth, Client VPN is for individual remote users, and PrivateLink connects a VPC to services.",
-      "sources": ["https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html"
+      ],
+      "simplePrompt": "A company with several branch offices wants encrypted links to AWS, does not need more speed, and wants the cheapest option. Which fits?",
+      "simpleExplanation": "AWS Site-to-Site VPN. It gives encrypted links between offices and AWS without a dedicated line."
     },
     {
       "id": "connectivity-options-002",
       "type": "mcq",
       "difficulty": 1,
-      "tags": ["Client VPN"],
+      "tags": [
+        "Client VPN"
+      ],
       "prompt": "Which option gives remote workers secure access to AWS resources from anywhere?",
       "options": [
-        { "id": "a", "text": "AWS Client VPN", "correct": true },
-        { "id": "b", "text": "AWS Direct Connect", "correct": false },
-        { "id": "c", "text": "An internet gateway", "correct": false },
-        { "id": "d", "text": "Amazon CloudFront", "correct": false }
+        {
+          "id": "a",
+          "text": "AWS Client VPN",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "AWS Direct Connect",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "An internet gateway",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Amazon CloudFront",
+          "correct": false
+        }
       ],
       "explanation": "AWS Client VPN is a managed VPN service that gives remote workers secure access. Direct Connect is a dedicated line for sites, an internet gateway serves public traffic, and CloudFront delivers content.",
-      "sources": ["https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/what-is.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/what-is.html"
+      ],
+      "simplePrompt": "Which option gives remote workers secure access to AWS from anywhere?",
+      "simpleExplanation": "AWS Client VPN."
     },
     {
       "id": "connectivity-options-003",
       "type": "mcq",
       "difficulty": 2,
-      "tags": ["Direct Connect"],
+      "tags": [
+        "Direct Connect"
+      ],
       "prompt": "A company must move a large data warehouse to AWS and keep a part of its on-premises systems. It needs high, consistent bandwidth for the transfers. Which option fits best?",
       "options": [
-        { "id": "a", "text": "AWS Direct Connect", "correct": true },
-        { "id": "b", "text": "AWS Client VPN", "correct": false },
-        { "id": "c", "text": "A standard internet connection", "correct": false },
-        { "id": "d", "text": "AWS PrivateLink", "correct": false }
+        {
+          "id": "a",
+          "text": "AWS Direct Connect",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "AWS Client VPN",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "A standard internet connection",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "AWS PrivateLink",
+          "correct": false
+        }
       ],
       "explanation": "Direct Connect is a dedicated private connection with more consistent bandwidth, which suits large migrations and hybrid setups. Client VPN is for remote users, a standard internet connection is shared and can be congested, and PrivateLink connects a VPC to services rather than a data center.",
-      "sources": ["https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html"
+      ],
+      "simplePrompt": "A company moves a large data warehouse to AWS and needs fast, steady transfers. Which option fits?",
+      "simpleExplanation": "AWS Direct Connect. It is a private cable from your building to AWS for large, steady traffic."
     },
     {
       "id": "connectivity-options-004",
       "type": "truefalse",
       "difficulty": 2,
-      "tags": ["PrivateLink"],
+      "tags": [
+        "PrivateLink"
+      ],
       "statement": "AWS PrivateLink requires an internet gateway, a NAT device or a public IP address to reach AWS services.",
       "answer": false,
       "explanation": "False. PrivateLink connects a VPC to services privately without an internet gateway, NAT device, public IP address, Direct Connect, or VPN.",
-      "sources": ["https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html"
+      ],
+      "simplePrompt": "True or false: PrivateLink needs an internet gateway, a NAT device or a public IP address.",
+      "simpleExplanation": "False. PrivateLink connects privately without those."
     },
     {
       "id": "connectivity-options-005",
       "type": "typed",
       "difficulty": 2,
-      "tags": ["Direct Connect"],
+      "tags": [
+        "Direct Connect"
+      ],
       "prompt": "Type the name of the AWS service that gives a dedicated private network connection between your network and AWS.",
       "rubric": [
-        { "any": ["direct connect", "aws direct connect"] }
+        {
+          "any": [
+            "direct connect",
+            "aws direct connect"
+          ]
+        }
       ],
       "explanation": "AWS Direct Connect provides a dedicated private network connection between your network and AWS.",
-      "sources": ["https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html"
+      ],
+      "simplePrompt": "Type the name of the AWS service that gives a dedicated private link from your network to AWS.",
+      "simpleExplanation": "AWS Direct Connect."
     }
   ]
 }

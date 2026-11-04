@@ -49,7 +49,9 @@ public static class PackParser
             Str(lesson, "summary"), Strings(lesson, "keyPoints"), Strings(lesson, "docLinks"),
             root.GetProperty("scenarios").EnumerateArray().Select(s => new ParsedScenario(Str(s, "id"), Str(s, "text"))).ToList(),
             root.GetProperty("questions").EnumerateArray().Select(ParseQuestion).ToList(),
-            lesson.TryGetProperty("diagrams", out _) ? Strings(lesson, "diagrams") : []);
+            lesson.TryGetProperty("diagrams", out _) ? Strings(lesson, "diagrams") : [],
+            OptionalText(lesson, "simpleSummary"),
+            OptionalText(lesson, "mnemonic"));
     }
 
     private static ParsedQuestion ParseQuestion(JsonElement q)
@@ -72,7 +74,10 @@ public static class PackParser
             Str(q, "id"), type, Str(q, type == "truefalse" ? "statement" : "prompt"), Str(q, "explanation"),
             q.GetProperty("difficulty").GetInt32(),
             q.TryGetProperty("scenarioId", out var scenario) ? scenario.GetString() : null,
-            Strings(q, "tags"), Strings(q, "sources"), options, data);
+            Strings(q, "tags"), Strings(q, "sources"), options, data,
+            OptionalText(q, "simplePrompt"),
+            OptionalText(q, "simpleExplanation"),
+            OptionalText(q, "mnemonic"));
     }
 
     private static VerificationStatus ReadStatus(PackFile? file)
@@ -145,6 +150,9 @@ public static class PackParser
         e.TryGetProperty(name, out var v) && v.ValueKind == JsonValueKind.String ? v.GetString() : null;
 
     private static string Str(JsonElement e, string name) => e.GetProperty(name).GetString()!;
+
+    private static string? OptionalText(JsonElement e, string name) =>
+        e.TryGetProperty(name, out var v) && v.ValueKind == JsonValueKind.String ? v.GetString() : null;
 
     private static List<string> Strings(JsonElement e, string name) =>
         e.GetProperty(name).EnumerateArray().Select(x => x.GetString()!).ToList();

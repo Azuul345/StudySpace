@@ -21,7 +21,9 @@
       "https://aws.amazon.com/ec2/instance-types/",
       "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html",
       "https://aws.amazon.com/compliance/shared-responsibility-model/"
-    ]
+    ],
+    "simpleSummary": "Amazon EC2 gives you virtual servers you can start and stop whenever you like. To start one you pick its size (instance type) and its starting software (AMI). The sizes are grouped into families for different jobs.",
+    "mnemonic": "Naruto hint: An EC2 instance is a Shadow Clone of a server. The AMI is the Clone Jutsu scroll that says what the clone knows, and the instance type is how strong the clone is."
   },
   "scenarios": [
     {
@@ -66,7 +68,9 @@
       "sources": [
         "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html",
         "https://aws.amazon.com/ec2/instance-types/"
-      ]
+      ],
+      "simplePrompt": "What two things do you choose when you start an EC2 server?",
+      "simpleExplanation": "You choose the instance type, which is the size of the server, and the AMI, which is its starting software."
     },
     {
       "id": "ec2-basics-002",
@@ -102,7 +106,9 @@
       "explanation": "Each family is tuned for one kind of resource: balanced for general use, CPU for compute-intensive work, memory for in-memory data, hardware accelerators for GPU workloads, and local storage throughput for storage-heavy work.",
       "sources": [
         "https://aws.amazon.com/ec2/instance-types/"
-      ]
+      ],
+      "simplePrompt": "Match each instance family to the job it is good at.",
+      "simpleExplanation": "Each family is built for one kind of job, such as general work, heavy calculations, big memory, graphics or fast storage."
     },
     {
       "id": "ec2-basics-003",
@@ -139,7 +145,9 @@
       "explanation": "Compute optimized instances give high CPU performance for compute-intensive tasks. The scenario does not mention large memory needs, GPUs, or heavy storage throughput, so the other families fit less well.",
       "sources": [
         "https://aws.amazon.com/ec2/instance-types/"
-      ]
+      ],
+      "simplePrompt": "A university team runs climate simulations that need a lot of raw CPU power. Which instance family fits best?",
+      "simpleExplanation": "Compute optimized. These servers have very fast processors for heavy calculations."
     },
     {
       "id": "ec2-basics-004",
@@ -153,7 +161,9 @@
       "explanation": "True. An AMI holds the operating system, storage setup, architecture, launch permissions and any extra software, so one AMI can start many instances with the same setup.",
       "sources": [
         "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html"
-      ]
+      ],
+      "simplePrompt": "True or false: one AMI can start several identical servers.",
+      "simpleExplanation": "True. An AMI is the starting software, so one AMI can start many servers that all match."
     },
     {
       "id": "ec2-basics-005",
@@ -188,7 +198,9 @@
       "explanation": "The AWS SDK provides language libraries so application code can call AWS services. The Console is a web interface for people, and billing statements and hardware keys are not provisioning tools.",
       "sources": [
         "https://docs.aws.amazon.com/sdkref/latest/guide/overview.html"
-      ]
+      ],
+      "simplePrompt": "Which AWS tool lets app code call AWS services?",
+      "simpleExplanation": "The AWS SDK. It is a library for your programming language that lets your code talk to AWS."
     },
     {
       "id": "ec2-basics-006",
@@ -224,7 +236,9 @@
       "explanation": "On an unmanaged service like EC2 the customer patches the guest OS and configures firewall rules such as security groups. AWS handles the data center's physical security and the underlying hardware.",
       "sources": [
         "https://aws.amazon.com/compliance/shared-responsibility-model/"
-      ]
+      ],
+      "simplePrompt": "On an EC2 server, which two tasks are yours?",
+      "simpleExplanation": "You update the operating system and set up the firewall rules called security groups."
     },
     {
       "id": "ec2-basics-007",
@@ -259,7 +273,9 @@
       "explanation": "Multi-tenancy means several customers share physical hardware, with each customer's workloads kept isolated. Dedicated hosts are the option for exclusive physical servers, and Regions and private networks are separate topics.",
       "sources": [
         "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-instance.html"
-      ]
+      ],
+      "simplePrompt": "What does multi-tenancy mean for EC2?",
+      "simpleExplanation": "Several customers share the same physical computer, and each customer's work stays separate from the others."
     },
     {
       "id": "ec2-basics-008",
@@ -279,7 +295,9 @@
       "explanation": "Accelerated computing instances use hardware accelerators such as GPUs to handle graphics processing and machine learning efficiently.",
       "sources": [
         "https://aws.amazon.com/ec2/instance-types/"
-      ]
+      ],
+      "simplePrompt": "Type the name of the instance family that uses GPUs for graphics and machine learning.",
+      "simpleExplanation": "Accelerated computing. These servers have extra chips such as GPUs."
     }
   ]
 }

@@ -18,7 +18,9 @@
       "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
       "https://aws.amazon.com/lambda/pricing/",
       "https://aws.amazon.com/compliance/shared-responsibility-model/"
-    ]
+    ],
+    "simpleSummary": "Serverless means you run your code without managing any servers. AWS Lambda runs your code when something happens, such as a file upload. It grows for many requests and you pay only for the time your code runs.",
+    "mnemonic": "Naruto hint: Lambda is like a summoning scroll. You call the ninja only when you need them, and you do not have to feed them while they wait."
   },
   "scenarios": [
     {
@@ -31,83 +33,185 @@
       "id": "serverless-and-lambda-001",
       "type": "mcq",
       "difficulty": 1,
-      "tags": ["Lambda", "serverless"],
+      "tags": [
+        "Lambda",
+        "serverless"
+      ],
       "prompt": "Which statement best describes AWS Lambda?",
       "options": [
-        { "id": "a", "text": "A service that runs code in response to events without you provisioning or managing servers", "correct": true },
-        { "id": "b", "text": "A virtual machine you must patch and configure before use", "correct": false },
-        { "id": "c", "text": "A physical data center you rent for your own hardware", "correct": false },
-        { "id": "d", "text": "A storage bucket for long-term file archives", "correct": false }
+        {
+          "id": "a",
+          "text": "A service that runs code in response to events without you provisioning or managing servers",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "A virtual machine you must patch and configure before use",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "A physical data center you rent for your own hardware",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "A storage bucket for long-term file archives",
+          "correct": false
+        }
       ],
       "explanation": "Lambda runs code in response to events and removes the need to provision or manage servers. A virtual machine needs your patching, a rented data center is hardware, and a storage bucket is a different service.",
-      "sources": ["https://docs.aws.amazon.com/lambda/latest/dg/welcome.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html"
+      ],
+      "simplePrompt": "Which statement best describes AWS Lambda?",
+      "simpleExplanation": "Lambda runs your code when an event happens, and you do not manage any servers."
     },
     {
       "id": "serverless-and-lambda-002",
       "type": "scenario",
       "difficulty": 2,
-      "tags": ["shared responsibility", "Lambda"],
+      "tags": [
+        "shared responsibility",
+        "Lambda"
+      ],
       "scenarioId": "serverless-sc-1",
       "prompt": "Which task is still the startup's responsibility when it runs this microservice on Lambda?",
       "options": [
-        { "id": "a", "text": "Scaling the underlying infrastructure", "correct": false },
-        { "id": "b", "text": "Managing data access permissions and the security of its application", "correct": true },
-        { "id": "c", "text": "Patching the physical servers in the data center", "correct": false },
-        { "id": "d", "text": "Keeping the service available during a data center failure", "correct": false }
+        {
+          "id": "a",
+          "text": "Scaling the underlying infrastructure",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "text": "Managing data access permissions and the security of its application",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "text": "Patching the physical servers in the data center",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Keeping the service available during a data center failure",
+          "correct": false
+        }
       ],
       "explanation": "With Lambda, AWS handles the infrastructure, scaling and availability. The customer still controls its data, who can access it, and the security of its application code.",
-      "sources": ["https://aws.amazon.com/compliance/shared-responsibility-model/"]
+      "sources": [
+        "https://aws.amazon.com/compliance/shared-responsibility-model/"
+      ],
+      "simplePrompt": "A fintech startup runs a new microservice on Lambda. What is still its job?",
+      "simpleExplanation": "Its own data, who can open that data, and the security of its own app code."
     },
     {
       "id": "serverless-and-lambda-003",
       "type": "truefalse",
       "difficulty": 1,
-      "tags": ["Lambda", "pricing"],
+      "tags": [
+        "Lambda",
+        "pricing"
+      ],
       "statement": "With AWS Lambda you pay only for the compute time your code consumes, measured to the millisecond.",
       "answer": true,
       "explanation": "True. Lambda charges for the compute time consumed, down to the millisecond, so you do not pay for idle servers.",
-      "sources": ["https://aws.amazon.com/lambda/pricing/"]
+      "sources": [
+        "https://aws.amazon.com/lambda/pricing/"
+      ],
+      "simplePrompt": "True or false: with Lambda you pay only for the time your code runs.",
+      "simpleExplanation": "True. Lambda bills for the compute time your code uses, down to the millisecond."
     },
     {
       "id": "serverless-and-lambda-004",
       "type": "multi",
       "difficulty": 2,
-      "tags": ["Lambda", "scaling"],
+      "tags": [
+        "Lambda",
+        "scaling"
+      ],
       "prompt": "Which TWO statements about AWS Lambda are correct? (Choose two.)",
       "options": [
-        { "id": "a", "text": "It scales automatically with the number of requests", "correct": true },
-        { "id": "b", "text": "You must choose how many servers to run in advance", "correct": false },
-        { "id": "c", "text": "It runs code only when an event triggers it", "correct": true },
-        { "id": "d", "text": "You must install and patch the operating system yourself", "correct": false }
+        {
+          "id": "a",
+          "text": "It scales automatically with the number of requests",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "You must choose how many servers to run in advance",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "It runs code only when an event triggers it",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "You must install and patch the operating system yourself",
+          "correct": false
+        }
       ],
       "explanation": "Lambda scales with request volume and runs code when an event triggers it. You do not choose servers in advance, and AWS manages the operating system.",
-      "sources": ["https://docs.aws.amazon.com/lambda/latest/dg/welcome.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html"
+      ],
+      "simplePrompt": "Which two things are true about Lambda?",
+      "simpleExplanation": "It grows automatically with the number of requests, and it runs only when an event starts it."
     },
     {
       "id": "serverless-and-lambda-005",
       "type": "matching",
       "difficulty": 2,
-      "tags": ["compute models"],
+      "tags": [
+        "compute models"
+      ],
       "prompt": "Match each compute service with the level of control model it represents.",
       "pairs": [
-        { "left": "Amazon EC2", "right": "Unmanaged: you manage the operating system and network setup" },
-        { "left": "AWS Elastic Beanstalk", "right": "Managed: AWS handles most infrastructure, you set deployment options" },
-        { "left": "AWS Lambda", "right": "Serverless: you upload code and AWS handles the rest" }
+        {
+          "left": "Amazon EC2",
+          "right": "Unmanaged: you manage the operating system and network setup"
+        },
+        {
+          "left": "AWS Elastic Beanstalk",
+          "right": "Managed: AWS handles most infrastructure, you set deployment options"
+        },
+        {
+          "left": "AWS Lambda",
+          "right": "Serverless: you upload code and AWS handles the rest"
+        }
       ],
       "explanation": "EC2 is unmanaged, Elastic Beanstalk is a managed service that handles most infrastructure, and Lambda is serverless, so most infrastructure work is handled by AWS.",
-      "sources": ["https://docs.aws.amazon.com/lambda/latest/dg/welcome.html", "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
+        "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html"
+      ],
+      "simplePrompt": "Match each compute service to how much work AWS does for you.",
+      "simpleExplanation": "EC2 leaves most of the work to you, Elastic Beanstalk does more, and Lambda does almost all of it."
     },
     {
       "id": "serverless-and-lambda-006",
       "type": "typed",
       "difficulty": 2,
-      "tags": ["Lambda"],
+      "tags": [
+        "Lambda"
+      ],
       "prompt": "Type the name of the AWS serverless compute service that runs code in response to events.",
       "rubric": [
-        { "any": ["lambda"] }
+        {
+          "any": [
+            "lambda"
+          ]
+        }
       ],
       "explanation": "AWS Lambda runs code in response to events without servers to manage.",
-      "sources": ["https://docs.aws.amazon.com/lambda/latest/dg/welcome.html"]
+      "sources": [
+        "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html"
+      ],
+      "simplePrompt": "Type the name of the serverless service that runs code in response to events.",
+      "simpleExplanation": "Lambda."
     }
   ]
 }
