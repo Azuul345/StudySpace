@@ -4,10 +4,10 @@
   "verifiedOn": "2026-11-04",
   "status": "verified",
   "summary": {
-    "checked": 41,
-    "passed": 41,
+    "checked": 57,
+    "passed": 57,
     "failed": 0,
-    "withCaveats": 16
+    "withCaveats": 26
   },
   "items": [
     {
@@ -353,6 +353,144 @@
       "reason": "Auto Scaling page says there are no additional fees and you only pay for the AWS resources you use, so charging for stopped group members is false.",
       "urlChecked": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html",
       "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "serverless-and-lambda-001",
+      "result": "pass",
+      "reason": "Lambda welcome page says Lambda runs code in response to events without provisioning or managing servers.",
+      "urlChecked": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "serverless-and-lambda-002",
+      "result": "pass",
+      "reason": "Shared responsibility page says the customer manages its data, IAM permissions and application security while AWS runs the infrastructure.",
+      "urlChecked": "https://aws.amazon.com/compliance/shared-responsibility-model/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "serverless-and-lambda-003",
+      "result": "pass",
+      "reason": "Pricing page says Lambda charges only for what you use and bills compute at 1 ms granularity.",
+      "urlChecked": "https://aws.amazon.com/lambda/pricing/",
+      "carried": false,
+      "caveat": "The claim that you pay nothing for idle servers is not on the cited page; it says Web Functions bill memory between requests, so idle-free billing holds only for some function types."
+    },
+    {
+      "kind": "question",
+      "id": "serverless-and-lambda-004",
+      "result": "pass",
+      "reason": "Lambda welcome page says Lambda scales automatically to demand, runs code when an event triggers it, and AWS manages patching.",
+      "urlChecked": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "serverless-and-lambda-005",
+      "result": "pass",
+      "reason": "EC2 concepts page says AMIs include the OS and you configure security and networking; Lambda welcome page supports the serverless row.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html",
+      "carried": false,
+      "caveat": "The cited EC2 concepts page does not say in those words that the customer manages the operating system; Elastic Beanstalk support is on its own page, which is not cited here."
+    },
+    {
+      "kind": "question",
+      "id": "serverless-and-lambda-006",
+      "result": "pass",
+      "reason": "Lambda welcome page says Lambda runs code in response to events without servers to manage; typed rubric lambda matches.",
+      "urlChecked": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "containers-and-orchestration-001",
+      "result": "pass",
+      "reason": "Containers page says containers give consistent, automated workflows across environments, which supports the consistency answer.",
+      "urlChecked": "https://aws.amazon.com/containers/",
+      "carried": false,
+      "caveat": "The cited page does not define containers or say they package dependencies; the packaging wording is not on it."
+    },
+    {
+      "kind": "question",
+      "id": "containers-and-orchestration-002",
+      "result": "pass",
+      "reason": "Containers page supports ECS managing containers, ECR storing container software, and EKS running Kubernetes applications; Fargate page confirms Fargate runs without servers.",
+      "urlChecked": "https://aws.amazon.com/containers/",
+      "carried": false,
+      "caveat": "The cited page does not state in those exact terms that ECS is an orchestrator or that EKS is managed; that wording is not on it."
+    },
+    {
+      "kind": "question",
+      "id": "containers-and-orchestration-003",
+      "result": "pass",
+      "reason": "Page says VM images contain their own operating system and are several GB, while containers virtualize the OS and package only what one application needs; (a) and (c) are supported.",
+      "urlChecked": "https://aws.amazon.com/compare/the-difference-between-containers-and-virtual-machines/",
+      "carried": false,
+      "caveat": "The page names Amazon ECS for running containers on AWS; the 'several services' wording in the explanation is not stated on it."
+    },
+    {
+      "kind": "question",
+      "id": "containers-and-orchestration-004",
+      "result": "pass",
+      "reason": "Fargate page says it removes the need to provision, configure or scale clusters of EC2 instances, so the false statement is correct as keyed.",
+      "urlChecked": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "containers-and-orchestration-005",
+      "result": "pass",
+      "reason": "Containers page says ECR is where you store, share and deploy container software; typed rubric ecr matches.",
+      "urlChecked": "https://aws.amazon.com/containers/",
+      "carried": false,
+      "caveat": "Version control of images is not mentioned on the cited page."
+    },
+    {
+      "kind": "question",
+      "id": "additional-compute-services-001",
+      "result": "pass",
+      "reason": "AWS Batch page says it plans, schedules and runs containerized simulation and analytics workloads, scaling compute across several options.",
+      "urlChecked": "https://docs.aws.amazon.com/batch/latest/userguide/what-is-batch.html",
+      "carried": false,
+      "caveat": "The cited page does not state that jobs run in parallel; the distractor explanations for Lightsail, Elastic Beanstalk and Outposts are not on it."
+    },
+    {
+      "kind": "question",
+      "id": "additional-compute-services-002",
+      "result": "pass",
+      "reason": "Elastic Beanstalk page says it provisions instances, configures load balancing, sets up health monitoring and dynamically scales the environment.",
+      "urlChecked": "https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "additional-compute-services-003",
+      "result": "pass",
+      "reason": "Lightsail page says it offers a cost-effective monthly price and that you can build a blog or personal website in a few clicks.",
+      "urlChecked": "https://aws.amazon.com/lightsail/",
+      "carried": false,
+      "caveat": "The cited Lightsail page says cost-effective, not predictable, monthly price; the word predictable is on the EC2 concepts page instead."
+    },
+    {
+      "kind": "question",
+      "id": "additional-compute-services-004",
+      "result": "pass",
+      "reason": "Outposts page says it extends AWS infrastructure to customer premises for lower latency and local data processing.",
+      "urlChecked": "https://docs.aws.amazon.com/outposts/latest/userguide/what-is-outposts.html",
+      "carried": false,
+      "caveat": "The cited page does not mention data residency; that need is an inference from on-premises placement."
+    },
+    {
+      "kind": "question",
+      "id": "additional-compute-services-005",
+      "result": "pass",
+      "reason": "Each pair is supported: Elastic Beanstalk page for deployment and scaling, Batch page for scheduling, Lightsail page for simple sites, Outposts page for on-premises AWS.",
+      "urlChecked": "https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html",
+      "carried": false,
+      "caveat": "The predictable monthly price wording for Lightsail is not on the cited Lightsail page (see additional-compute-services-003)."
     }
   ]
 }
