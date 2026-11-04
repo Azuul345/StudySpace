@@ -90,6 +90,8 @@ public sealed class EfPackRepository(StudySpaceDbContext db) : IPackRepository
             topic.Lesson.KeyPointsJson = JsonSerializer.Serialize(parsed.KeyPoints);
             topic.Lesson.DocLinksJson = JsonSerializer.Serialize(parsed.DocLinks);
             topic.Lesson.DiagramsJson = JsonSerializer.Serialize(parsed.Diagrams ?? []);
+            topic.Lesson.SimpleSummary = parsed.SimpleSummary ?? "";
+            topic.Lesson.Mnemonic = parsed.Mnemonic ?? "";
 
             foreach (var scenario in parsed.Scenarios)
             {
@@ -130,6 +132,9 @@ public sealed class EfPackRepository(StudySpaceDbContext db) : IPackRepository
                 row.Type = parsed.Type;
                 row.Prompt = parsed.Prompt;
                 row.Explanation = parsed.Explanation;
+                row.SimplePrompt = parsed.SimplePrompt ?? "";
+                row.SimpleExplanation = parsed.SimpleExplanation ?? "";
+                row.Mnemonic = parsed.Mnemonic ?? "";
                 row.Difficulty = parsed.Difficulty;
                 row.TagsJson = JsonSerializer.Serialize(parsed.Tags);
                 row.SourcesJson = JsonSerializer.Serialize(parsed.Sources);

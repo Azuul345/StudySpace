@@ -44,6 +44,8 @@ public class LessonEntity
     public string KeyPointsJson { get; set; } = "[]";
     public string DocLinksJson { get; set; } = "[]";
     public string DiagramsJson { get; set; } = "[]";
+    public string SimpleSummary { get; set; } = "";
+    public string Mnemonic { get; set; } = "";
 }
 
 public class ScenarioEntity
@@ -64,6 +66,9 @@ public class QuestionEntity
     public string Type { get; set; } = "";
     public string Prompt { get; set; } = "";
     public string Explanation { get; set; } = "";
+    public string SimplePrompt { get; set; } = "";
+    public string SimpleExplanation { get; set; } = "";
+    public string Mnemonic { get; set; } = "";
     public int Difficulty { get; set; }
     public string TagsJson { get; set; } = "[]";
     public string SourcesJson { get; set; } = "[]";

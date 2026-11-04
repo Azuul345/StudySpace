@@ -2,6 +2,9 @@ import { useRef, useState } from 'react'
 import { ApiError, finishAttempt, overrideTyped, submitAnswer } from '../api/client'
 import type { Answer, AnswerResult, Attempt, AttemptSummary } from '../api/client'
 import { Caveat } from '../components/Caveat'
+import { Mnemonic } from '../components/Mnemonic'
+import { ModeSwitch } from '../components/ModeSwitch'
+import { useStudyMode } from '../components/studyMode'
 import { Countdown } from './Countdown'
 import { formatCorrect } from './formatCorrect'
 import { QuestionView } from './QuestionView'
@@ -14,6 +17,7 @@ const messageOf = (error: unknown) => (error instanceof ApiError ? error.message
 export function Session({ attempt }: { attempt: Attempt }) {
   const { questions } = attempt
   const isExam = attempt.form === 'full'
+  const [mode, setMode] = useStudyMode()
   const [deadline] = useState(() => (attempt.timeLimitSeconds ? Date.now() + attempt.timeLimitSeconds * 1000 : null))
 
   const [index, setIndex] = useState(0)
@@ -96,7 +100,14 @@ export function Session({ attempt }: { attempt: Attempt }) {
           <p className="progress">
             Question {index + 1} of {questions.length}
           </p>
-          <QuestionView key={question.id} question={question} onSubmit={answer} disabled={busy || result !== null} />
+          <ModeSwitch mode={mode} onChange={setMode} />
+          <Mnemonic text={question.mnemonic} />
+          <QuestionView
+            key={question.id}
+            question={mode === 'simple' && question.simplePrompt ? { ...question, prompt: question.simplePrompt } : question}
+            onSubmit={answer}
+            disabled={busy || result !== null}
+          />
         </>
       )}
 
@@ -120,7 +131,7 @@ export function Session({ attempt }: { attempt: Attempt }) {
                 <strong>{confirmedCorrect ? 'Correct' : 'Incorrect'}</strong>
               </p>
               {!confirmedCorrect && !result.needsConfirmation && <p>Answer: {formatCorrect(question, result.correct)}</p>}
-              <p>{result.explanation}</p>
+              <p>{mode === 'simple' && result.simpleExplanation ? result.simpleExplanation : result.explanation}</p>
               <Caveat text={result.caveat} />
               {isLast ? (
                 <button type="button" disabled={busy} onClick={() => void finish()}>

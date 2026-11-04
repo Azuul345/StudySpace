@@ -38,6 +38,8 @@ export interface Lesson {
   keyPoints: string[]
   docLinks: string[]
   diagrams?: string[]
+  simpleSummary?: string | null
+  mnemonic?: string | null
 }
 
 export interface TopicDetail {
@@ -88,6 +90,8 @@ export interface Question {
   id: number
   type: QuestionType
   prompt: string
+  simplePrompt?: string | null
+  mnemonic?: string | null
   difficulty: number
   tags: string[]
   topicId: number
@@ -129,6 +133,7 @@ export interface AnswerResult {
   isCorrect: boolean
   needsConfirmation: boolean
   explanation: string
+  simpleExplanation?: string | null
   caveat?: string | null
   correct: unknown
 }
@@ -140,6 +145,7 @@ export interface QuestionOutcome {
   isCorrect: boolean | null
   given: unknown
   explanation: string
+  simpleExplanation?: string | null
   caveat?: string | null
   correct: unknown
 }

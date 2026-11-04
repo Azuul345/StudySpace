@@ -298,6 +298,14 @@ namespace StudySpace.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Mnemonic")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SimpleSummary")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Summary")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -332,6 +340,10 @@ namespace StudySpace.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Mnemonic")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("PackId")
                         .HasColumnType("INTEGER");
 
@@ -341,6 +353,14 @@ namespace StudySpace.Infrastructure.Persistence.Migrations
 
                     b.Property<int?>("ScenarioId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("SimpleExplanation")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SimplePrompt")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Slug")
                         .IsRequired()
