@@ -4,10 +4,10 @@
   "verifiedOn": "2026-11-04",
   "status": "verified",
   "summary": {
-    "checked": 57,
-    "passed": 57,
+    "checked": 68,
+    "passed": 68,
     "failed": 0,
-    "withCaveats": 26
+    "withCaveats": 33
   },
   "items": [
     {
@@ -491,6 +491,101 @@
       "urlChecked": "https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html",
       "carried": false,
       "caveat": "The predictable monthly price wording for Lightsail is not on the cited Lightsail page (see additional-compute-services-003)."
+    },
+    {
+      "kind": "question",
+      "id": "infrastructure-as-code-001",
+      "result": "pass",
+      "reason": "CloudFormation page says one template describes all resources and can be reused to provision identical resources consistently across multiple Regions.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "infrastructure-as-code-002",
+      "result": "pass",
+      "reason": "CLI page says it automates through scripts, CloudFormation page says it provisions from templates, and SDK overview lists language SDKs; Console as web interface is implied by the CLI page's 'browser-based AWS Management Console' wording.",
+      "urlChecked": "https://aws.amazon.com/cli/",
+      "carried": false,
+      "caveat": "The SDK pair 'calling AWS services from application code' is not stated on the SDK overview page, which is a reference guide; it is implied by the language SDK list."
+    },
+    {
+      "kind": "question",
+      "id": "infrastructure-as-code-003",
+      "result": "pass",
+      "reason": "CLI page says it lets you control multiple AWS services from the command line and automate them through scripts.",
+      "urlChecked": "https://aws.amazon.com/cli/",
+      "carried": false,
+      "caveat": "The claim that the CLI needs no account or permissions is contrary to the page's 'use your existing console credentials' wording; the 'not visual' and 'does not replace services' distractor reasons are not stated on the page."
+    },
+    {
+      "kind": "question",
+      "id": "infrastructure-as-code-004",
+      "result": "pass",
+      "reason": "CloudFormation page says you create a template describing your AWS resources and CloudFormation provisions and configures them for you.",
+      "urlChecked": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "infrastructure-as-code-005",
+      "result": "pass",
+      "reason": "SDK overview lists per-language AWS SDKs, which supports the SDK as the tool for application code; the page does not mention S3 or application-code calls explicitly.",
+      "urlChecked": "https://docs.aws.amazon.com/sdkref/latest/guide/overview.html",
+      "carried": false,
+      "caveat": "The page does not name Amazon S3 or state that SDKs let application code call services; the paper form, billing dashboard and Outposts distractor reasons are not on it."
+    },
+    {
+      "kind": "question",
+      "id": "going-global-001",
+      "result": "pass",
+      "reason": "CloudFront page says data is delivered through 750+ globally dispersed PoPs to reduce latency, so CloudFront is the keyed answer.",
+      "urlChecked": "https://aws.amazon.com/cloudfront/",
+      "carried": false,
+      "caveat": "The explanation's descriptions of AWS Batch, Lightsail and Outposts are not on the cited pages."
+    },
+    {
+      "kind": "question",
+      "id": "going-global-002",
+      "result": "pass",
+      "reason": "CloudFront page supports global PoP delivery for low-latency content, which fits a video company without its own servers in each country.",
+      "urlChecked": "https://aws.amazon.com/cloudfront/",
+      "carried": false,
+      "caveat": "The explanation's claim that the other options need local data centers is not on the cited pages; 'videos start quickly' is inferred from the low-latency wording."
+    },
+    {
+      "kind": "question",
+      "id": "going-global-003",
+      "result": "pass",
+      "reason": "CloudFront page states 750+ globally dispersed Points of Presence that reduce latency, so the statement is true as keyed.",
+      "urlChecked": "https://aws.amazon.com/cloudfront/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "going-global-004",
+      "result": "pass",
+      "reason": "Regions page says deploying across multiple AZs keeps the app available if one fails, and that some resources can be replicated across Regions but are not replicated automatically.",
+      "urlChecked": "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html",
+      "carried": false,
+      "caveat": "The claim that no design guarantees zero downtime is not stated on the cited pages."
+    },
+    {
+      "kind": "question",
+      "id": "going-global-005",
+      "result": "pass",
+      "reason": "CloudFront page describes a global content delivery network of PoPs, supporting the typed answer CloudFront.",
+      "urlChecked": "https://aws.amazon.com/cloudfront/",
+      "carried": false
+    },
+    {
+      "kind": "question",
+      "id": "going-global-006",
+      "result": "pass",
+      "reason": "CloudFront page says it reduces latency through 750+ globally dispersed Points of Presence, so the latency purpose is supported.",
+      "urlChecked": "https://aws.amazon.com/cloudfront/",
+      "carried": false,
+      "caveat": "The page does not explicitly say PoPs deliver content from locations close to users; that wording is inferred. The explanation that PoPs do not replace Availability Zones, change prices, or guarantee no failure is not stated on the page (AZs not mentioned; no uptime guarantee)."
     }
   ]
 }

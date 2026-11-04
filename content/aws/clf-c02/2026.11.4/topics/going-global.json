@@ -1,0 +1,208 @@
+{
+  "schemaVersion": 1,
+  "topicId": "going-global",
+  "domainId": "technology",
+  "name": "Going global: Regions, multi-Region design and edge locations",
+  "lesson": {
+    "summary": "AWS runs services in Regions around the world, and each Region has at least three Availability Zones. Spreading an application across Availability Zones keeps it available when one zone fails, and you can also deploy to more than one Region. Replication across Regions is not automatic, so you set it up yourself. Amazon CloudFront uses more than 750 globally dispersed points of presence to deliver content with low latency.",
+    "keyPoints": [
+      "Each Region is a geographic area with at least three Availability Zones",
+      "Deploying across multiple Availability Zones keeps an application running if one zone fails",
+      "Deploying to more than one Region adds protection against a whole Region failing",
+      "AWS does not replicate most resources across Regions automatically; you configure replication yourself",
+      "Amazon CloudFront delivers content through more than 750 globally dispersed points of presence to reduce latency",
+      "Choosing a Region close to your users reduces latency for interactive services"
+    ],
+    "docLinks": [
+      "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html",
+      "https://aws.amazon.com/cloudfront/"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "going-global-sc-1",
+      "text": "A video company has viewers in many countries. It wants videos to start quickly for viewers everywhere, without building its own servers in each country."
+    }
+  ],
+  "questions": [
+    {
+      "id": "going-global-001",
+      "type": "mcq",
+      "difficulty": 1,
+      "tags": [
+        "edge locations",
+        "CloudFront"
+      ],
+      "prompt": "Which AWS approach reduces latency by delivering content from points of presence spread around the world?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Amazon CloudFront",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "AWS Batch",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "Amazon Lightsail",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "AWS Outposts",
+          "correct": false
+        }
+      ],
+      "explanation": "Amazon CloudFront delivers data through globally dispersed points of presence to reduce latency. Batch runs batch jobs, Lightsail is simple hosting, and Outposts runs AWS in your own data center.",
+      "sources": [
+        "https://aws.amazon.com/cloudfront/"
+      ]
+    },
+    {
+      "id": "going-global-002",
+      "type": "scenario",
+      "difficulty": 2,
+      "tags": [
+        "CloudFront"
+      ],
+      "scenarioId": "going-global-sc-1",
+      "prompt": "Which AWS service best fits the video company in this scenario?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Amazon CloudFront",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "AWS Outposts in each country",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "A single server in one Region with no caching",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "Manual copies of the videos on laptops",
+          "correct": false
+        }
+      ],
+      "explanation": "CloudFront uses a global network of points of presence to deliver content with low latency without building servers in each country. The other options either need local data centers or do not deliver content quickly to everyone.",
+      "sources": [
+        "https://aws.amazon.com/cloudfront/"
+      ]
+    },
+    {
+      "id": "going-global-003",
+      "type": "truefalse",
+      "difficulty": 1,
+      "tags": [
+        "CloudFront"
+      ],
+      "statement": "Amazon CloudFront uses more than 750 globally dispersed points of presence to reduce latency.",
+      "answer": true,
+      "explanation": "True. The CloudFront page describes more than 750 globally dispersed points of presence that reduce latency.",
+      "sources": [
+        "https://aws.amazon.com/cloudfront/"
+      ]
+    },
+    {
+      "id": "going-global-004",
+      "type": "multi",
+      "difficulty": 2,
+      "tags": [
+        "high availability",
+        "Regions"
+      ],
+      "prompt": "Which TWO statements about designing across Regions and Availability Zones are correct? (Choose two.)",
+      "options": [
+        {
+          "id": "a",
+          "text": "Spreading resources across Availability Zones helps keep an application available if one zone fails",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "AWS replicates every resource to every Region automatically",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "You can replicate some types of resources across Regions, but you must set it up yourself",
+          "correct": true
+        },
+        {
+          "id": "d",
+          "text": "A multi-Region design guarantees zero downtime",
+          "correct": false
+        }
+      ],
+      "explanation": "Spreading resources across Availability Zones supports availability, and replication across Regions is configured by the customer because it is not automatic. No design guarantees zero downtime, and AWS does not replicate every resource automatically.",
+      "sources": [
+        "https://docs.aws.amazon.com/global-infrastructure/latest/regions/aws-regions-availability-zones.html"
+      ]
+    },
+    {
+      "id": "going-global-005",
+      "type": "typed",
+      "difficulty": 2,
+      "tags": [
+        "CloudFront"
+      ],
+      "prompt": "Type the name of the AWS service that delivers content through a global network of points of presence.",
+      "rubric": [
+        {
+          "any": [
+            "cloudfront",
+            "amazon cloudfront"
+          ]
+        }
+      ],
+      "explanation": "Amazon CloudFront delivers content through a global network of points of presence to reduce latency.",
+      "sources": [
+        "https://aws.amazon.com/cloudfront/"
+      ]
+    },
+    {
+      "id": "going-global-006",
+      "type": "mcq",
+      "difficulty": 2,
+      "tags": [
+        "CloudFront",
+        "latency"
+      ],
+      "prompt": "Why does Amazon CloudFront use globally dispersed points of presence?",
+      "options": [
+        {
+          "id": "a",
+          "text": "To reduce latency by delivering data from locations close to users",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "text": "To replace the Availability Zones inside a Region",
+          "correct": false
+        },
+        {
+          "id": "c",
+          "text": "To make every service cheaper in every Region",
+          "correct": false
+        },
+        {
+          "id": "d",
+          "text": "To guarantee the application never fails",
+          "correct": false
+        }
+      ],
+      "explanation": "The CloudFront page describes its globally dispersed points of presence as a way to reduce latency. They do not replace Availability Zones, change prices, or guarantee that an application never fails.",
+      "sources": [
+        "https://aws.amazon.com/cloudfront/"
+      ]
+    }
+  ]
+}
